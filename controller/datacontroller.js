@@ -31,11 +31,11 @@ module.exports.editpost = async (req, res) => {
         if (!id) {
             return res.status(400).send("L'Id n'existe pas.");
         }
-     const updatepost = await ClientPost.findByIdAndUpdate(
-        id,
-        req.body,
-        {new:true}
-     )   
+        const updatepost = await ClientPost.findByIdAndUpdate(
+            id,
+            req.body,
+            { new: true }
+        )
         res.status(200).send("mise a jour effectuer success.");
     }
     catch (err) {
@@ -43,3 +43,18 @@ module.exports.editpost = async (req, res) => {
     }
 }
 
+
+module.exports.getposts = async (req, res) => {
+    try {
+        if (!res.status == 200) {
+            return res.status(400).send("Une erreur est survenue");
+        }
+        const getpost = await ClientPost.find();
+        //res.status(200).send("Récupération effectuer success.");
+        res.status(200).json(getpost);
+        
+    }
+    catch (err) {
+        res.status(500).send("Une erreur est survenue.");
+    }
+}
