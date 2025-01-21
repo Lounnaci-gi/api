@@ -52,6 +52,21 @@ module.exports.getposts = async (req, res) => {
         const getpost = await ClientPost.find();
         //res.status(200).send("Récupération effectuer success.");
         res.status(200).json(getpost);
+        
+    }
+    catch (err) {
+        res.status(500).send("Une erreur est survenue.");
+    }
+}
+
+module.exports.getposts = async (req, res) => {
+    try {
+        if (!res.status == 200) {
+            return res.status(400).send("Une erreur est survenue");
+        }
+        const getpost = await ClientPost.find();
+        //res.status(200).send("Récupération effectuer success.");
+        res.status(200).json(getpost);
 
     }
     catch (err) {
