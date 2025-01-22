@@ -43,32 +43,6 @@ module.exports.editpost = async (req, res) => {
     }
 }
 
-
-module.exports.getposts = async (req, res) => {
-    try {
-        if (!res.status == 200) {
-            return res.status(400).send("Une erreur est survenue");
-        }
-        const getpost = await ClientPost.find();
-        //res.status(200).send("Récupération effectuer success.");
-        res.status(200).json(getpost);
-
-    }
-    catch (err) {
-        res.status(500).send("Une erreur est survenue.");
-    }
-}
-
-module.exports.getpost_with_id = async (req, res) => {
-    try {
-        const getclient = await ClientPost.find({ Id_Client: req.params.id });
-        res.status(200).json({ getclient });
-    }
-    catch (err) {
-        res.status(500).send("Une erreur est survenue.");
-    }
-}
-
 module.exports.getposts = async (req, res) => {
     try {
         if (!res.status == 200) {
@@ -86,12 +60,13 @@ module.exports.getposts = async (req, res) => {
 
 module.exports.get_with_id_client = async (req, res) => {
     try {
+
         if (!req.params.id == "") {
             const nombre = await ClientPost.find({ Id_Client: req.params.id });
             if (nombre.length > 0) {
                 res.status(200).json(nombre);
             } else {
-                res.send(`Aucun enregistrement Trouvès ne coorespond a l'id : `+req.params.id);
+                res.send(`Aucun enregistrement Trouvès ne coorespond a l'id : ` + req.params.id);
             }
         } else {
             res.send('Veuillez Fournir un Id_Client');
@@ -99,5 +74,22 @@ module.exports.get_with_id_client = async (req, res) => {
     } catch (err) {
         res.status(400).send(`Impossible d'accéder a l'enregistrement.`);
 
+    }
+}
+
+module.exports.deletepost = async (req, res) => {
+    try {
+        if (!req.params.id == "") {
+            const post = await ClientPost.find({ Id_Client: req.params.id });
+            if (post.length==0) {
+                res.status(300).send(`L'enregistement dont l'id = ` + req.params.id + ` n'existe pas ?`);
+            }
+            else {
+                await post.remove();
+                res.status(200).send(`L'enregistement est supprimer avec succes.`);
+            }
+        }
+    } catch (err) {
+        res.status(400).send(`Impossible d'accéder a l'enregistrement.`);
     }
 }
