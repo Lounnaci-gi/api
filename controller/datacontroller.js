@@ -16,7 +16,7 @@ module.exports.setPosts = async (req, res) => {
             Adresse: req.body.Adresse,
             email: req.body.email
         });
-        res.status(200).send("Enregistrement Ajouter avec succèss");
+        res.status(200).send("Enregistrement Ajouter avec succèss.");
     }
     catch (err) {
         res.status(500).send("Une erreur est survenue.");
@@ -52,7 +52,17 @@ module.exports.getposts = async (req, res) => {
         const getpost = await ClientPost.find();
         //res.status(200).send("Récupération effectuer success.");
         res.status(200).json(getpost);
-        
+
+    }
+    catch (err) {
+        res.status(500).send("Une erreur est survenue.");
+    }
+}
+
+module.exports.getpost_with_id = async (req, res) => {
+    try {
+        const getclient = await ClientPost.find({ Id_Client: req.params.id });
+        res.status(200).json({ getclient });
     }
     catch (err) {
         res.status(500).send("Une erreur est survenue.");
