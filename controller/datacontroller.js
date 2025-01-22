@@ -68,3 +68,36 @@ module.exports.getpost_with_id = async (req, res) => {
         res.status(500).send("Une erreur est survenue.");
     }
 }
+
+module.exports.getposts = async (req, res) => {
+    try {
+        if (!res.status == 200) {
+            return res.status(400).send("Une erreur est survenue");
+        }
+        const getpost = await ClientPost.find();
+        //res.status(200).send("Récupération effectuer success.");
+        res.status(200).json(getpost);
+
+    }
+    catch (err) {
+        res.status(500).send("Une erreur est survenue.");
+    }
+}
+
+module.exports.get_with_id_client = async (req, res) => {
+    try {
+        if (!req.params.id == "") {
+            const nombre = await ClientPost.find({ Id_Client: req.params.id });
+            if (nombre.length > 0) {
+                res.status(200).json(nombre);
+            } else {
+                res.send(`Aucun enregistrement Trouvès ne coorespond a l'id : `+req.params.id);
+            }
+        } else {
+            res.send('Veuillez Fournir un Id_Client');
+        }
+    } catch (err) {
+        res.status(400).send(`Impossible d'accéder a l'enregistrement.`);
+
+    }
+}
