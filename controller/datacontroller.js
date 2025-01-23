@@ -79,17 +79,19 @@ module.exports.get_with_id_client = async (req, res) => {
 
 module.exports.deletepost = async (req, res) => {
     try {
-        if (!req.params.id == "") {
-            const post = await ClientPost.find({ Id_Client: req.params.id });
-            if (post.length==0) {
-                res.status(300).send(`L'enregistement dont l'id = ` + req.params.id + ` n'existe pas ?`);
-            }
-            else {
-                await post.remove();
-                res.status(200).send(`L'enregistement est supprimer avec succes.`);
+        if (req.params.id === "") {
+            return res.status(400).send(`Ajouter l'id de Client !`);
+        } else {
+            const post = await ClientPost.findOne({ Id_Client: req.params.id });
+            if (!post) {
+                return res.status(404).send(`Aucun enregistrement trouvé avec l'id : ` + req.params.id);
+            } else {
+                await post.deleteOne();
+                res.status(200).send(`Enregistrement supprimer avec succes`);
             }
         }
+
     } catch (err) {
-        res.status(400).send(`Impossible d'accéder a l'enregistrement.`);
+        res.status(500).send(`Impossible de ce connecté a l'enregistrement.`);
     }
 }
