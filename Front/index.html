@@ -12,20 +12,45 @@
 
 <body>
     <div class="container-fluid">
-
-        <div class="row 2">
-            <div class="col 2">
-                <a href="#">sdgdfgsdfg</a>
-                <a href="#">bbbbbb</a>
-            </div>
+        <div class="row">
             <div class="col">
-                <a href="#">cccccc</a>
+                <!-- Barre de navigation -->
+                <nav class="navbar navbar-expand-lg bg-body-tertiary">
+                    <div class="container-fluid">
+                        <!-- Logo ou titre -->
+                        <a class="navbar-brand" href="#">Accueil</a>
 
+                        <!-- Bouton pour les petits écrans -->
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <!-- Menu de navigation -->
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li class="nav-item">
+                                    <a class="nav-link active" aria-current="page" href="#">Client</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Devis</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Factures</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Paramètres</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
             </div>
         </div>
         <div class="core">
-            <button id="btn">Afficher</button>
-            <table id="table">
+            <button id ="btn" type="button" class="btn btn-primary">Afficher</button>
+            <table id="table" class="table table-hover">
             </table>
         </div>
     </div>

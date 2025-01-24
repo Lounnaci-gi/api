@@ -8,24 +8,31 @@ btn.addEventListener('click', async () => {
         }
         const posts = await response.json();
         const count = posts.length;
-
+        let i = 1;
         const ttable = document.getElementById("table");
         ttable.innerHTML = `
-          <tr>
-            <th>ID_Client</th>
-            <th>Raison Sociale</th>
-            <th>Adresse</th>
-            <th>Email</th>
-          </tr>`;
+        <thead>  
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">ID_Client</th>
+            <th scope="col">Raison Sociale</th>
+            <th scope="col">Adresse</th>
+            <th scope="col">Email</th>
+        </tr>
+        </thead>`;
+        const tbody = document.createElement('tbody');
+        tfoot
         posts.forEach(e => {
             const row = document.createElement("tr");
             row.innerHTML = `
+                        <td>${i++}</td>
                         <td>${e.Id_Client}</td>
                         <td>${e.raison_sociale}</td>
                         <td>${e.Adresse}</td>
                         <td>${e.email}</td>
                         `;
-            ttable.appendChild(row);
+            tbody.appendChild(row);
+            ttable.appendChild(tbody);
         });
 
 
