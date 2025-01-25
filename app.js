@@ -16,5 +16,5 @@ app.use("/users",users);
 
 
 app.listen(port,()=>{
-console.log(`le serveur est lancé sur le port: http://www.localhost:${port}`);
+console.log(`le serveur est lancé sur le port: http://localhost:${port}`);
 })

@@ -2,7 +2,7 @@ const btn = document.getElementById('btn');
 
 btn.addEventListener('click', async () => {
     try {
-        const response = await fetch("http://www.localhost:3000/users", { method: 'GET' });
+        const response = await fetch("http://localhost:3000/users", { method: 'GET' });
         if (!response.ok) {
             throw new Error(`Erreur HTTP : ${response.status}`);
         }
