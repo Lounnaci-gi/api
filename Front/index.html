@@ -5,54 +5,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document Test</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col">
-                <!-- Barre de navigation -->
-                <nav class="navbar navbar-expand-lg bg-body-tertiary">
-                    <div class="container-fluid">
-                        <!-- Logo ou titre -->
-                        <a class="navbar-brand" href="#">Accueil</a>
+    <div class="container">
+        <div class="logo"><a href="#">Logo</a></div>
 
-                        <!-- Bouton pour les petits écrans -->
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
+        <nav>
+            <ul>
+                <li><a href="#">Client</a></li>
+                <li><a href="#">Devis</a></li>
+                <li><a href="#">Factures</a></li>
+                <li><a href="#">Contact</a></li>
 
-                        <!-- Menu de navigation -->
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                                <li class="nav-item">
-                                    <a class="nav-link active" aria-current="page" href="#">Client</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Devis</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Factures</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Paramètres</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </nav>
-            </div>
-        </div>
-        <div class="core">
-            <button id ="btn" type="button" class="btn btn-primary">Afficher</button>
-            <table id="table" class="table table-hover">
-            </table>
-        </div>
+            </ul>
+        </nav>
+    </div>
+    <div class="core">
+        <button id="btn">Afficher</button>
+        <table id="table" class="table table-hover">
+        </table>
     </div>
     <script src="main.js"></script>
 </body>

@@ -13,15 +13,15 @@ btn.addEventListener('click', async () => {
         ttable.innerHTML = `
         <thead>  
         <tr>
-            <th scope="col">#</th>
-            <th scope="col">ID_Client</th>
-            <th scope="col">Raison Sociale</th>
-            <th scope="col">Adresse</th>
-            <th scope="col">Email</th>
+            <th>#</th>
+            <th>ID_Client</th>
+            <th>Raison Sociale</th>
+            <th>Adresse</th>
+            <th>Email</th>
         </tr>
         </thead>`;
         const tbody = document.createElement('tbody');
-        tfoot
+
         posts.forEach(e => {
             const row = document.createElement("tr");
             row.innerHTML = `
