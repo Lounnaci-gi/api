@@ -5,51 +5,84 @@
     margin: 0;
     padding: 0;
     scroll-behavior: smooth;
-    font-family: 'poppins', Arial, Helvetica, sans-serif;
+    font-family: 'poppins', sans-serif, Arial, Helvetica;
 }
 
 body {
     background-color: #1f242d;
-}
-
-a {
     color: white;
-    text-decoration: none;
 }
 
-.navbar {
+.header {
     position: fixed;
-    left: 0;
     top: 0;
+    left: 0;
     width: 100%;
-    padding: 25px 9%;
+    padding: 20px 10%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 100;
+    background-color: transparent;
 }
 
-.navbar .logo {
-    font-size: 30px;
-    font-weight: 700;
-}
-
-.navbar ul {
-    display: flex;
-}
-
-.navbar ul li {
-    list-style: none;
-    margin-left: 35px;
-}
-
-.navbar ul li a {
-    font-size: 20px;
+.logo {
+    color: white;
+    font-size: 25px;
     font-weight: 500;
+    text-decoration: none;
+}
+
+.navbar a {
+    font-size: 18px;
+    color: white;
+    text-decoration: none;
+    font-weight: 300;
+    margin-left: 35px;
     transition: 0.5s;
 }
 
-.navbar ul li:hover a,
-.navbar ul li.active a {
-    color: #7cf03d;
+.navbar a:hover,
+.navbar a.active {
+    color: #00abf0;
+}
+
+.client {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 0 10%;
+}
+
+.client-class {
+    max-width: 600px;
+}
+
+.client-class h1 {
+    font-size: 44px;
+    font-weight: 700;
+}
+
+.client-class h3 {
+    font-size: 30px;
+    font-weight: 600;
+    color: #00abf0;
+}
+
+.client-class p {
+    font-size: 16px;
+}
+
+.client-class .btn-box {
+    width: 345px;
+    height: 50px;
+}
+
+.btn-box a {
+    display: inline-flex;
+    width: 150px;
+    height: 100%;
+    background-color: #00abf0;
+    border: 2px solid #00abf0;
+    border-radius: 8px;
 }
