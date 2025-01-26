@@ -33,6 +33,10 @@ body {
     text-decoration: none;
 }
 
+a {
+    text-decoration: none;
+}
+
 .navbar a {
     font-size: 18px;
     color: white;
@@ -47,42 +51,93 @@ body {
     color: #00abf0;
 }
 
-.client {
+.home {
     height: 100vh;
     display: flex;
     align-items: center;
-    padding: 0 10%;
+    padding: 60px 9%;
+    color: white;
+   
 }
 
-.client-class {
-    max-width: 600px;
+.home-info h1 {
+    font-size: 40px;
 }
 
-.client-class h1 {
-    font-size: 44px;
-    font-weight: 700;
-}
-
-.client-class h3 {
+.home-info h2 {
     font-size: 30px;
-    font-weight: 600;
-    color: #00abf0;
+    margin-top: -10px;
 }
 
-.client-class p {
+.home-info p {
     font-size: 16px;
+    margin: 10px 0 25px;
 }
 
-.client-class .btn-box {
-    width: 345px;
-    height: 50px;
+.home-info .btn-sci {
+    display: flex;
+    align-items: center;
 }
 
-.btn-box a {
-    display: inline-flex;
-    width: 150px;
-    height: 100%;
-    background-color: #00abf0;
+.btn {
+    display: inline-block;
+    padding: 10px 30px;
+    background: #00abf0;
     border: 2px solid #00abf0;
-    border-radius: 8px;
+    border-radius: 40px;
+    box-shadow: 0 0 10px #00abf0;
+    font-size: 16px;
+    color: #1f242d;
+    font-weight: 600;
+    transition: 0.5s;
+}
+
+.btn:hover {
+    background: transparent;
+    color: #00abf0;
+    box-shadow: none;
+    border-color: transparent;
+}
+
+.home-info .btn-sci .sci {
+    margin-left: 20px;
+}
+
+.home-info .btn-sci .sci a {
+    display: inline-flex;
+    padding: 8px;
+    border: 2px solid #00abf0;
+    border-radius: 50%;
+    font-size: 20px;
+    color: #00abf0;
+    margin: 0 8px;
+    transition: 0.3s;
+}
+.home-info .btn-sci .sci a:hover {
+    background: #00abf0;
+    color: #1f242d;
+    box-shadow: 0 0 10px #00abf0;
+}
+.home-img .img-box {
+    width: 28vw;
+    height: 28vw;
+    background: red;
+    border-radius: 50%;
+}
+.home-img .img-box .img-item {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: slateblue;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+}
+.home-img .img-box .img-item img {
+    position: absolute;
+    display: block;
+    width: 100%;
+    object-fit: cover;
+
 }
