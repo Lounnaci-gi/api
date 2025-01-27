@@ -24,6 +24,17 @@ body {
     align-items: center;
     z-index: 100;
     background-color: transparent;
+    visibility: hidden;
+    opacity: 0;
+    animation: show-content 1.5s linear forwards;
+    animation-delay: 1.2s;
+}
+
+@keyframes show-content {
+    100% {
+        visibility: visible;
+        opacity: 1;
+    }
 }
 
 .logo {
@@ -57,7 +68,11 @@ a {
     align-items: center;
     padding: 60px 9%;
     color: white;
-   
+    visibility: hidden;
+    opacity: 0;
+    animation: show-content 1.5s linear forwards;
+    animation-delay: 1.2s;
+
 }
 
 .home-info h1 {
@@ -113,31 +128,45 @@ a {
     margin: 0 8px;
     transition: 0.3s;
 }
+
 .home-info .btn-sci .sci a:hover {
     background: #00abf0;
     color: #1f242d;
     box-shadow: 0 0 10px #00abf0;
 }
+
 .home-img .img-box {
-    width: 28vw;
-    height: 28vw;
-    background: red;
+    position: relative;
+    width: 32vw;
+    height: 32vw;
     border-radius: 50%;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 }
+
 .home-img .img-box .img-item {
     position: relative;
     width: 100%;
     height: 100%;
-    background: slateblue;
+    background: #1f242d;
     border-radius: 50%;
+    border: 0.1px solid #1f242d;
     display: flex;
     justify-content: center;
+    z-index: 1;
     overflow: hidden;
 }
+
 .home-img .img-box .img-item img {
     position: absolute;
     display: block;
-    width: 100%;
+    width: 85%;
     object-fit: cover;
-
+    top: 60px;
+    left: 50px;
+    transform: scale(1.3);
+    mix-blend-mode: normal;
 }
