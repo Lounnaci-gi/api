@@ -1,15 +1,17 @@
 const express = require("express");
 const routes = express.Router();
-const {setPosts, editpost, getposts,get_with_id_client,deletepost,newuser} = require("../controller/datacontroller");
+const {setPosts, editpost, getposts,get_with_id_client,deletepost,newuser,getusers} = require("../controller/datacontroller");
 
 
+// Définir les routes spécifiques AVANT les routes dynamiques
+routes.post("/posts", setPosts);
+routes.get("/getuser", getusers); // Route spécifique pour récupérer tous les utilisateurs
+routes.post("/newuser", newuser);
 
-routes.post("/posts",setPosts);
-routes.put("/:p",editpost);
-routes.get("/",getposts);
-routes.get("/:id",get_with_id_client);
-routes.delete("/:id",deletepost);
-routes.post("/",newuser);
-
+// Les routes dynamiques doivent venir après
+routes.get("/", getposts);
+routes.get("/:id", get_with_id_client); // Route dynamique pour récupérer un client par ID
+routes.delete("/:id", deletepost);
+routes.put("/:p", editpost);
 
 module.exports = routes;

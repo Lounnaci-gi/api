@@ -1,5 +1,6 @@
 const btn = document.getElementById('btn');
-
+const connecte = document.getElementById("connecter");
+/*
 btn.addEventListener('click', async () => {
     try {
         const response = await fetch("http://localhost:3000/users", { method: 'GET' });
@@ -43,10 +44,11 @@ btn.addEventListener('click', async () => {
     }
 
 });
-
-// Fonction pour ouvrir le modal
+*/
+// Fonction pour ouvrir le modal (connexion par défaut)
 function openLogin() {
     document.getElementById("loginModal").style.display = "block";
+    showLoginForm(); // Afficher le formulaire de connexion par défaut
 }
 
 // Fonction pour fermer le modal
@@ -55,7 +57,7 @@ function closeLogin() {
 }
 
 // Fermer le modal si on clique en dehors
-window.onclick = function(event) {
+window.onclick = function (event) {
     const modal = document.getElementById("loginModal");
     if (event.target === modal) {
         modal.style.display = "none";
@@ -74,21 +76,7 @@ function showLoginForm() {
     document.getElementById("loginForm").style.display = "block";
 }
 
-// Fonction pour ouvrir le modal (connexion par défaut)
-function openLogin() {
-    document.getElementById("loginModal").style.display = "block";
-    showLoginForm(); // Afficher le formulaire de connexion par défaut
-}
 
-// Fonction pour fermer le modal
-function closeLogin() {
-    document.getElementById("loginModal").style.display = "none";
-}
-
-// Fermer le modal si on clique en dehors
-window.onclick = function(event) {
-    const modal = document.getElementById("loginModal");
-    if (event.target === modal) {
-        modal.style.display = "none";
-    }
-}
+connecte.addEventListener('click', function() {
+    console.log('ffffffff');
+})

@@ -55,22 +55,27 @@ module.exports.getposts = async (req, res) => {
 
 module.exports.get_with_id_client = async (req, res) => {
     try {
+        // Vérification si l'ID est fourni
+        if (req.params.id === "") {
+            return res.status(400).send('Veuillez Fournir un Id_Client');
+        }
 
-        if (!req.params.id == "") {
-            const nombre = await Client.findOne({ Id_Client: req.params.id });
-            if (nombre.length > 0) {
-                res.status(200).json(nombre);
-            } else {
-                res.send(`Aucun enregistrement Trouvès ne coorespond a l'id : ` + req.params.id);
-            }
+        // Recherche du client dans la base de données
+        const client = await Client.findOne({ Id_Client: req.params.id });
+
+        if (client) {
+            // Si le client est trouvé, on renvoie les données
+            res.status(200).json(client);
         } else {
-            res.send('Veuillez Fournir un Id_Client');
+            // Si aucun client n'est trouvé pour l'ID donné
+            res.status(404).send(`Aucun enregistrement trouvé ne correspond à l'ID : ${req.params.id}`);
         }
     } catch (err) {
-        res.status(400).send(`Impossible d'accéder a l'enregistrement.`);
-
+        // En cas d'erreur lors de l'accès à la base de données
+        res.status(400).send(`Impossible d'accéder à l'enregistrement.`);
     }
-}
+};
+
 
 module.exports.deletepost = async (req, res) => {
     try {
@@ -112,3 +117,14 @@ module.exports.newuser = async (req, res) => {
         res.status(500).send("Une erreur est survenue.");
     }
 };
+
+module.exports.getusers = async (req, res) => {
+    try {
+        console.log('ffffffff');
+        const getuser = await User.find();
+        res.status(200).json(getuser);
+    }
+    catch (err) {
+        res.status(500).send("Une erreur est survenue.");
+    }
+}
