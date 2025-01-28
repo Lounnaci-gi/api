@@ -73,12 +73,12 @@
             <!-- Formulaire d'inscription -->
             <div id="registerForm" style="display: none;">
                 <h2>Inscription</h2>
-                <form>
-                    <input type="text" placeholder="Nom complet" required>
-                    <input type="text" placeholder="Nom d'utilisateur" required>
-                    <input type="email" placeholder="Adresse e-mail" required>
-                    <input type="password" placeholder="Mot de passe" required>
-                    <input type="password" placeholder="Confirmer le mot de passe" required>
+                <form action="users/newuser" method="post">
+                    <input type="text" placeholder="Nom complet" required name="nomComplet">
+                    <input type="text" placeholder="Nom d'utilisateur" required name="nomUtilisateur">
+                    <input type="email" placeholder="Adresse e-mail" required name="email">
+                    <input type="password" placeholder="Mot de passe" required name="motDePasse">
+                    <input type="password" placeholder="Confirmer le mot de passe" required >
                     <button type="submit" class="btn">S'inscrire</button>
                 </form>
                 <p>Déjà un compte ? <a href="#" onclick="showLoginForm()">Se connecter</a></p>

@@ -120,7 +120,6 @@ module.exports.newuser = async (req, res) => {
 
 module.exports.getusers = async (req, res) => {
     try {
-        console.log('ffffffff');
         const getuser = await User.find();
         res.status(200).json(getuser);
     }
