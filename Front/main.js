@@ -43,3 +43,52 @@ btn.addEventListener('click', async () => {
     }
 
 });
+
+// Fonction pour ouvrir le modal
+function openLogin() {
+    document.getElementById("loginModal").style.display = "block";
+}
+
+// Fonction pour fermer le modal
+function closeLogin() {
+    document.getElementById("loginModal").style.display = "none";
+}
+
+// Fermer le modal si on clique en dehors
+window.onclick = function(event) {
+    const modal = document.getElementById("loginModal");
+    if (event.target === modal) {
+        modal.style.display = "none";
+    }
+}
+
+// Fonction pour afficher le formulaire d'inscription
+function showRegisterForm() {
+    document.getElementById("loginForm").style.display = "none";
+    document.getElementById("registerForm").style.display = "block";
+}
+
+// Fonction pour afficher le formulaire de connexion
+function showLoginForm() {
+    document.getElementById("registerForm").style.display = "none";
+    document.getElementById("loginForm").style.display = "block";
+}
+
+// Fonction pour ouvrir le modal (connexion par défaut)
+function openLogin() {
+    document.getElementById("loginModal").style.display = "block";
+    showLoginForm(); // Afficher le formulaire de connexion par défaut
+}
+
+// Fonction pour fermer le modal
+function closeLogin() {
+    document.getElementById("loginModal").style.display = "none";
+}
+
+// Fermer le modal si on clique en dehors
+window.onclick = function(event) {
+    const modal = document.getElementById("loginModal");
+    if (event.target === modal) {
+        modal.style.display = "none";
+    }
+}

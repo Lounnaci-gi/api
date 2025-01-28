@@ -170,3 +170,114 @@ a {
     transform: scale(1.3);
     mix-blend-mode: normal;
 }
+
+/* Style du modal */
+.modal {
+    display: none; /* Caché par défaut */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(31, 36, 45,0.8);
+    animation: fadeIn 0.5s ease-in-out;
+    
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background-color: #1f242d;
+    margin: 10% auto;
+    padding: 20px;
+    
+    box-shadow: 0 0 10px #00abf0;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 350px;
+    position: relative;
+    animation: slideDown 0.5s ease-in-out forwards;
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.close {
+    color: #00abf0;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.close:hover {
+    color: #fff;
+}
+
+.modal-content h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #00abf0;
+    text-shadow: 0 0 8px #00abf0;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #00abf0;
+    border-radius: 10px;
+    background-color: transparent;
+    color: white;
+}
+
+.modal-content input::placeholder {
+    color: #aaa;
+}
+
+.modal-content .btn {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background: #00abf0;
+    border: none;
+    border-radius: 5px;
+    color: #1f242d;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.modal-content .btn:hover {
+    background: transparent;
+    color: #00abf0;
+    
+    box-shadow: 0 0 10px #00abf0;
+}
+
+/* Styles pour les liens de bascule entre connexion et inscription */
+.modal-content p {
+    text-align: center;
+    margin-top: 15px;
+    color: #aaa;
+}
+
+.modal-content p a {
+    color: #00abf0;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.modal-content p a:hover {
+    text-decoration: underline;
+    color: #fff;
+}

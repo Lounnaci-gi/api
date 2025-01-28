@@ -62,7 +62,7 @@ module.exports.get_with_id_client = async (req, res) => {
     try {
 
         if (!req.params.id == "") {
-            const nombre = await ClientPost.find({ Id_Client: req.params.id });
+            const nombre = await ClientPost.findOne({ Id_Client: req.params.id });
             if (nombre.length > 0) {
                 res.status(200).json(nombre);
             } else {
