@@ -1,5 +1,4 @@
 const btn = document.getElementById('btn');
-const inscrire = document.getElementById('inscrire');
 /*
 btn.addEventListener('click', async () => {
     try {
@@ -68,6 +67,30 @@ function closeLogin() {
     document.getElementById("loginModal").style.display = "none";
 }
 
-inscrire.addEventListener('click',()=>{
-    console.log('inscrire');
-})
+document.getElementById('submit').addEventListener('click', async (event) => {
+    event.preventDefault(); // Empêche la soumission du formulaire
+
+    const user = document.getElementById('user').value;
+    const password = document.getElementById('password').value;
+    const datas = { nomUtilisateur: user, motDePasse: password };
+
+    try {
+        const response = await fetch('http://localhost:3000/users/getuser', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(datas),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            // Afficher le nom d'utilisateur sans guillemets
+            document.getElementsByClassName('logo')[0].innerText = result.data.nomUtilisateur;
+            closeLogin();
+        } else {
+            alert(result.message || "Erreur lors de la connexion.");
+        }
+    } catch (err) {
+        alert("Une erreur s'est produite lors de la récupération des données.");
+    }
+});

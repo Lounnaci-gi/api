@@ -1,4 +1,5 @@
 const { Client, User } = require("../models/model");
+const bcrypt = require('bcrypt');
 
 module.exports.setPosts = async (req, res) => {
     try {
@@ -96,38 +97,74 @@ module.exports.deletepost = async (req, res) => {
     }
 }
 //-----------Ajouter des utilisateurs ---------------------------------------------------
+
+
 module.exports.newuser = async (req, res) => {
     try {
         const { nomComplet, nomUtilisateur, email, motDePasse } = req.body;
+
         // Vérifier si `req.body` est vide
         if (!req.body || Object.keys(req.body).length === 0) {
-            return res.status(400).send("Le corps de la requête est vide. Veuillez ajouter des données.");
+            return res.status(400).json({ success: false, message: "Le corps de la requête est vide. Veuillez ajouter des données." });
         }
+
+        // Vérifier si l'utilisateur ou l'email existe déjà
         const existingUser = await User.findOne({ $or: [{ nomUtilisateur }, { email }] });
         if (existingUser) {
-            return res.status(400).json({ message: "Le nom d'utilisateur ou l'email est déjà utilisé." });
+            return res.status(400).json({ success: false, message: "Le nom d'utilisateur ou l'email est déjà utilisé." });
         }
-        const newUser = User.create({
-            nomComplet: req.body.nomComplet,
-            nomUtilisateur: req.body.nomUtilisateur,
-            email: req.body.email,
-            motDePasse: req.body.motDePasse,
-        });
-        res.status(200).send("Enregistrement Ajouter avec succèss.");
 
-    }
-    catch (err) {
-        res.status(500).send("Une erreur est survenue.");
+        // Hasher le mot de passe avant de l'enregistrer
+        const salt = await bcrypt.genSalt(10); // Générer un salt
+        const hashedPassword = await bcrypt.hash(motDePasse, salt); // Hasher le mot de passe
+
+        // Créer un nouvel utilisateur
+        const newUser = await User.create({
+            nomComplet,
+            nomUtilisateur,
+            email,
+            motDePasse: hashedPassword, // Utiliser le mot de passe hashé
+        });
+
+        // Renvoyer une réponse JSON
+        res.status(200).json({ success: true, message: "Enregistrement ajouté avec succès.", data: newUser });
+    } catch (err) {
+        console.error("Erreur dans newuser :", err); // Log de l'erreur pour le débogage
+        res.status(500).json({ success: false, message: "Une erreur est survenue lors de la création de l'utilisateur." });
     }
 };
 
 module.exports.getuser = async (req, res) => {
     try {
         const { nomUtilisateur, motDePasse } = req.body;
-        const user = await User.findOne({ $or: [{ nomUtilisateur }, { motDePasse }]});
-        res.status(200).json(user);
+
+        // Trouver l'utilisateur par nom d'utilisateur
+        const user = await User.findOne({ nomUtilisateur });
+
+        
+
+        // Vérifier si l'utilisateur existe
+        if (!user) {
+            return res.status(404).json({ success: false, message: "Nom d'utilisateur incorrect." });
+        }
+
+        // Comparer le mot de passe fourni avec le mot de passe hashé
+        const isPasswordValid = await bcrypt.compare(motDePasse, user.motDePasse);
+
+        if (!isPasswordValid) {
+            return res.status(401).json({ success: false, message: "Mot de passe incorrect." });
+        }
+
+        // Renvoyer les données de l'utilisateur (sans le mot de passe)
+        const userData = {
+            nomUtilisateur: user.nomUtilisateur,
+            email: user.email,
+            nomComplet: user.nomComplet,
+        };
+
+        res.status(200).json({ success: true, data: userData });
+    } catch (err) {
+        console.error("Erreur dans getuser :", err);
+        res.status(500).json({ success: false, message: "Une erreur est survenue lors de la connexion." });
     }
-    catch (err) {
-        res.status(500).send("Une erreur est survenue.");
-    }
-}
+};

@@ -5,8 +5,8 @@ const {setPosts, editpost, getposts,get_with_id_client,deletepost,newuser,getuse
 
 // Définir les routes spécifiques AVANT les routes dynamiques
 routes.post("/posts", setPosts);
-routes.post("/getuser", getuser); // Route spécifique pour récupérer tous les utilisateurs
 routes.post("/newuser", newuser);
+routes.post("/getuser", getuser); // Route spécifique pour récupérer tous les utilisateurs
 
 // Les routes dynamiques doivent venir après
 routes.get("/", getposts);
