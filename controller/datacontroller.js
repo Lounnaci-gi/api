@@ -98,20 +98,23 @@ module.exports.deletepost = async (req, res) => {
 //-----------Ajouter des utilisateurs ---------------------------------------------------
 module.exports.newuser = async (req, res) => {
     try {
-        const data = req.body;
+        const {nomComplet,nomUtilisateur,email,motDePasse}=req.body;
         // Vérifier si `req.body` est vide
-        if (!data || Object.keys(data).length === 0) {
+        if (!req.body || Object.keys(req.body).length === 0){
             return res.status(400).send("Le corps de la requête est vide. Veuillez ajouter des données.");
         }
-
-        // Si `data` contient des données, on les traite
-        const post = User.create({
+        const existingUser = await User.findOne({ $or: [{ nomUtilisateur }, { email }] });
+        if (existingUser) {
+            return res.status(400).json({ message: "Le nom d'utilisateur ou l'email est déjà utilisé." });
+        }
+        const newUser = User.create({
             nomComplet: req.body.nomComplet,
             nomUtilisateur: req.body.nomUtilisateur,
             email: req.body.email,
             motDePasse: req.body.motDePasse,
         });
         res.status(200).send("Enregistrement Ajouter avec succèss.");
+        
     }
     catch (err) {
         res.status(500).send("Une erreur est survenue.");
