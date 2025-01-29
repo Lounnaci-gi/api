@@ -1,4 +1,5 @@
 const btn = document.getElementById('btn');
+const inscrire = document.getElementById('inscrire');
 /*
 btn.addEventListener('click', async () => {
     try {
@@ -67,11 +68,6 @@ function closeLogin() {
     document.getElementById("loginModal").style.display = "none";
 }
 
-// Fermer le modal si on clique en dehors
-window.onclick = function(event) {
-    const modal = document.getElementById("loginModal");
-    if (event.target === modal) {
-        modal.style.display = "none";
-    }
-}
-
+inscrire.addEventListener('click',()=>{
+    console.log('inscrire');
+})
