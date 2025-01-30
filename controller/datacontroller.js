@@ -1,5 +1,6 @@
 const { Client, User } = require("../models/model");
 const bcrypt = require('bcrypt');
+const { validationResult } = require("express-validator");
 
 module.exports.setPosts = async (req, res) => {
     try {
@@ -10,7 +11,7 @@ module.exports.setPosts = async (req, res) => {
         }
 
         // Si `data` contient des données, on les traite
-        const post = Client.create({
+        const post = await Client.create({
             Id_Client: req.body.Id_Client,
             raison_sociale: req.body.raison_sociale,
             Adresse: req.body.Adresse,
@@ -100,6 +101,10 @@ module.exports.deletepost = async (req, res) => {
 
 
 module.exports.newuser = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ success: false, errors: errors.array() });
+    }
     try {
         const { nomComplet, nomUtilisateur, email, motDePasse } = req.body;
 
@@ -137,22 +142,20 @@ module.exports.newuser = async (req, res) => {
 module.exports.getuser = async (req, res) => {
     try {
         const { nomUtilisateur, motDePasse } = req.body;
-
         // Trouver l'utilisateur par nom d'utilisateur
         const user = await User.findOne({ nomUtilisateur });
 
-        
 
         // Vérifier si l'utilisateur existe
         if (!user) {
-            return res.status(404).json({ success: false, message: "Nom d'utilisateur incorrect." });
+            return res.status(401).json({ success: false, message: "Nom d'utilisateur ou mot de passe incorrect." });
         }
 
         // Comparer le mot de passe fourni avec le mot de passe hashé
         const isPasswordValid = await bcrypt.compare(motDePasse, user.motDePasse);
 
         if (!isPasswordValid) {
-            return res.status(401).json({ success: false, message: "Mot de passe incorrect." });
+            return res.status(401).json({ success: false, message: "Nom d'utilisateur ou mot de passe incorrect." });
         }
 
         // Renvoyer les données de l'utilisateur (sans le mot de passe)

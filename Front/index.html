@@ -62,11 +62,15 @@
             <!-- Formulaire de connexion -->
             <div id="loginForm">
                 <h2>Connexion</h2>
-                <form> 
+                <form>
                     <!-- action="users/getuser" method="post" -->
-                    <input type="text" id="user" placeholder="Nom d'utilisateur" name="nomUtilisateur" required maxlength="20">
-                    <input type="password" id="password" placeholder="Mot de passe" name="motDePasse" required maxlength="15">
-                    <button type="submit" class="btn" id="submit">Se connecter</button>
+                    <input type="text" id="user" placeholder="Nom d'utilisateur" name="nomUtilisateur" required
+                        maxlength="20" pattern="[A-Za-z0-9_]+"
+                        title="Utilisez uniquement des lettres, chiffres et underscores">
+                    <input type="password" id="password" placeholder="Mot de passe" name="motDePasse" required
+                        minlength="6" maxlength="15" title="Le mot de passe doit contenir au moins 6 caractères">
+
+                    <button type="button" class="btn" id="submit">Se connecter</button>
                 </form>
                 <p>Pas encore de compte ? <a href="#" onclick="showRegisterForm()">Créer un compte</a></p>
             </div>

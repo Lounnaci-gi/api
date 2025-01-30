@@ -70,8 +70,12 @@ function closeLogin() {
 document.getElementById('submit').addEventListener('click', async (event) => {
     event.preventDefault(); // Empêche la soumission du formulaire
 
-    const user = document.getElementById('user').value;
-    const password = document.getElementById('password').value;
+    const user = document.getElementById('user').value.trim();
+    const password = document.getElementById('password').value.trim();
+    if (!user || !password) {
+        alert("Veuillez remplir tous les champs.");
+        return;
+    }
     const datas = { nomUtilisateur: user, motDePasse: password };
 
     try {
@@ -87,10 +91,22 @@ document.getElementById('submit').addEventListener('click', async (event) => {
             // Afficher le nom d'utilisateur sans guillemets
             document.getElementsByClassName('logo')[0].innerText = result.data.nomUtilisateur;
             closeLogin();
+            document.getElementById('user').value="";
+            document.getElementById('password').value="";
         } else {
             alert(result.message || "Erreur lors de la connexion.");
         }
     } catch (err) {
         alert("Une erreur s'est produite lors de la récupération des données.");
+    }
+});
+
+document.getElementById('inscrire').addEventListener('click', function (event) {
+    const password = document.querySelector("input[name='motDePasse']").value;
+    const confirmPassword = document.querySelector("input[placeholder='Confirmer le mot de passe']").value;
+    alert(password+ "  "+confirmPassword);
+    if (password !== confirmPassword) {
+        alert("Les mots de passe ne correspondent pas.");
+        event.preventDefault(); // Bloquer l'envoi du formulaire
     }
 });
