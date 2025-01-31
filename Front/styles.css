@@ -48,18 +48,61 @@ a {
     text-decoration: none;
 }
 
+.navbar {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    background: #1f242d;
+    padding: 15px 0;
+}
 .navbar a {
     font-size: 18px;
     color: white;
-    text-decoration: none;
-    font-weight: 300;
-    margin-left: 35px;
-    transition: 0.5s;
+    font-weight: 400;
+    padding: 10px 15px;
+    position: relative;
+    transition: 0.3s;
 }
 
 .navbar a:hover,
 .navbar a.active {
     color: #00abf0;
+}
+.dropdown {
+    position: relative;
+}
+.submenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #1f242d;
+    display: none;
+    flex-direction: column;
+    min-width: 180px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.submenu a {
+    padding: 12px;
+    color: white;
+    font-size: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.submenu a:hover {
+    background: #00abf0;
+    color: #1f242d;
+}
+
+/* Afficher le sous-menu au survol */
+.dropdown:hover .submenu {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .home {

@@ -4,23 +4,23 @@ const postSchema = mongoose.Schema(
     {
         Id_Client: {
             type: String,
-            required: true
+            required: true,
         },
         raison_sociale: {
             type: String,
-            required: true
+            required: true,
         },
         Adresse: {
             type: String,
-            required: true
+            required: true,
         },
         email: {
             type: String,
-            required: true
-        }
+            required: true,
+        },
     },
     {
-        timestamps: true
+        timestamps: true,
     }
 );
 
@@ -45,13 +45,19 @@ const userSchema = mongoose.Schema(
             type: String,
             required: true,
         },
+        resetToken: {
+            type: String, // Champ pour stocker le token de réinitialisation
+            default: null, // Valeur par défaut
+        },
+        resetTokenExpire: {
+            type: Date, // Champ pour stocker la date d'expiration du token
+            default: null, // Valeur par défaut
+        },
     },
     {
         timestamps: true, // Ajoute automatiquement les champs createdAt et updatedAt
     }
 );
-
-// Export du modèle User
 
 // Création des modèles
 const Client = mongoose.model("Client", postSchema);
