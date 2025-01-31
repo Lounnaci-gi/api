@@ -13,11 +13,50 @@
     <header class="header">
         <a href="#" class="logo">Logo</a>
         <nav class="navbar">
-            <a href="#" class="active">Acceuil</a>
-            <a href="#">Client</a>
-            <a href="#">Devis</a>
-            <a href="#">Factures</a>
-            <a href="#">Contact</a>
+            <!-- Accueil -->
+            <div class="dropdown">
+                <a href="#" class="active">Acceuil</a>
+            </div>
+    
+            <!-- Client avec sous-menu -->
+            <div class="dropdown">
+                <a href="#">Client</a>
+                <div class="submenu">
+                    <a href="#">Ajouter un client</a>
+                    <a href="#">Liste des clients</a>
+                    <a href="#">Modifier un client</a>
+                </div>
+            </div>
+    
+            <!-- Devis avec sous-menu -->
+            <div class="dropdown">
+                <a href="#">Devis</a>
+                <div class="submenu">
+                    <a href="#">Créer un devis</a>
+                    <a href="#">Liste des devis</a>
+                    <a href="#">Modifier un devis</a>
+                </div>
+            </div>
+    
+            <!-- Factures avec sous-menu -->
+            <div class="dropdown">
+                <a href="#">Factures</a>
+                <div class="submenu">
+                    <a href="#">Créer une facture</a>
+                    <a href="#">Liste des factures</a>
+                    <a href="#">Modifier une facture</a>
+                </div>
+            </div>
+    
+            <!-- Contact avec sous-menu -->
+            <div class="dropdown">
+                <a href="#">Contact</a>
+                <div class="submenu">
+                    <a href="#">Nous contacter</a>
+                    <a href="#">Support technique</a>
+                    <a href="#">FAQ</a>
+                </div>
+            </div>
         </nav>
     </header>
     <section class="home">
@@ -98,7 +137,6 @@
                 <p>Déjà un compte ? <a href="#" onclick="showLoginForm()">Se connecter</a></p>
             </div>
         </div>
-
 
     </div>
     <script src="main.js"></script>

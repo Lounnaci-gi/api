@@ -48,13 +48,17 @@ a {
     text-decoration: none;
 }
 
+/* Styles pour la barre de navigation */
 .navbar {
     display: flex;
     justify-content: center;
+    align-items: center; /* Alignement vertical */
     gap: 20px;
     background: #1f242d;
     padding: 15px 0;
 }
+
+/* Styles pour les liens de la barre de navigation */
 .navbar a {
     font-size: 18px;
     color: white;
@@ -62,15 +66,23 @@ a {
     padding: 10px 15px;
     position: relative;
     transition: 0.3s;
+    text-decoration: none; /* Supprime le soulignement par défaut */
 }
 
 .navbar a:hover,
 .navbar a.active {
     color: #00abf0;
 }
+
+/* Styles pour les éléments avec sous-menus */
 .dropdown {
     position: relative;
+    display: flex;
+    align-items: center; /* Alignement vertical */
+    border-radius: 15px;
 }
+
+/* Styles pour les sous-menus */
 .submenu {
     position: absolute;
     top: 100%;
@@ -79,11 +91,11 @@ a {
     display: none;
     flex-direction: column;
     min-width: 180px;
-    border-radius: 5px;
+    border-radius: 15px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
     opacity: 0;
     transform: translateY(10px);
-    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
 }
 
 .submenu a {
@@ -91,6 +103,7 @@ a {
     color: white;
     font-size: 16px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
 }
 
 .submenu a:hover {
@@ -101,10 +114,9 @@ a {
 /* Afficher le sous-menu au survol */
 .dropdown:hover .submenu {
     display: flex;
-    opacity: 1;
+    opacity: 0.8;
     transform: translateY(0);
 }
-
 .home {
     height: 100vh;
     display: flex;
