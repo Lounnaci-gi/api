@@ -66,7 +66,7 @@ function openLogin() {
 function closeLogin() {
     document.getElementById("loginModal").style.display = "none";
 }
-
+/*
 // Fonction login
 document.getElementById('submit').addEventListener('click', async (event) => {
     event.preventDefault(); // Empêche la soumission du formulaire
@@ -101,6 +101,71 @@ document.getElementById('submit').addEventListener('click', async (event) => {
         alert("Une erreur s'est produite lors de la récupération des données.");
     }
 });
+*/
+document.getElementById('submit').addEventListener('click', async (event) => {
+    event.preventDefault(); // Empêche la soumission du formulaire
+
+    const user = document.getElementById('user').value.trim();
+    const password = document.getElementById('password').value.trim();
+
+    // Vérification des champs vides
+    if (!user || !password) {
+        showErrorMessage("Veuillez remplir tous les champs.");
+        return;
+    }
+
+    const datas = { nomUtilisateur: user, motDePasse: password };
+
+    try {
+        const response = await fetch('http://localhost:3000/users/getuser', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(datas),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.message || "Erreur lors de la connexion.");
+        }
+
+        // Vérification si les données retournées sont valides
+        if (!result.data || !result.data.nomUtilisateur) {
+            throw new Error("Données utilisateur invalides.");
+        }
+
+        // Afficher le nom d'utilisateur sans guillemets
+        document.getElementsByClassName('logo')[0].innerText = result.data.nomUtilisateur;
+        closeLogin();
+        
+        // Réinitialiser les champs du formulaire
+        document.getElementById('user').value = "";
+        document.getElementById('password').value = "";
+
+    } catch (err) {
+        showErrorMessage(err.message || "Une erreur s'est produite lors de la récupération des données.");
+    }
+});
+
+function showErrorMessage(message) {
+    const errorBox = document.getElementById('error-message');
+    const errorText = document.getElementById('error-text');
+
+    if (errorBox && errorText) {
+        errorText.innerText = message;
+        errorBox.style.display = "flex";
+
+        // Cacher le message après 5 secondes
+        setTimeout(() => {
+            errorBox.style.display = "none";
+        }, 5000);
+    }
+}
+
+// Fonction pour fermer manuellement le message d'erreur
+function closeErrorMessage() {
+    document.getElementById('error-message').style.display = "none";
+}
 
 // Fonction inscription nouveau utilistaeur
 
