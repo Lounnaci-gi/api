@@ -143,29 +143,25 @@ document.getElementById('submit').addEventListener('click', async (event) => {
         document.getElementById('password').value = "";
 
     } catch (err) {
-        showErrorMessage(err.message || "Une erreur s'est produite lors de la récupération des données.");
+        showLoginError(); // Fait vibrer la boîte en cas d'échec
     }
 });
 
-function showErrorMessage(message) {
-    const errorBox = document.getElementById('error-message');
-    const errorText = document.getElementById('error-text');
+function showLoginError() {
+    const loginModal = document.querySelector('.modal-content'); // Sélection de la boîte de connexion
 
-    if (errorBox && errorText) {
-        errorText.innerText = message;
-        errorBox.style.display = "flex";
+    if (loginModal) {
+        loginModal.classList.add('shake'); // Ajoute l’animation
 
-        // Cacher le message après 5 secondes
         setTimeout(() => {
-            errorBox.style.display = "none";
-        }, 5000);
+            loginModal.classList.remove('shake'); // Retire l’animation après 400ms
+            document.getElementById('user').value = "";
+            document.getElementById('password').value = "";
+        }, 400);
     }
 }
 
-// Fonction pour fermer manuellement le message d'erreur
-function closeErrorMessage() {
-    document.getElementById('error-message').style.display = "none";
-}
+
 
 // Fonction inscription nouveau utilistaeur
 
