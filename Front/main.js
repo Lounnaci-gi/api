@@ -54,6 +54,7 @@ function showRegisterForm() {
 function showLoginForm() {
     document.getElementById("registerForm").style.display = "none";
     document.getElementById("loginForm").style.display = "block";
+    document.getElementById('forgotPasswordForm').style.display = 'none';
 }
 
 // Fonction pour ouvrir le modal (connexion par défaut)
@@ -110,7 +111,7 @@ document.getElementById('submit').addEventListener('click', async (event) => {
 
     // Vérification des champs vides
     if (!user || !password) {
-        showErrorMessage("Veuillez remplir tous les champs.");
+        showLoginError();
         return;
     }
 
@@ -199,3 +200,40 @@ document.getElementById('inscrire').addEventListener('click',  async function (e
             alert("Une erreur s'est produite lors de la récupération des données.");
         }
 });
+
+
+// Afficher le formulaire de récupération de mot de passe
+function showForgotPassword() {
+    document.getElementById('loginForm').style.display = 'none';
+    document.getElementById('forgotPasswordForm').style.display = 'block';
+}
+
+// Envoyer la demande de réinitialisation
+async function sendPasswordReset() {
+    const email = document.getElementById('emailReset').value.trim();
+
+    if (!email) {
+        alert("Veuillez entrer une adresse e-mail.");
+        return;
+    }
+
+    try {
+        const response = await fetch('http://localhost:3000/users/reset-password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email }),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.message || "Erreur lors de la réinitialisation.");
+        }
+
+        alert("Un e-mail de réinitialisation a été envoyé.");
+        showLoginForm();
+
+    } catch (err) {
+        alert(err.message);
+    }
+}

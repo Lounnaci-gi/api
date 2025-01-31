@@ -1,6 +1,9 @@
 const { Client, User } = require("../models/model");
 const bcrypt = require('bcrypt');
 const { validationResult } = require("express-validator");
+const crypto = require("crypto");
+const nodemailer = require("nodemailer");
+const dotenv = require("dotenv").config();
 
 module.exports.setPosts = async (req, res) => {
     try {
@@ -171,3 +174,47 @@ module.exports.getuser = async (req, res) => {
         res.status(500).json({ success: false, message: "Une erreur est survenue lors de la connexion." });
     }
 };
+
+const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+        user: process.env.EMAIL_USER, // Utilisez la variable d'environnement
+        pass: process.env.EMAIL_PASSWORD, // Utilisez la variable d'environnement
+    },
+});
+
+module.exports.recupass = async (req, res) => {
+    const { email } = req.body; // Extraction de l'e-mail de la requête
+    
+    try {
+        // Recherche de l'utilisateur dans la base de données
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: "Utilisateur non trouvé." }); // Si l'utilisateur n'existe pas, renvoyer une erreur 404
+        }
+        
+        // Génération d'un token de réinitialisation (valide 1h)
+        const resetToken = crypto.randomBytes(32).toString("hex"); // Token aléatoire sécurisé
+        user.resetToken = resetToken; // Enregistrement du token dans l'objet utilisateur
+        user.resetTokenExpire = Date.now() + 3600000; // Date d'expiration du token (1h)
+        await user.save(); // Sauvegarde des modifications dans la base de données
+
+        // Création du lien de réinitialisation
+        const resetLink = `http://localhost:3000/users/reset-password/${resetToken}`;
+        console.log(user.resetToken); // Affichage du token dans la console (pour le débogage)
+        // Envoi de l'e-mail avec le lien de réinitialisation
+        await transporter.sendMail({
+            from: "ahmedlounnaci@gmail.com", // Expéditeur
+            to: user.email, // Destinataire
+            subject: "Réinitialisation du mot de passe", // Sujet de l'e-mail
+            text: `Cliquez sur le lien suivant pour réinitialiser votre mot de passe : ${resetLink}`, // Corps du message
+        });
+        
+        // Réponse indiquant que l'e-mail a été envoyé
+        res.json({ message: "Un e-mail de réinitialisation a été envoyé." });
+
+    } catch (err) {
+        // Gestion des erreurs
+        res.status(500).json({ message: "Erreur serveur." }); // En cas d'erreur, renvoyer une erreur 500
+    }
+}

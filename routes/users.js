@@ -1,12 +1,12 @@
 const express = require("express");
 const routes = express.Router();
 const { body, validationResult } = require("express-validator");
-const {setPosts, editpost, getposts,get_with_id_client,deletepost,newuser,getuser} = require("../controller/datacontroller");
+const {setPosts, editpost, getposts,get_with_id_client,deletepost,newuser,getuser,recupass} = require("../controller/datacontroller");
 
 
 // Définir les routes spécifiques AVANT les routes dynamiques
+routes.post("/reset-password",recupass);
 routes.post("/posts", setPosts);
-//routes.post("/newuser", newuser);
 routes.post(
     "/newuser",
     [
