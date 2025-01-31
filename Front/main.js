@@ -104,7 +104,7 @@ document.getElementById('submit').addEventListener('click', async (event) => {
 document.getElementById('inscrire').addEventListener('click', function (event) {
     const password = document.querySelector("input[name='motDePasse']").value;
     const confirmPassword = document.querySelector("input[placeholder='Confirmer le mot de passe']").value;
-    alert(password+ "  "+confirmPassword);
+    alert("premier : "+password+ " deuxieme : "+confirmPassword);
     if (password !== confirmPassword) {
         alert("Les mots de passe ne correspondent pas.");
         event.preventDefault(); // Bloquer l'envoi du formulaire
