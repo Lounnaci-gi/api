@@ -29,7 +29,7 @@
                 précises et suivi rigoureux pour garantir une satisfaction client optimale et une efficacité maximale
             </p>
             <div class="btn-sci">
-                <a href="#" class="btn" onclick="openLogin()">Loggin</a>
+                <a href="#" class="btn" onclick="openLogin()">Login</a>
                 <div class="sci">
                     <a href="#"><i class='bx bxl-facebook'></i></a>
                     <a href="#"><i class='bx bxl-twitter'></i></a>
@@ -77,13 +77,13 @@
             <!-- Formulaire d'inscription -->
             <div id="registerForm" style="display: none;">
                 <h2>Inscription</h2>
-                <form action="users/newuser" method="post">
+                <form> <!-- action="users/newuser" method="post"-->
                     <input type="text" placeholder="Nom complet" required name="nomComplet" maxlength="40">
-                    <input type="text" placeholder="Nom d'utilisateur" required name="nomUtilisateur" maxlength="20">
+                    <input type="text" placeholder="Nom d'utilisateur" required name="nomUtilisateurs" maxlength="20">
                     <input type="email" placeholder="Adresse e-mail" required name="email" maxlength="40">
                     <input type="password" placeholder="Mot de passe" required name="motDePasse" maxlength="15">
                     <input type="password" placeholder="Confirmer le mot de passe" required maxlength="15">
-                    <button type="submit" class="btn" id="inscrire">S'inscrire</button>
+                    <button type="button" class="btn" id="inscrire">S'inscrire</button>
                 </form>
                 <p>Déjà un compte ? <a href="#" onclick="showLoginForm()">Se connecter</a></p>
             </div>
