@@ -47,15 +47,23 @@ body {
 a {
     text-decoration: none;
 }
-
+/*---------------------------*/
 /* Styles pour la barre de navigation */
 .navbar {
     display: flex;
     justify-content: center;
-    align-items: center; /* Alignement vertical */
-    gap: 20px;
-    background: #1f242d;
+    align-items: center;
+    gap: 15px;
+    /*background: #1f242d;*/
+    background: transparent;
     padding: 15px 0;
+    opacity: 0; /* Masquer par défaut */
+    transition: opacity 0.3s ease-in-out; /* Animation de transition */
+}
+
+/* Afficher la barre de navigation au survol */
+.header:hover .navbar {
+    opacity: 1; /* Rendre visible */
 }
 
 /* Styles pour les liens de la barre de navigation */
@@ -66,7 +74,7 @@ a {
     padding: 10px 15px;
     position: relative;
     transition: 0.3s;
-    text-decoration: none; /* Supprime le soulignement par défaut */
+    text-decoration: none;
 }
 
 .navbar a:hover,
@@ -78,7 +86,7 @@ a {
 .dropdown {
     position: relative;
     display: flex;
-    align-items: center; /* Alignement vertical */
+    align-items: center;
     border-radius: 15px;
 }
 
@@ -521,4 +529,121 @@ footer {
 /* Effet au survol des liens */
 .footer-links a:hover {
     color: #00abf0; /* Couleur bleue pour le hover */
+}
+
+/* Styles pour la section de gestion des clients */
+
+#typeClient{
+    background-color: #2a2f3a;
+}
+.client-section {
+    padding-top: 10%;
+    padding-left: 5%;
+    padding-right: 5%;
+    background-color: #1f242d;
+    color: white;
+    text-align: center;
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Assure que la section prend toute la hauteur de la page */
+}
+
+.client-container {
+    max-width: 400px; /* Largeur maximale réduite pour un formulaire compact */
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    background: #2a2f3a;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.client-container h2 {
+    font-size: 30px;
+    margin-bottom: 20px;
+    color: #00abf0;
+}
+
+.client-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Espacement réduit entre les éléments */
+}
+
+.client-form h3 {
+    font-size: 1.2em;
+    font-weight: 200;
+    margin-bottom: 15px;
+    color: #00abf0;
+}
+
+.client-form input,
+.client-form select {
+    width: 100%; /* Largeur de 100% pour s'adapter au conteneur */
+    padding: 8px; /* Padding réduit */
+    margin: 5px 0;
+    border: 1px solid #00abf0;
+    border-radius: 5px;
+    background-color: transparent;
+    color: white;
+    font-size: 14px; /* Taille de police réduite */
+    text-transform: capitalize;
+}
+
+.client-form input::placeholder,
+.client-form select::placeholder {
+    color: #aaa;
+}
+
+.client-form select {
+    appearance: none; /* Supprime l'apparence par défaut du select */
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.client-form button {
+    width: 50%; /* Largeur réduite du bouton */
+    padding: 8px; /* Padding réduit */
+    margin: 10px auto; /* Centrage du bouton */
+    background: #00abf0;
+    border: none;
+    border-radius: 5px;
+    color: #1f242d;
+    font-size: 14px; /* Taille de police réduite */
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.client-form button:hover {
+    background: transparent;
+    color: #00abf0;
+    box-shadow: 0 0 10px #00abf0;
+}
+
+/* Styles pour les écrans mobiles */
+@media (max-width: 768px) {
+    .client-section {
+        padding-top: 20%;
+        padding-left: 2%;
+        padding-right: 2%;
+    }
+
+    .client-container {
+        padding: 15px;
+    }
+
+    .client-form input,
+    .client-form select {
+        font-size: 12px; /* Taille de police encore plus réduite pour les mobiles */
+        padding: 6px;
+    }
+
+    .client-form button {
+        width: 60%; /* Largeur légèrement augmentée pour les mobiles */
+        font-size: 12px;
+        padding: 6px;
+    }
 }

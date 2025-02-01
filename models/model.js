@@ -27,10 +27,12 @@ const postSchema = mongoose.Schema(
         email: {
             type: String,
             required: false,
+            match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Veuillez entrer un email valide"],
         },
         telephone: {
             type: String,
             required: false,
+            match: [/^[0-9]{10}$/, "Veuillez entrer un numéro de téléphone valide"],
         },
         type_client: {
             type: String,
@@ -60,6 +62,7 @@ const userSchema = mongoose.Schema(
             type: String,
             required: true,
             unique: true, // L'email doit être unique
+            match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Veuillez entrer un email valide"],
         },
         motDePasse: {
             type: String,
