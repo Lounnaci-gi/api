@@ -1,4 +1,9 @@
 const btn = document.getElementById('btn');
+
+function toggleMenu() {
+    const navbar = document.querySelector('.navbar');
+    navbar.classList.toggle('active');
+}
 /*
 btn.addEventListener('click', async () => {
     try {

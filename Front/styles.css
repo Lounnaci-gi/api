@@ -370,3 +370,155 @@ a {
 #forgotPasswordForm input::placeholder {
     color: #aaa;
 }
+
+.menu-icon {
+    display: none; /* Masqué par défaut */
+    font-size: 24px;
+    cursor: pointer;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .menu-icon {
+        display: block; /* Visible sur mobile */
+    }
+    .navbar {
+        display: none; /* Cache la navigation par défaut */
+    }
+    .navbar.active {
+        display: flex; /* Affiche la navigation lorsqu'elle est active */
+        flex-direction: column;
+        background-color: #1f242d;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        z-index: 100;
+    }
+}
+
+/* Styles pour les écrans de moins de 768px (mobiles) */
+@media (max-width: 768px) {
+    /* Réduction de la taille du logo */
+    .logo {
+        font-size: 20px;
+    }
+
+    /* Barre de navigation adaptée aux mobiles */
+    .navbar {
+        flex-direction: column; /* Passage en colonne */
+        gap: 10px; /* Espace entre les éléments */
+        padding: 10px 0;
+        
+    }
+    .navbar a {
+        font-size: 16px; /* Réduction de la taille de police */
+        padding: 8px 15px; /* Réduction des paddings */
+    }
+
+    /* Sous-menus adaptés aux mobiles */
+    .submenu {
+        position: static; /* Passage en position statique */
+        display: none; /* Caché par défaut */
+        flex-direction: column;
+        box-shadow: none; /* Suppression de l'ombre */
+        border-radius: 0; /* Coins arrondis supprimés */
+    }
+    .dropdown:hover .submenu {
+        display: flex; /* Affichage au survol */
+    }
+
+    /* Section Accueil */
+    .home {
+        flex-direction: column; /* Passage en colonne */
+        text-align: center; /* Centrage du texte */
+    }
+    .home-info h1 {
+        font-size: 30px; /* Réduction de la taille de police */
+    }
+    .home-info h3 {
+        font-size: 20px; /* Réduction de la taille de police */
+    }
+    .home-info p {
+        font-size: 14px; /* Réduction de la taille de police */
+    }
+
+    /* Image centrée et réduite */
+    .home-img .img-box {
+        width: 50vw; /* Réduction de la taille de l'image */
+        height: 50vw;
+    }
+    .home-img .img-box .img-item img {
+        width: 90%; /* Ajustement de la taille de l'image */
+        top: 20px; /* Ajustement de la position */
+        left: 10px;
+        transform: scale(1); /* Suppression de l'effet de zoom */
+    }
+
+    /* Modal de connexion/inscription */
+    .modal-content {
+        width: 95%; /* Largeur maximale ajustée */
+        max-width: none; /* Suppression de la largeur maximale */
+        margin: 5% auto; /* Ajustement de la marge */
+    }
+    .modal-content input {
+        font-size: 14px; /* Réduction de la taille de police */
+        padding: 8px; /* Réduction des paddings */
+    }
+    .modal-content .btn {
+        font-size: 14px; /* Réduction de la taille de police */
+        padding: 8px; /* Réduction des paddings */
+    }
+
+    /* Boutons sociaux */
+    .home-info .btn-sci .sci a {
+        padding: 6px; /* Réduction des paddings */
+        font-size: 18px; /* Réduction de la taille de police */
+    }
+}
+
+/* Styles généraux pour le footer */
+footer {
+    background-color: #1f242d; /* Fond sombre cohérent avec le reste du design */
+    color: white; /* Texte blanc pour un bon contraste */
+    padding: 20px 10%; /* Espacement intérieur */
+    text-align: center; /* Centrage du contenu */
+    margin-top: auto; /* Pour s'assurer qu'il reste en bas de la page */
+}
+
+/* Contenu du footer */
+.footer-content {
+    display: flex;
+    flex-direction: column; /* Alignement vertical */
+    align-items: center; /* Centrage horizontal */
+    gap: 15px; /* Espace entre les éléments */
+}
+
+/* Paragraphe de copyright */
+.footer-content p {
+    font-size: 14px; /* Taille de police réduite */
+    margin: 0; /* Suppression des marges par défaut */
+    opacity: 0.8; /* Effet subtil de transparence */
+}
+
+/* Liste des liens */
+.footer-links {
+    list-style: none; /* Suppression des puces */
+    padding: 0; /* Suppression des paddings par défaut */
+    margin: 0; /* Suppression des marges par défaut */
+    display: flex;
+    gap: 15px; /* Espace entre les liens */
+}
+
+/* Liens dans le footer */
+.footer-links a {
+    color: #aaa; /* Couleur grise pour les liens */
+    text-decoration: none; /* Suppression du soulignement */
+    font-size: 14px; /* Taille de police réduite */
+    transition: color 0.3s ease; /* Transition douce pour le hover */
+}
+
+/* Effet au survol des liens */
+.footer-links a:hover {
+    color: #00abf0; /* Couleur bleue pour le hover */
+}
