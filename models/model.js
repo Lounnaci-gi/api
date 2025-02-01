@@ -1,30 +1,50 @@
 const mongoose = require("mongoose");
 
+// Schéma pour les clients
 const postSchema = mongoose.Schema(
     {
         Id_Client: {
             type: String,
             required: true,
+            unique: true,
         },
         raison_sociale: {
             type: String,
             required: true,
         },
-        Adresse: {
+        Adresse_correspondante: { // Modification du nom du champ
+            type: String,
+            required: true,
+        },
+        Num_pic_identite: { // Nouveau champ
+            type: String,
+            required: false,
+        },
+        Adresse_branchement: { // Nouveau champ
             type: String,
             required: true,
         },
         email: {
             type: String,
+            required: false,
+        },
+        telephone: {
+            type: String,
+            required: false,
+        },
+        type_client: {
+            type: String,
             required: true,
         },
+        // Ajoutez d'autres champs si nécessaire pour type_client
     },
     {
-        timestamps: true,
+        timestamps: true, // Ajoute automatiquement les champs createdAt et updatedAt
     }
 );
 
-// Schéma pour les utilisateurs
+
+// Schéma pour les utilisateurs (inchangé)
 const userSchema = mongoose.Schema(
     {
         nomComplet: {

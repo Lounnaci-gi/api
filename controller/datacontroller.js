@@ -17,8 +17,12 @@ module.exports.setPosts = async (req, res) => {
         const post = await Client.create({
             Id_Client: req.body.Id_Client,
             raison_sociale: req.body.raison_sociale,
-            Adresse: req.body.Adresse,
-            email: req.body.email
+            Adresse_correspondante: req.body.Adresse_correspondante,
+            Num_pic_identite: req.body.Num_pic_identite,
+            Adresse_branchement: req.body.Adresse_branchement,
+            email: req.body.email,
+            telephone: req.body.telephone,
+            type_client: req.body.type_client
         });
         res.status(200).send("Enregistrement Ajouter avec succèss.");
     }
@@ -200,7 +204,7 @@ module.exports.recupass = async (req, res) => {
         await user.save(); // Sauvegarde les modifications dans la base de données
         // Création du lien de réinitialisation
         const resetLink = `http://localhost:3000/users/reset-password/${resetToken}`;
-        
+
         // Envoi de l'e-mail avec le lien de réinitialisation
         console.log("Tentative d'envoi d'e-mail à :", user.email);
         await transporter.sendMail({
