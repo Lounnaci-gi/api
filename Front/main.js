@@ -68,10 +68,12 @@ function closeLogin() {
 }
 
 // Fermer le modal si on clique en dehors
+/*
 window.onclick = function(event) {
     const modal = document.getElementById("loginModal");
     if (event.target === modal) {
         modal.style.display = "none";
     }
 }
+*/
 
