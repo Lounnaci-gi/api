@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 // Schéma pour les clients
 const postSchema = mongoose.Schema(
     {
-        Id_Client: {
+        Id_Dossier: {
             type: String,
             required: true,
             unique: true,
@@ -16,23 +16,29 @@ const postSchema = mongoose.Schema(
             type: String,
             required: true,
         },
+        commune_correspondante: { // Modification du nom du champ
+            type: String,
+            required: true,
+        },
         Num_pic_identite: { // Nouveau champ
             type: String,
             required: false,
         },
         Adresse_branchement: { // Nouveau champ
+            required: true,
+            type: String,
+        },
+        commune_branchement: { // Modification du nom du champ
             type: String,
             required: true,
         },
         email: {
             type: String,
             required: false,
-            match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Veuillez entrer un email valide"],
         },
         telephone: {
             type: String,
             required: false,
-            match: [/^[0-9]{10}$/, "Veuillez entrer un numéro de téléphone valide"],
         },
         type_client: {
             type: String,
@@ -62,7 +68,6 @@ const userSchema = mongoose.Schema(
             type: String,
             required: true,
             unique: true, // L'email doit être unique
-            match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Veuillez entrer un email valide"],
         },
         motDePasse: {
             type: String,
