@@ -7,18 +7,64 @@
     <title>Gestion Clientels - Suivi des nouveaux branchements </title>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="styles.css">
+    <!-- Ajout de méta-données SEO -->
+    <meta name="description"
+        content="Solution de gestion clientèle spécialisée dans le suivi des branchements - Création de devis, facturation et suivi technique">
+    <meta name="keywords" content="gestion client, branchements, devis, facturation, suivi technique">
 </head>
 
 <body>
     <header class="header">
         <a href="#" class="logo">Logo</a>
         <nav class="navbar">
-            <a href="#" class="active">Acceuil</a>
-            <a href="#">Client</a>
-            <a href="#">Devis</a>
-            <a href="#">Factures</a>
-            <a href="#">Contact</a>
+            <!-- Accueil -->
+            <div class="dropdown">
+                <a href="#" class="active">Acceuil</a>
+            </div>
+
+            <!-- Client avec sous-menu -->
+            <div class="dropdown">
+                <a href="#">Client</a>
+                <div class="submenu">
+                    <a href="clients.html">Ajouter un client</a>
+                    <a href="clients.html">Liste des clients</a>
+                    <a href="clients.html">Modifier un client</a>
+                </div>
+            </div>
+
+            <!-- Devis avec sous-menu -->
+            <div class="dropdown">
+                <a href="#">Devis</a>
+                <div class="submenu">
+                    <a href="#">Créer un devis</a>
+                    <a href="#">Liste des devis</a>
+                    <a href="#">Modifier un devis</a>
+                </div>
+            </div>
+
+            <!-- Factures avec sous-menu -->
+            <div class="dropdown">
+                <a href="#">Factures</a>
+                <div class="submenu">
+                    <a href="#">Créer une facture</a>
+                    <a href="#">Liste des factures</a>
+                    <a href="#">Modifier une facture</a>
+                </div>
+            </div>
+
+            <!-- Contact avec sous-menu -->
+            <div class="dropdown">
+                <a href="#">Contact</a>
+                <div class="submenu">
+                    <a href="#">Nous contacter</a>
+                    <a href="#">Support technique</a>
+                    <a href="#">FAQ</a>
+                </div>
+            </div>
         </nav>
+        <div class="menu-icon" onclick="toggleMenu()">
+            <i class='bx bx-menu'></i>
+        </div>
     </header>
     <section class="home">
         <div class="home-info">
@@ -29,7 +75,7 @@
                 précises et suivi rigoureux pour garantir une satisfaction client optimale et une efficacité maximale
             </p>
             <div class="btn-sci">
-                <a href="#" class="btn" onclick="openLogin()">Loggin</a>
+                <a href="#" class="btn" onclick="openLogin()">Login</a>
                 <div class="sci">
                     <a href="#"><i class='bx bxl-facebook'></i></a>
                     <a href="#"><i class='bx bxl-twitter'></i></a>
@@ -63,16 +109,37 @@
             <div id="loginForm">
                 <h2>Connexion</h2>
                 <form>
+<<<<<<< HEAD
                     <input type="text" placeholder="Nom d'utilisateur" required maxlength="15">
                     <input type="password" placeholder="Mot de passe" required maxlength="15">
                     <button type="submit" class="btn">Se connecter</button>
+=======
+                    <input type="text" id="user" placeholder="Nom d'utilisateur" name="nomUtilisateur" required
+                        maxlength="20" pattern="[A-Za-z0-9_]+"
+                        title="Utilisez uniquement des lettres, chiffres et underscores">
+                    <input type="password" id="password" placeholder="Mot de passe" required minlength="6"
+                        maxlength="15" title="Le mot de passe doit contenir au moins 6 caractères">
+
+                    <button type="button" class="btn" id="submit">Se connecter</button>
+>>>>>>> f6eb44626efbe012f3939dc676a1529887a42415
                 </form>
                 <p>Pas encore de compte ? <a href="#" onclick="showRegisterForm()">Créer un compte</a></p>
+                <p><a href="#" onclick="showForgotPassword()">Mot de passe oublié ?</a></p>
+            </div>
+            <!-- Formulaire de récupération du mot de passe (caché par défaut) -->
+            <div id="forgotPasswordForm" style="display: none;">
+                <h2>Réinitialisation du mot de passe</h2>
+                <form>
+                    <input type="email" id="emailReset" placeholder="Entrez votre email" required maxlength="40">
+                    <button type="button" class="btn" onclick="sendPasswordReset()">Envoyer</button>
+                </form>
+                <p><a href="#" onclick="showLoginForm()">Retour à la connexion</a></p>
             </div>
 
             <!-- Formulaire d'inscription -->
             <div id="registerForm" style="display: none;">
                 <h2>Inscription</h2>
+<<<<<<< HEAD
                 <form action="users/newuser" method="post">
                     <input type="text" placeholder="Nom complet" required name="nomComplet" maxlength="50">
                     <input type="text" placeholder="Nom d'utilisateur" required name="nomUtilisateur" maxlength="15">
@@ -80,12 +147,31 @@
                     <input type="password" placeholder="Mot de passe" required name="motDePasse" maxlength="15">
                     <input type="password" placeholder="Confirmer le mot de passe" required maxlength="15">
                     <button type="submit" class="btn">S'inscrire</button>
+=======
+                <form>
+                    <input type="text" placeholder="Nom complet" required name="nomComplet" maxlength="40">
+                    <input type="text" placeholder="Nom d'utilisateur" required name="nomUtilisateurs" maxlength="20">
+                    <input type="email" placeholder="Adresse e-mail" required name="email" maxlength="40">
+                    <input type="password" placeholder="Mot de passe" required name="motDePasse" maxlength="15">
+                    <input type="password" placeholder="Confirmer le mot de passe" required maxlength="15">
+                    <button type="button" class="btn" id="inscrire">S'inscrire</button>
+>>>>>>> f6eb44626efbe012f3939dc676a1529887a42415
                 </form>
                 <p>Déjà un compte ? <a href="#" onclick="showLoginForm()">Se connecter</a></p>
             </div>
         </div>
+
     </div>
-    <!-- Fin Formulaire d'inscription -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 Gestion Clientèle. Tous droits réservés.</p>
+            <ul class="footer-links">
+                <li><a href="#">Mentions légales</a></li>
+                <li><a href="#">Politique de confidentialité</a></li>
+                <li><a href="#">Conditions d'utilisation</a></li>
+            </ul>
+        </div>
+    </footer>
     <script src="main.js"></script>
 </body>
 
