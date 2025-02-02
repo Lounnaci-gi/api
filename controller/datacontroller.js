@@ -4,6 +4,7 @@ const { validationResult } = require("express-validator");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const dotenv = require("dotenv").config();
+const moment = require("moment");
 
 module.exports.setPosts = async (req, res) => {
     try {
@@ -227,3 +228,27 @@ module.exports.recupass = async (req, res) => {
 }
 
 //-----------Récupérer le dernier id_dossier -- ---------------------------------------------------
+module.exports.last_id_dossier = async (req, res) => {
+    const currentYear = moment().format("YYYY");
+    try {
+        const lastClient = await Client.findOne({ Id_Dossier: new RegExp(`\\/CB\\/${currentYear}$`) })
+            .sort({ Id_Dossier: -1 }) // Correction du champ
+            .lean();
+
+        let nextNumber = 1;
+        if (lastClient && lastClient.Id_Dossier) {
+            const lastNumber = parseInt(lastClient.Id_Dossier.split("/")[0], 10);
+            if (!isNaN(lastNumber)) {
+                nextNumber = lastNumber + 1;
+            }
+        }
+
+        const newIdDossier = `${String(nextNumber).padStart(4, "0")}/CB/${currentYear}`;
+        res.json({ success: true, idDossier: newIdDossier });
+
+    } catch (error) {
+        console.error("Erreur lors de la génération de l'ID dossier :", error);
+        res.status(500).json({ success: false, message: "Erreur serveur" });
+    }
+
+}

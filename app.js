@@ -20,10 +20,10 @@ app.use("/users/getuser", loginLimiter);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname,'Front')));
-app.use("/users",users);
+app.use(express.static(path.join(__dirname, 'Front')));
+app.use("/users", users);
 
 
-app.listen(port,()=>{
-console.log(`le serveur est lancé sur le port: http://localhost:${port}`);
+app.listen(port, () => {
+    console.log(`le serveur est lancé sur le port: http://localhost:${port}`);
 })
