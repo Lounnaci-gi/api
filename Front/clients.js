@@ -11,8 +11,14 @@ document.getElementById('AjouterClient').addEventListener('click', async () => {
                 }
             });
 
-    } catch {
+    } catch (error) {
         alert("Une erreur s'est produite lors de la récupération de idDossier.");
+        Swal.fire({
+            title: 'Erreur',
+            text: `Une erreur s'est produite : ${error.message}`,
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
 
     }
 })
@@ -45,8 +51,23 @@ document.getElementsByClassName('btn')[0].addEventListener('click', async () => 
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(datas),
             });
-    } catch (error) {
-        alert(`Une erreur s'est produite : ${error.message}`);
-    }
 
+        if (!response.ok) {
+            throw new Error(`Erreur HTTP: ${response.status}`);
+        } else {
+            Swal.fire({
+                title: 'Succès !',
+                text: 'Données envoyées avec succès.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        }
+    } catch (error) {
+        Swal.fire({
+            title: 'Erreur',
+            text: `Une erreur s'est produite : ${error.message}`,
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    }
 })
