@@ -33,3 +33,18 @@ window.onload = async () => {
 
 };
 */
+window.onload = async () => {
+    try {
+        const response = await fetch('http://localhost:3000/users/last_id_dossier')
+            .then(response => response.json())
+            .then(data => {
+                if (data) {
+                    document.getElementById('idDossier').value = data.idDossier;
+                }
+            });
+
+    } catch {
+
+    }
+
+}
