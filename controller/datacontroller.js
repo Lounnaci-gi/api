@@ -1,5 +1,5 @@
 const { Client, User } = require("../models/model");
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const { validationResult } = require("express-validator");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
@@ -185,6 +185,9 @@ const transporter = nodemailer.createTransport({
         user: process.env.EMAIL_USER, // Utilisez la variable d'environnement
         pass: process.env.EMAIL_PASSWORD, // Utilisez la variable d'environnement
     },
+    tls: {
+        rejectUnauthorized: false, // Ignore les erreurs SSL
+    }
 });
 
 module.exports.recupass = async (req, res) => {
@@ -196,7 +199,6 @@ module.exports.recupass = async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: "Utilisateur non trouvé." }); // Si l'utilisateur n'existe pas, renvoyer une erreur 404
         }
-
         // Génération d'un token de réinitialisation (valide 1h)
         const resetToken = crypto.randomBytes(32).toString("hex"); // Génère un token aléatoire
         user.resetToken = resetToken; // Associe le token à l'utilisateur

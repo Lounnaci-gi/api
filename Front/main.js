@@ -77,14 +77,6 @@ function closeLogin() {
 document.getElementById('submit').addEventListener('click', async (event) => {
     event.preventDefault(); // Empêche la soumission du formulaire
 
-<<<<<<< HEAD
-// Fermer le modal si on clique en dehors
-/*
-window.onclick = function(event) {
-    const modal = document.getElementById("loginModal");
-    if (event.target === modal) {
-        modal.style.display = "none";
-=======
     const user = document.getElementById('user').value.trim();
     const password = document.getElementById('password').value.trim();
     if (!user || !password) {
@@ -172,10 +164,9 @@ function showLoginError() {
             document.getElementById('user').value = "";
             document.getElementById('password').value = "";
         }, 400);
->>>>>>> f6eb44626efbe012f3939dc676a1529887a42415
     }
 }
-*/
+
 
 
 

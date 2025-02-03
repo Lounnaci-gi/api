@@ -109,11 +109,6 @@
             <div id="loginForm">
                 <h2>Connexion</h2>
                 <form>
-<<<<<<< HEAD
-                    <input type="text" placeholder="Nom d'utilisateur" required maxlength="15">
-                    <input type="password" placeholder="Mot de passe" required maxlength="15">
-                    <button type="submit" class="btn">Se connecter</button>
-=======
                     <input type="text" id="user" placeholder="Nom d'utilisateur" name="nomUtilisateur" required
                         maxlength="20" pattern="[A-Za-z0-9_]+"
                         title="Utilisez uniquement des lettres, chiffres et underscores">
@@ -121,7 +116,6 @@
                         maxlength="15" title="Le mot de passe doit contenir au moins 6 caractères">
 
                     <button type="button" class="btn" id="submit">Se connecter</button>
->>>>>>> f6eb44626efbe012f3939dc676a1529887a42415
                 </form>
                 <p>Pas encore de compte ? <a href="#" onclick="showRegisterForm()">Créer un compte</a></p>
                 <p><a href="#" onclick="showForgotPassword()">Mot de passe oublié ?</a></p>
@@ -139,15 +133,6 @@
             <!-- Formulaire d'inscription -->
             <div id="registerForm" style="display: none;">
                 <h2>Inscription</h2>
-<<<<<<< HEAD
-                <form action="users/newuser" method="post">
-                    <input type="text" placeholder="Nom complet" required name="nomComplet" maxlength="50">
-                    <input type="text" placeholder="Nom d'utilisateur" required name="nomUtilisateur" maxlength="15">
-                    <input type="email" placeholder="Adresse e-mail" required name="email" maxlength="60">
-                    <input type="password" placeholder="Mot de passe" required name="motDePasse" maxlength="15">
-                    <input type="password" placeholder="Confirmer le mot de passe" required maxlength="15">
-                    <button type="submit" class="btn">S'inscrire</button>
-=======
                 <form>
                     <input type="text" placeholder="Nom complet" required name="nomComplet" maxlength="40">
                     <input type="text" placeholder="Nom d'utilisateur" required name="nomUtilisateurs" maxlength="20">
@@ -155,7 +140,6 @@
                     <input type="password" placeholder="Mot de passe" required name="motDePasse" maxlength="15">
                     <input type="password" placeholder="Confirmer le mot de passe" required maxlength="15">
                     <button type="button" class="btn" id="inscrire">S'inscrire</button>
->>>>>>> f6eb44626efbe012f3939dc676a1529887a42415
                 </form>
                 <p>Déjà un compte ? <a href="#" onclick="showLoginForm()">Se connecter</a></p>
             </div>
