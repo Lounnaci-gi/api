@@ -35,6 +35,8 @@ window.onload = async () => {
 */
 document.getElementById('AjouterClient').addEventListener('click', async () => {
     document.getElementsByClassName('client-section')[0].style.display='flex';
+    document.getElementsByClassName('footer')[0].style='margin-top: auto';
+    
     try {
         const response = await fetch('http://localhost:3000/users/last_id_dossier')
             .then(response => response.json())
