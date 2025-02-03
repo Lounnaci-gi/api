@@ -70,19 +70,31 @@
             <div class="client-form">
                 <h3>Ajouter un Client</h3>
                 <form id="addClientForm">
-                    <input type="text" id="idClient" placeholder="ID Client" required maxlength="6">
-                    <input type="text" id="raisonSociale" placeholder="Raison Sociale" required maxlength="60">
-                    <input type="text" id="adresseCorrespondante" placeholder="Adresse Correspondante" required maxlength="120">
-                    <input type="text" id="numPicIdentite" placeholder="Numéro PIC Identité" maxlength="20">
-                    <input type="text" id="adresseBranchement" placeholder="Adresse de Branchement" required maxlength="120">
-                    <input type="email" id="email" placeholder="Email" maxlength="45">
-                    <input type="tel" id="telephone" placeholder="Téléphone" maxlength="10">
-                    <select id="typeClient" required>
-                        <option value="">Sélectionnez un type de client</option>
-                        <option value="proprietaire">Propriétaire</option>
-                        <option value="locataire">Locataire</option>
-                        <option value="mandataire">Mandataire</option>
-                    </select>
+                    <div class="clientrows">
+                        <div class="clientrow1">
+                            <input type="text" id="idDossier" placeholder="ID Dossier" required maxlength="6"
+                                readonly>
+                            <input type="text" id="raisonSociale" placeholder="Raison Sociale" required maxlength="60">
+                            <select id="typeClient" required>
+                                <option value="">Sélectionnez un type de client</option>
+                                <option value="proprietaire">Propriétaire</option>
+                                <option value="locataire">Locataire</option>
+                                <option value="mandataire">Mandataire</option>
+                            </select>
+                            <input type="text" id="adresseCorrespondante" placeholder="Adresse Correspondante" required
+                                maxlength="120">
+                            <input type="text" id="communeCorrespondante" placeholder="Commune" required
+                                maxlength="120">
+                            <input type="text" id="numPicIdentite" placeholder="Numéro PIC Identité" maxlength="20">
+                        </div>
+                        <div class="clientrow2">
+                            <input type="text" id="adresseBranchement" placeholder="Adresse de Branchement" required
+                                maxlength="120">
+                            <input type="text" id="CommuneBranchement" placeholder="Commune" required maxlength="120">
+                            <input type="email" id="email" placeholder="Email" maxlength="45">
+                            <input type="tel" id="telephone" placeholder="Téléphone" maxlength="10">
+                        </div>
+                    </div>
                     <button type="submit" class="btn">Ajouter</button>
                 </form>
             </div>
@@ -99,6 +111,9 @@
             </ul>
         </div>
     </footer>
+    <!-- <script src="main.js"></script> -->
+    <script src="clients.js"></script>
+
 </body>
 
 </html>

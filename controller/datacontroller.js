@@ -4,6 +4,7 @@ const { validationResult } = require("express-validator");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const dotenv = require("dotenv").config();
+const moment = require("moment");
 
 module.exports.setPosts = async (req, res) => {
     try {
@@ -15,11 +16,13 @@ module.exports.setPosts = async (req, res) => {
 
         // Si `data` contient des données, on les traite
         const post = await Client.create({
-            Id_Client: req.body.Id_Client,
+            Id_Dossier: req.body.Id_Dossier,
             raison_sociale: req.body.raison_sociale,
             Adresse_correspondante: req.body.Adresse_correspondante,
+            commune_correspondante: req.body.commune_correspondante,
             Num_pic_identite: req.body.Num_pic_identite,
             Adresse_branchement: req.body.Adresse_branchement,
+            commune_branchement: req.body.commune_branchement,
             email: req.body.email,
             telephone: req.body.telephone,
             type_client: req.body.type_client
@@ -62,15 +65,15 @@ module.exports.getposts = async (req, res) => {
     }
 }
 
-module.exports.get_with_id_client = async (req, res) => {
+module.exports.get_with_Id_dossier = async (req, res) => {
     try {
         // Vérification si l'ID est fourni
         if (req.params.id === "") {
-            return res.status(400).send('Veuillez Fournir un Id_Client');
+            return res.status(400).send('Veuillez Fournir un Id_dossier');
         }
 
         // Recherche du client dans la base de données
-        const client = await Client.findOne({ Id_Client: req.params.id });
+        const client = await Client.findOne({ Id_Dossier: req.params.id });
 
         if (client) {
             // Si le client est trouvé, on renvoie les données
@@ -91,7 +94,7 @@ module.exports.deletepost = async (req, res) => {
         if (req.params.id === "") {
             return res.status(400).send(`Ajouter l'id de Client !`);
         } else {
-            const post = await Client.findOne({ Id_Client: req.params.id });
+            const post = await Client.findOne({ Id_Dossier: req.params.id });
             if (!post) {
                 return res.status(404).send(`Aucun enregistrement trouvé avec l'id : ` + req.params.id);
             } else {
@@ -226,3 +229,28 @@ module.exports.recupass = async (req, res) => {
     }
 }
 
+//-----------Récupérer le dernier id_dossier -- ---------------------------------------------------
+module.exports.last_id_dossier = async (req, res) => {
+    const currentYear = moment().format("YYYY");
+    try {
+        const lastClient = await Client.findOne({ Id_Dossier: new RegExp(`\\/CB\\/${currentYear}$`) })
+            .sort({ Id_Dossier: -1 }) // Correction du champ
+            .lean();
+
+        let nextNumber = 1;
+        if (lastClient && lastClient.Id_Dossier) {
+            const lastNumber = parseInt(lastClient.Id_Dossier.split("/")[0], 10);
+            if (!isNaN(lastNumber)) {
+                nextNumber = lastNumber + 1;
+            }
+        }
+
+        const newIdDossier = `${String(nextNumber).padStart(4, "0")}/CB/${currentYear}`;
+        res.json({ success: true, idDossier: newIdDossier });
+
+    } catch (error) {
+        console.error("Erreur lors de la génération de l'ID dossier :", error);
+        res.status(500).json({ success: false, message: "Erreur serveur" });
+    }
+
+}
