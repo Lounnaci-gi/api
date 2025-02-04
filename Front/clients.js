@@ -24,7 +24,8 @@ document.getElementById('AjouterClient').addEventListener('click', async () => {
 })
 
 
-document.getElementsByClassName('btn')[0].addEventListener('click', async () => {
+document.getElementsByClassName('btn')[0].addEventListener('click', async (event) => {
+    event.preventDefault(); // Empêche le rechargement de la page
     const id_dossier = document.getElementById('idDossier').value;
     const raisonSociale = document.getElementById('raisonSociale').value.trim();
     const typeClient = document.getElementById('typeClient').value;
@@ -79,6 +80,10 @@ document.getElementsByClassName('btn')[0].addEventListener('click', async () => 
                 text: 'Données envoyées avec succès.',
                 icon: 'success',
                 confirmButtonText: 'OK'
+            }).then(() => {
+                document.getElementById('addClientForm').reset(); // Réinitialisation du formulaire
+                document.getElementsByClassName('client-section')[0].style.display = 'none';
+                document.getElementsByClassName('footer')[0].style = 'margin-top: 50%';
             });
         }
     } catch (error) {
@@ -89,6 +94,5 @@ document.getElementsByClassName('btn')[0].addEventListener('click', async () => 
             confirmButtonText: 'OK'
         });
     }
-    document.getElementById('addClientForm').reset();
 
 })
