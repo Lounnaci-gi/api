@@ -99,3 +99,35 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
         });
     }
 });
+
+document.getElementById('raisonSociale').addEventListener('input', async function () {
+    const inputValue = this.value.trim();
+    const datalist = document.getElementById('suggestionsRaisonSociale');
+    // Si l'utilisateur a tapé moins de 2 caractères, on ne fait pas de requête
+    if (inputValue.length < 2) {
+        datalist.innerHTML = '';
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:3000/users/search_rs?q=${inputValue}`);
+        if (!response.ok) {
+            throw new Error(`Erreur HTTP: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        // Vider la liste avant d'ajouter les nouvelles suggestions
+        datalist.innerHTML = '';
+
+        // Ajouter les résultats à la liste déroulante
+        data.forEach(clients => {
+            const option = document.createElement('option');
+            option.value = clients.raison_sociale;  // Ajustez selon le format de votre API
+            datalist.appendChild(option);
+        });
+
+    } catch (error) {
+        console.error("Erreur lors de la récupération des raisons sociales :", error);
+    }
+});
