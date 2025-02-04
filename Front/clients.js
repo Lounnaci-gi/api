@@ -43,6 +43,25 @@ document.getElementsByClassName('btn')[0].addEventListener('click', async () => 
         email: email, telephone: telephone
     };
 
+    if (!id_dossier || !raisonSociale || !typeClient || !numPicIdentite || !adresseBranchement || !adresseCorrespondante) {
+        return Swal.fire({
+            title: 'Erreur',
+            text: 'Veuillez remplir tous les champs obligatoires.',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
+    }
+
+    const phoneRegex = /^\d+$/;
+    if (!phoneRegex.test(telephone)) {
+        return Swal.fire({
+            title: 'Erreur',
+            text: 'Numéro de téléphone invalide. Veuillez entrer uniquement des chiffres.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    }
+
     try {
 
         const response = await fetch('http://localhost:3000/users/posts',
@@ -70,4 +89,6 @@ document.getElementsByClassName('btn')[0].addEventListener('click', async () => 
             confirmButtonText: 'OK'
         });
     }
+    document.getElementById('addClientForm').reset();
+
 })
