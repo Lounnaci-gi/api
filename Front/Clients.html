@@ -24,7 +24,7 @@
             <div class="dropdown">
                 <a href="#">Client</a>
                 <div class="submenu">
-                    <a href="#">Ajouter un client</a>
+                    <a href="#" id="addclient" onclick="">Ajouter un client</a>
                     <a href="#">Liste des clients</a>
                     <a href="#">Modifier un client</a>
                 </div>
@@ -72,8 +72,7 @@
                 <form id="addClientForm">
                     <div class="clientrows">
                         <div class="clientrow1">
-                            <input type="text" id="idDossier" placeholder="ID Dossier" required maxlength="6"
-                                readonly>
+                            <input type="text" id="idDossier" placeholder="ID Dossier" required maxlength="6" readonly>
                             <input type="text" id="raisonSociale" placeholder="Raison Sociale" required maxlength="60">
                             <select id="typeClient" required>
                                 <option value="">Sélectionnez un type de client</option>
