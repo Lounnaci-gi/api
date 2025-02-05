@@ -760,63 +760,78 @@ footer {
     }
 }
 
-.clientrows {
-    display: flex;
-    justify-content: space-between;
-    gap: 5%;
-
-}
-
-.clientrow1, .clientrow2 {
-    flex: 1; /* Chaque ligne prend une part égale de l'espace disponible */
-}
-
 /* Styles personnalisés pour SweetAlert2 */
 .swal2-popup {
-    background-color: #2a2f3a !important; /* Arrière-plan de la boîte de dialogue */
-    border-radius: 10px !important; /* Coins arrondis */
-    border: 1px solid #00abf0 !important; /* Bordure bleue */
-    box-shadow: 0 0 10px rgba(0, 171, 240, 0.5) !important; /* Ombre bleue */
-    color: white !important; /* Texte blanc */
+    background-color: #2a2f3a !important;
+    /* Arrière-plan de la boîte de dialogue */
+    border-radius: 10px !important;
+    /* Coins arrondis */
+    border: 1px solid #00abf0 !important;
+    /* Bordure bleue */
+    box-shadow: 0 0 10px rgba(0, 171, 240, 0.5) !important;
+    /* Ombre bleue */
+    color: white !important;
+    /* Texte blanc */
 }
 
 .swal2-title {
-    font-size: 24px !important; /* Taille du titre */
-    color: #00abf0 !important; /* Couleur du titre */
-    font-weight: 600 !important; /* Poids de la police */
+    font-size: 24px !important;
+    /* Taille du titre */
+    color: #00abf0 !important;
+    /* Couleur du titre */
+    font-weight: 600 !important;
+    /* Poids de la police */
 }
 
 .swal2-content {
-    font-size: 16px !important; /* Taille du texte */
-    color: white !important; /* Couleur du texte */
+    font-size: 16px !important;
+    /* Taille du texte */
+    color: white !important;
+    /* Couleur du texte */
 }
 
 .swal2-confirm {
-    background-color: #00abf0 !important; /* Fond du bouton */
-    border: none !important; /* Suppression de la bordure */
-    border-radius: 5px !important; /* Coins arrondis */
-    padding: 10px 20px !important; /* Espacement interne */
-    font-size: 16px !important; /* Taille de la police */
-    font-weight: 600 !important; /* Poids de la police */
-    color: #1f242d !important; /* Couleur du texte */
-    transition: background-color 0.3s ease !important; /* Transition douce */
+    background-color: #00abf0 !important;
+    /* Fond du bouton */
+    border: none !important;
+    /* Suppression de la bordure */
+    border-radius: 5px !important;
+    /* Coins arrondis */
+    padding: 10px 20px !important;
+    /* Espacement interne */
+    font-size: 16px !important;
+    /* Taille de la police */
+    font-weight: 600 !important;
+    /* Poids de la police */
+    color: #1f242d !important;
+    /* Couleur du texte */
+    transition: background-color 0.3s ease !important;
+    /* Transition douce */
 }
 
 .swal2-confirm:hover {
-    background-color: transparent !important; /* Fond transparent au survol */
-    color: #00abf0 !important; /* Texte bleu au survol */
-    border: 1px solid #00abf0 !important; /* Bordure bleue au survol */
-    box-shadow: 0 0 10px #00abf0 !important; /* Ombre bleue au survol */
+    background-color: transparent !important;
+    /* Fond transparent au survol */
+    color: #00abf0 !important;
+    /* Texte bleu au survol */
+    border: 1px solid #00abf0 !important;
+    /* Bordure bleue au survol */
+    box-shadow: 0 0 10px #00abf0 !important;
+    /* Ombre bleue au survol */
 }
 
 .swal2-close {
-    color: #00abf0 !important; /* Couleur de l'icône de fermeture */
-    font-size: 24px !important; /* Taille de l'icône */
+    color: #00abf0 !important;
+    /* Couleur de l'icône de fermeture */
+    font-size: 24px !important;
+    /* Taille de l'icône */
 }
 
 .swal2-close:hover {
-    color: white !important; /* Couleur au survol */
+    color: white !important;
+    /* Couleur au survol */
 }
+
 .swal2-popup {
     animation: fadeIn 0.5s ease-in-out;
 }
@@ -826,8 +841,24 @@ footer {
         opacity: 0;
         transform: translateY(-20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+.btn {
+    max-width: 15%;
+    position: relative;
+
+}
+
+.civi {
+    display: flex;
+    gap: 20px;
+}
+#civilite {
+    background-color:#2a2f3a;
+    width: 15%;
 }
