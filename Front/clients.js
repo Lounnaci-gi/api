@@ -18,8 +18,6 @@ document.getElementById('AjouterClient').addEventListener('click', async () => {
         });
     }
 });
-
-// 👉 Gérer l'envoi du formulaire
 document.getElementById('addClientForm').addEventListener('submit', async (event) => {
     event.preventDefault(); // Empêche le rechargement de la page
 
@@ -53,6 +51,21 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
             icon: 'error',
             confirmButtonText: 'OK'
         });
+    }
+
+    // 👉 Affichage de la boîte de confirmation avant soumission
+    const confirmation = await Swal.fire({
+        title: 'Confirmation',
+        text: 'Voulez-vous vraiment soumettre ces informations ?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Oui, envoyer',
+        cancelButtonText: 'Annuler'
+    });
+
+    // Si l'utilisateur annule, on stoppe l'envoi
+    if (!confirmation.isConfirmed) {
+        return;
     }
 
     const datas = {
