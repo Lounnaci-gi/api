@@ -1,47 +1,40 @@
+// 👉 Afficher le formulaire lors du clic sur "Ajouter un client"
 document.getElementById('AjouterClient').addEventListener('click', async () => {
-    document.getElementsByClassName('client-section')[0].style.display = 'flex';
-    document.getElementsByClassName('footer')[0].style = 'margin-top: auto';
+    document.querySelector('.client-section').style.display = 'flex';
+    document.querySelector('.footer').style.marginTop = 'auto';
 
     try {
-        const response = await fetch('http://localhost:3000/users/last_id_dossier')
-            .then(response => response.json())
-            .then(data => {
-                if (data) {
-                    document.getElementById('idDossier').value = data.idDossier;
-                }
-            });
-
+        const response = await fetch('http://localhost:3000/users/last_id_dossier');
+        const data = await response.json();
+        if (data) {
+            document.getElementById('idDossier').value = data.idDossier;
+        }
     } catch (error) {
-        alert("Une erreur s'est produite lors de la récupération de idDossier.");
         Swal.fire({
             title: 'Erreur',
-            text: `Une erreur s'est produite : ${error.message}`,
+            text: `Une erreur s'est produite lors de la récupération de l'ID Dossier : ${error.message}`,
             icon: 'error',
             confirmButtonText: 'OK'
         });
-
     }
-})
+});
 
+// 👉 Gérer l'envoi du formulaire
+document.getElementById('addClientForm').addEventListener('submit', async (event) => {
+    event.preventDefault(); // Empêche le rechargement de la page
 
-document.getElementsByClassName('btn')[0].addEventListener('click', async () => {
-    const id_dossier = document.getElementById('idDossier').value;
-    const raisonSociale = document.getElementById('raisonSociale').value.trim();
-    const typeClient = document.getElementById('typeClient').value;
-    const adresseCorrespondante = document.getElementById('adresseCorrespondante').value.trim();
-    const communeCorrespondante = document.getElementById('communeCorrespondante').value.trim();
-    const numPicIdentite = document.getElementById('numPicIdentite').value.trim();
-    const adresseBranchement = document.getElementById('adresseBranchement').value.trim();
-    const CommuneBranchement = document.getElementById('CommuneBranchement').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const telephone = document.getElementById('telephone').value.trim();
+    const getValue = (id) => document.getElementById(id).value.trim();
 
-    const datas = {
-        Id_Dossier: id_dossier, raison_sociale: raisonSociale, type_client: typeClient,
-        Adresse_correspondante: adresseCorrespondante, commune_correspondante: communeCorrespondante,
-        Num_pic_identite: numPicIdentite, Adresse_branchement: adresseBranchement, commune_branchement: CommuneBranchement,
-        email: email, telephone: telephone
-    };
+    const id_dossier = getValue('idDossier');
+    const raisonSociale = getValue('raisonSociale');
+    const typeClient = getValue('typeClient');
+    const adresseCorrespondante = getValue('adresseCorrespondante');
+    const communeCorrespondante = getValue('communeCorrespondante');
+    const numPicIdentite = getValue('numPicIdentite');
+    const adresseBranchement = getValue('adresseBranchement');
+    const communeBranchement = getValue('CommuneBranchement');
+    const email = getValue('email');
+    const telephone = getValue('telephone');
 
     if (!id_dossier || !raisonSociale || !typeClient || !numPicIdentite || !adresseBranchement || !adresseCorrespondante) {
         return Swal.fire({
@@ -62,25 +55,41 @@ document.getElementsByClassName('btn')[0].addEventListener('click', async () => 
         });
     }
 
-    try {
+    const datas = {
+        Id_Dossier: id_dossier,
+        raison_sociale: raisonSociale,
+        type_client: typeClient,
+        Adresse_correspondante: adresseCorrespondante,
+        commune_correspondante: communeCorrespondante,
+        Num_pic_identite: numPicIdentite,
+        Adresse_branchement: adresseBranchement,
+        commune_branchement: communeBranchement,
+        email: email,
+        telephone: telephone
+    };
 
-        const response = await fetch('http://localhost:3000/users/posts',
-            {
-                method: 'post',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(datas),
-            });
+    try {
+        const response = await fetch('http://localhost:3000/users/posts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(datas),
+        });
 
         if (!response.ok) {
             throw new Error(`Erreur HTTP: ${response.status}`);
-        } else {
-            Swal.fire({
-                title: 'Succès !',
-                text: 'Données envoyées avec succès.',
-                icon: 'success',
-                confirmButtonText: 'OK'
-            });
         }
+
+        Swal.fire({
+            title: 'Succès !',
+            text: 'Données envoyées avec succès.',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        }).then(() => {
+            document.getElementById('addClientForm').reset(); // Réinitialisation du formulaire
+            document.querySelector('.client-section').style.display = 'none'; // Masquer le formulaire
+            document.querySelector('.footer').style.marginTop = '50%'; // Ajuster le footer
+        });
+
     } catch (error) {
         Swal.fire({
             title: 'Erreur',
@@ -89,6 +98,36 @@ document.getElementsByClassName('btn')[0].addEventListener('click', async () => 
             confirmButtonText: 'OK'
         });
     }
-    document.getElementById('addClientForm').reset();
+});
 
-})
+document.getElementById('raisonSociale').addEventListener('input', async function () {
+    const inputValue = this.value.trim();
+    const datalist = document.getElementById('suggestionsRaisonSociale');
+    // Si l'utilisateur a tapé moins de 2 caractères, on ne fait pas de requête
+    if (inputValue.length < 2) {
+        datalist.innerHTML = '';
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:3000/users/search_rs?q=${inputValue}`);
+        if (!response.ok) {
+            throw new Error(`Erreur HTTP: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        // Vider la liste avant d'ajouter les nouvelles suggestions
+        datalist.innerHTML = '';
+
+        // Ajouter les résultats à la liste déroulante
+        data.forEach(clients => {
+            const option = document.createElement('option');
+            option.value = clients.raison_sociale;  // Ajustez selon le format de votre API
+            datalist.appendChild(option);
+        });
+
+    } catch (error) {
+        console.error("Erreur lors de la récupération des raisons sociales :", error);
+    }
+});

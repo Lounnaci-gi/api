@@ -254,3 +254,21 @@ module.exports.last_id_dossier = async (req, res) => {
     }
 
 }
+// Rechercher des raisons sociales similaires
+module.exports.search_rs= async(req,res)=>{
+
+        try {
+            const searchTerm = req.query.q;
+            if (!searchTerm) {
+                return res.status(400).json({ error: "Paramètre de recherche manquant" });
+            }
+    
+            const clients = await Client.find({ raison_sociale: new RegExp(searchTerm, 'i') }).limit(10);
+    
+            res.json(clients);
+        } catch (error) {
+            console.error("Erreur API:", error);
+            res.status(500).json({ error: "Erreur interne du serveur" });
+        }   
+    
+}

@@ -74,8 +74,11 @@
                 <form id="addClientForm">
                     <div class="clientrows">
                         <div class="clientrow1">
-                            <input type="text" id="idDossier" placeholder="ID Dossier" required maxlength="6" readonly>
-                            <input type="text" id="raisonSociale" placeholder="Raison Sociale" required maxlength="60">
+                            <input type="text" id="idDossier" placeholder="ID Dossier" required maxlength="6"
+                                readonly>
+                                <input type="text" id="raisonSociale" placeholder="Raison Sociale" required maxlength="60" list="suggestionsRaisonSociale">
+                                <datalist id="suggestionsRaisonSociale"></datalist>
+                               
                             <select id="typeClient" required>
                                 <option value="">Sélectionnez un type de client</option>
                                 <option value="proprietaire">Propriétaire</option>

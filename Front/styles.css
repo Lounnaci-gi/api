@@ -860,11 +860,3 @@ footer {
         transform: translateY(0);
     }
 }
-.clientrow3{
-    display: flex;
-    flex-direction: row;
-}
-.btn {
-    max-width: 10%;
-    border-radius: 20%;
-}
