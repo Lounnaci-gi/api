@@ -10,7 +10,7 @@
     <meta name="description" content="Page de gestion des clients - Ajouter, lister et modifier les clients.">
     <meta name="keywords" content="gestion client, ajouter client, modifier client, liste clients">
     <!-- Dans l'en-tête de votre fichier HTML -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -26,11 +26,7 @@
             <div class="dropdown">
                 <a href="#">Client</a>
                 <div class="submenu">
-<<<<<<< HEAD
-                    <a href="#" id="addclient" onclick="">Ajouter un client</a>
-=======
                     <a href="#" id="AjouterClient">Ajouter un client</a>
->>>>>>> 59093d53a0f774dcea6eba6ec9323fac0449296e
                     <a href="#">Liste des clients</a>
                     <a href="#">Modifier un client</a>
                 </div>
@@ -100,7 +96,10 @@
                             <input type="tel" id="telephone" placeholder="Téléphone" maxlength="10">
                         </div>
                     </div>
-                    <button type="submit" class="btn">Ajouter</button>
+                    <div class="clientrow3">
+                        <button type="submit" class="btn">Ajouter</button>
+                        <button type="button" class="btn">Annuler</button>
+                    </div>
                 </form>
             </div>
         </div>
