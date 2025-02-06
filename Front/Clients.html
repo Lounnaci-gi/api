@@ -66,13 +66,11 @@
             <i class='bx bx-menu'></i>
         </div>
     </header>
-
     <section class="client-section">
         <div class="client-container">
             <div class="client-form">
                 <h3>Ajouter un Client</h3>
                 <form id="addClientForm">
-
 
                     <input type="text" id="idDossier" placeholder="ID Dossier" required maxlength="6" readonly>
                     <div class="civi">
@@ -88,29 +86,41 @@
                     </div>
 
                     <select id="typeClient" required>
-                        <option value="">Sélectionnez un type de client</option>
+                        <option value="">qualité client</option>
                         <option value="proprietaire">Propriétaire</option>
                         <option value="locataire">Locataire</option>
                         <option value="mandataire">Mandataire</option>
                     </select>
-                    <input type="text" id="adresseCorrespondante" placeholder="Adresse Correspondante" required
-                        maxlength="120">
-                    <input type="text" id="communeCorrespondante" placeholder="Commune" required maxlength="120">
-                    <input type="text" id="numPicIdentite" placeholder="Numéro PIC Identité" maxlength="20">
 
+                    <div class="adresse-group">
+                        <input type="text" id="adresseCorrespondante" placeholder="Adresse Correspondante" required
+                            maxlength="120">
+                        </div>
+                        
+                        <input type="text" id="communeCorrespondante" placeholder="Commune" required maxlength="120">
+                        <input type="text" id="codePostal" placeholder="Code Postal" required maxlength="10">
+
+                    <div class="identite-group">
+                        <input type="text" id="numPicIdentite" placeholder="Numéro PIC Identité" maxlength="20">
+                        <input type="text" id="delivrePar" placeholder="Délivré par" required maxlength="50">
+                        <input type="date" id="dateDelivrance" placeholder="Date de délivrance" required>
+                    </div>
 
                     <input type="text" id="adresseBranchement" placeholder="Adresse de Branchement" required
                         maxlength="120">
                     <input type="text" id="CommuneBranchement" placeholder="Commune" required maxlength="120">
-                    <input type="email" id="email" placeholder="Email" maxlength="45">
-                    <input type="tel" id="telephone" placeholder="Téléphone" maxlength="10">
 
+                    <div class="contact-group">
+                        <input type="email" id="email" placeholder="Email" maxlength="45">
+                        <input type="tel" id="telephone" placeholder="Téléphone" maxlength="10">
+                    </div>
 
-                    <button type="submit" class="btn">Ajouter</button>
+                    <button type="submit" class="btn">Créer</button>
                 </form>
             </div>
         </div>
     </section>
+
 
     <footer class="footer" style="margin-top: 50%;">
         <div class="footer-content">
