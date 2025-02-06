@@ -848,7 +848,17 @@ footer {
     }
 }
 
+.btn {
+    max-width: 15%;
+    position: relative;
 
-.custom-datalist{
-    background-color: #00abf0;
+}
+
+.civi {
+    display: flex;
+    gap: 20px;
+}
+#civilite {
+    background-color:#2a2f3a;
+    width: 15%;
 }
