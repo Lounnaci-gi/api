@@ -880,14 +880,12 @@ footer {
     min-width: 0;
 }
 
-/* Réduction supplémentaire de la taille des champs spécifiques */
 #idDossier,
 #telephone,
 #typeClient,
 #civilite,
 #codePostal {
     width: 18%;
-    background-color: #2a2f3a;
 }
 
 #email {
@@ -903,6 +901,20 @@ footer {
 #adresseBranchement {
     width: 70%;
 }
+
+#idDossier,
+#telephone,
+#typeClient,
+#civilite,
+#codePostal,
+#email,
+#communeCorrespondante,
+#CommuneBranchement,
+#adresseCorrespondante,
+#adresseBranchement {
+    background-color: #2a2f3a;
+}
+
 
 /* Assurer une bonne lisibilité */
 .client-form {
@@ -922,7 +934,6 @@ footer {
     /* Ajoute un espacement entre les éléments individuels */
 }
 
-/* Réduction supplémentaire du bouton */
 .client-form button {
     width: 15%;
     padding: 8px;
@@ -933,10 +944,9 @@ footer {
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
-    transition: 0.3s;
+    transition: background 0.3s, color 0.3s, box-shadow 0.3s;
     text-align: center;
     margin-top: 15px;
-    /* Ajoute un espace au-dessus du bouton */
 }
 
 .client-form button:hover {
@@ -944,6 +954,7 @@ footer {
     color: #00abf0;
     box-shadow: 0 0 10px #00abf0;
 }
+
 
 .adresse-group input {
     width: 50%;

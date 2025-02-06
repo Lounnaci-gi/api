@@ -39,7 +39,7 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
     const email = getValue('email');
     const telephone = getValue('telephone');
 
-    if (!id_dossier || !raisonSociale || !typeClient || !numPicIdentite || !adresseBranchement || !adresseCorrespondante) {
+    if (!id_dossier || !raisonSociale || !typeClient || !adresseBranchement || !adresseCorrespondante) {
         return Swal.fire({
             title: 'Erreur',
             text: 'Veuillez remplir tous les champs obligatoires.',
