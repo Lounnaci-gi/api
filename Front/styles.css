@@ -760,19 +760,6 @@ footer {
     }
 }
 
-.clientrows {
-    display: flex;
-    justify-content: space-between;
-    gap: 5%;
-
-}
-
-.clientrow1,
-.clientrow2 {
-    flex: 1;
-    /* Chaque ligne prend une part égale de l'espace disponible */
-}
-
 /* Styles personnalisés pour SweetAlert2 */
 .swal2-popup {
     background-color: #2a2f3a !important;
@@ -859,4 +846,9 @@ footer {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+
+.custom-datalist{
+    background-color: #00abf0;
 }
