@@ -851,7 +851,7 @@ footer {
 
 .civi {
     display: flex;
-    gap: 15px; 
+    gap: 15px;
 }
 
 
@@ -884,7 +884,8 @@ footer {
 #idDossier,
 #telephone,
 #typeClient,
-#civilite,#codePostal {
+#civilite,
+#codePostal {
     width: 18%;
     background-color: #2a2f3a;
 }
@@ -944,7 +945,7 @@ footer {
     box-shadow: 0 0 10px #00abf0;
 }
 
-.adresse-group input{
+.adresse-group input {
     width: 50%;
     padding: 10px;
 }

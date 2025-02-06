@@ -18,17 +18,22 @@ document.getElementById('AjouterClient').addEventListener('click', async () => {
         });
     }
 });
+
 document.getElementById('addClientForm').addEventListener('submit', async (event) => {
     event.preventDefault(); // Empêche le rechargement de la page
 
     const getValue = (id) => document.getElementById(id).value.trim();
 
     const id_dossier = getValue('idDossier');
+    const civilite = getValue('civilite');
     const raisonSociale = getValue('raisonSociale');
     const typeClient = getValue('typeClient');
     const adresseCorrespondante = getValue('adresseCorrespondante');
     const communeCorrespondante = getValue('communeCorrespondante');
-    const numPicIdentite = getValue('numPicIdentite');
+    const code_postale = getValue('codePostal');
+    const numPicIdentite = getValue('numPicIdentite'); // Ancien champ pour compatibilité
+    const delivrePar = getValue('delivrePar'); // Nouveau champ
+    const dateDelivrance = getValue('dateDelivrance'); // Nouveau champ
     const adresseBranchement = getValue('adresseBranchement');
     const communeBranchement = getValue('CommuneBranchement');
     const email = getValue('email');
@@ -70,11 +75,17 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
 
     const datas = {
         Id_Dossier: id_dossier,
+        Civilite: civilite,
         raison_sociale: raisonSociale,
         type_client: typeClient,
         Adresse_correspondante: adresseCorrespondante,
         commune_correspondante: communeCorrespondante,
-        Num_pic_identite: numPicIdentite,
+        Code_postale: code_postale,
+        Num_pic_identite: {
+            numero: numPicIdentite, // Récupère le numéro d'identité
+            delivre_par: delivrePar, // Récupère l'autorité de délivrance
+            date_delivrance: dateDelivrance || null // Convertir la date si besoin
+        },
         Adresse_branchement: adresseBranchement,
         commune_branchement: communeBranchement,
         email: email,
@@ -112,6 +123,7 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
         });
     }
 });
+
 
 document.getElementById('raisonSociale').addEventListener('input', async function () {
     const inputValue = this.value.trim();
