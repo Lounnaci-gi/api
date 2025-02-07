@@ -174,8 +174,8 @@ document.getElementById('liste-clients').addEventListener('click', async () => {
         ttable.innerHTML = `
         <thead>  
         <tr>
-            <th>#</th>
-            <th>ID_Client</th>
+            <th>N°</th>
+            <th>N° Dossier</th>
             <th>Statut</th>
             <th>Raison Sociale</th>
             <th>Adresse</th>
@@ -184,14 +184,15 @@ document.getElementById('liste-clients').addEventListener('click', async () => {
             <th>N° Délivrer par</th>
             <th>Telephone</th>
             <th>Email</th>
+            <th>Date Dépot</th>
         </tr>
         </thead>`;
         const tbody = document.createElement('tbody');
 
         posts.forEach(e => {
             const row = document.createElement("tr");
-            row.innerHTML = `
-                        <td>${i++}</td>
+            row.innerHTML = `                       
+                        <td>${String(i++).padStart(3, "0")}</td>
                         <td>${e.Id_Dossier}</td>
                         <td>${e.type_client}</td>
                         <td>${e.raison_sociale}</td>
@@ -201,6 +202,8 @@ document.getElementById('liste-clients').addEventListener('click', async () => {
                         <td>${e.Num_pic_identite?.delivre_par || ""}</td>
                         <td>${e.telephone}</td>
                         <td>${e.email}</td>
+                        <td>${new Date(e.createdAt).toLocaleDateString('fr-FR')}</td>
+
                         `;
             tbody.appendChild(row);
             ttable.appendChild(tbody);

@@ -74,7 +74,7 @@
 
                     <span>Dossier N°: </span> <input type="text" id="idDossier" placeholder="ID Dossier" required
                         maxlength="6" readonly>
-                        <p></p>
+                    <p></p>
                     <select id="typeClient" required>
                         <option value="">qualité client</option>
                         <option value="proprietaire">Propriétaire</option>
@@ -108,7 +108,8 @@
                     <div class="identite-group">
                         <input type="text" id="numPicIdentite" placeholder="Numéro PIC Identité" maxlength="20">
                         <input type="text" id="delivrePar" placeholder="Délivré par" required maxlength="50">
-                        <input type="date" id="dateDelivrance" placeholder="Date de délivrance" required style="text-transform: none;">
+                        <input type="date" id="dateDelivrance" placeholder="Date de délivrance" required
+                            style="text-transform: none;">
                     </div>
 
                     <input type="text" id="adresseBranchement" placeholder="Adresse de Branchement" required
@@ -125,13 +126,14 @@
             </div>
         </div>
     </section>
-    <table class="liste-clients">
-        <tbody>
+    <div class="table-container">
+        <table class="liste-clients">
+            <tbody>
 
-        </tbody>
+            </tbody>
 
-    </table>
-
+        </table>
+    </div>
 
     <footer class="footer" style="margin-top: 50%;">
         <div class="footer-content">
