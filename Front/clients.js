@@ -8,6 +8,7 @@ document.getElementById('AjouterClient').addEventListener('click', async () => {
         const data = await response.json();
         if (data) {
             document.getElementById('idDossier').value = data.idDossier;
+
         }
     } catch (error) {
         Swal.fire({
@@ -155,4 +156,61 @@ document.getElementById('raisonSociale').addEventListener('input', async functio
     } catch (error) {
         console.error("Erreur lors de la récupération des raisons sociales :", error);
     }
+});
+
+
+// liste des clients 
+
+document.getElementById('liste-clients').addEventListener('click', async () => {
+    try {
+        const response = await fetch("http://localhost:3000/users", { method: 'GET' });
+        if (!response.ok) {
+            throw new Error(`Erreur HTTP : ${response.status}`);
+        }
+        const posts = await response.json();
+        const count = posts.length;
+        let i = 1;
+        const ttable = document.getElementsByClassName("liste-clients")[0];
+        ttable.innerHTML = `
+        <thead>  
+        <tr>
+            <th>#</th>
+            <th>ID_Client</th>
+            <th>Statut</th>
+            <th>Raison Sociale</th>
+            <th>Adresse</th>
+            <th>Commune</th>
+            <th>N° Pièce d'identité</th>
+            <th>N° Délivrer par</th>
+            <th>Telephone</th>
+            <th>Email</th>
+        </tr>
+        </thead>`;
+        const tbody = document.createElement('tbody');
+
+        posts.forEach(e => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                        <td>${i++}</td>
+                        <td>${e.Id_Dossier}</td>
+                        <td>${e.type_client}</td>
+                        <td>${e.raison_sociale}</td>
+                        <td>${e.Adresse_correspondante}</td>
+                        <td>${e.commune_correspondante}</td>
+                        <td>${e.Num_pic_identite?.numero || ""}</td>
+                        <td>${e.Num_pic_identite?.delivre_par || ""}</td>
+                        <td>${e.telephone}</td>
+                        <td>${e.email}</td>
+                        `;
+            tbody.appendChild(row);
+            ttable.appendChild(tbody);
+        });
+
+
+    }
+    catch (error) {
+        console.error("Erreur :", error);
+        alert("Une erreur s'est produite lors de la récupération des données.");
+    }
+
 });

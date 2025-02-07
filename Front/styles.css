@@ -8,10 +8,28 @@
     font-family: 'poppins', sans-serif, Arial, Helvetica;
 }
 
-body {
-    background-color: #1f242d;
-    color: white;
+:root {
+    --primary-color: #00abf0;
+    --secondary-color: #1f242d;
+    --text-color: white;
 }
+
+
+body {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+}
+
+.client-form button {
+    background: var(--primary-color);
+    color: var(--secondary-color);
+}
+
+.client-form button:hover {
+    background: transparent;
+    color: var(--primary-color);
+}
+
 
 .header {
     position: fixed;
@@ -840,6 +858,7 @@ footer {
     from {
         opacity: 0;
         transform: translateY(-20px);
+        will-change: opacity, transform;
     }
 
     to {
@@ -885,7 +904,7 @@ footer {
 #typeClient,
 #civilite,
 #codePostal {
-    width: 18%;
+    width: 20%;
 }
 
 #email {
@@ -913,8 +932,14 @@ footer {
 #adresseCorrespondante,
 #adresseBranchement {
     background-color: #2a2f3a;
+    gap: 20px;
 }
 
+/* Mofifier le style de id_dossier */
+#idDossier {
+    border: none;
+    width: 20%;
+}
 
 /* Assurer une bonne lisibilité */
 .client-form {
@@ -960,3 +985,4 @@ footer {
     width: 50%;
     padding: 10px;
 }
+

@@ -27,7 +27,7 @@
                 <a href="#">Client</a>
                 <div class="submenu">
                     <a href="#" id="AjouterClient">Ajouter un client</a>
-                    <a href="#">Liste des clients</a>
+                    <a href="#" id="liste-clients">Liste des clients</a>
                     <a href="#">Modifier un client</a>
                 </div>
             </div>
@@ -72,7 +72,15 @@
                 <h3>Ajouter un Client</h3>
                 <form id="addClientForm">
 
-                    <input type="text" id="idDossier" placeholder="ID Dossier" required maxlength="6" readonly>
+                    <span>Dossier N°: </span> <input type="text" id="idDossier" placeholder="ID Dossier" required
+                        maxlength="6" readonly>
+                        <p></p>
+                    <select id="typeClient" required>
+                        <option value="">qualité client</option>
+                        <option value="proprietaire">Propriétaire</option>
+                        <option value="locataire">Locataire</option>
+                        <option value="mandataire">Mandataire</option>
+                    </select>
                     <div class="civi">
                         <select id="civilite" required>
                             <option value="">Civilité</option>
@@ -88,25 +96,19 @@
                         <datalist id="suggestionsRaisonSociale"></datalist>
                     </div>
 
-                    <select id="typeClient" required>
-                        <option value="">qualité client</option>
-                        <option value="proprietaire">Propriétaire</option>
-                        <option value="locataire">Locataire</option>
-                        <option value="mandataire">Mandataire</option>
-                    </select>
 
                     <div class="adresse-group">
                         <input type="text" id="adresseCorrespondante" placeholder="Adresse Correspondante" required
                             maxlength="120">
-                        </div>
-                        
-                        <input type="text" id="communeCorrespondante" placeholder="Commune" required maxlength="120">
-                        <input type="text" id="codePostal" placeholder="Code Postal" required maxlength="10">
+                    </div>
+
+                    <input type="text" id="communeCorrespondante" placeholder="Commune" required maxlength="120">
+                    <input type="text" id="codePostal" placeholder="Code Postal" required maxlength="10">
 
                     <div class="identite-group">
                         <input type="text" id="numPicIdentite" placeholder="Numéro PIC Identité" maxlength="20">
                         <input type="text" id="delivrePar" placeholder="Délivré par" required maxlength="50">
-                        <input type="date" id="dateDelivrance" placeholder="Date de délivrance" required>
+                        <input type="date" id="dateDelivrance" placeholder="Date de délivrance" required style="text-transform: none;">
                     </div>
 
                     <input type="text" id="adresseBranchement" placeholder="Adresse de Branchement" required
@@ -123,6 +125,12 @@
             </div>
         </div>
     </section>
+    <table class="liste-clients">
+        <tbody>
+
+        </tbody>
+
+    </table>
 
 
     <footer class="footer" style="margin-top: 50%;">
@@ -135,6 +143,7 @@
             </ul>
         </div>
     </footer>
+
     <!-- <script src="main.js"></script> -->
     <script src="clients.js"></script>
 
