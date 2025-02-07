@@ -642,12 +642,12 @@ footer {
     color: white;
     text-align: center;
     max-width: 100%;
-    display: flex;
     display: none;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     /* Assure que la section prend toute la hauteur de la page */
+     
 }
 
 .client-container {
@@ -861,4 +861,10 @@ footer {
 #civilite {
     background-color:#2a2f3a;
     width: 15%;
+}
+#idDossier{
+    color: #fff;
+    position: relative;
+    justify-content: left;
+    
 }
