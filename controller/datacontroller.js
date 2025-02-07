@@ -1,5 +1,5 @@
 const { Client, User } = require("../models/model");
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const { validationResult } = require("express-validator");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
@@ -13,14 +13,23 @@ module.exports.setPosts = async (req, res) => {
         if (!data || Object.keys(data).length === 0) {
             return res.status(400).send("Le corps de la requête est vide. Veuillez ajouter des données.");
         }
+        // Vérifier si Num_pic_identite est bien structuré
+        const numPicIdentite = req.body.Num_pic_identite || {};
 
         // Si `data` contient des données, on les traite
         const post = await Client.create({
             Id_Dossier: req.body.Id_Dossier,
+            Civilite: req.body.Civilite,
             raison_sociale: req.body.raison_sociale,
             Adresse_correspondante: req.body.Adresse_correspondante,
             commune_correspondante: req.body.commune_correspondante,
-            Num_pic_identite: req.body.Num_pic_identite,
+            Code_postale: req.body.Code_postale,
+            /*  Num_pic_identite: req.body.Num_pic_identite,*/
+            Num_pic_identite: {
+                numero: numPicIdentite.numero || "", // Assigner un champ vide si absent
+                delivre_par: numPicIdentite.delivre_par || "",
+                date_delivrance: numPicIdentite.date_delivrance || null
+            },
             Adresse_branchement: req.body.Adresse_branchement,
             commune_branchement: req.body.commune_branchement,
             email: req.body.email,
@@ -188,6 +197,9 @@ const transporter = nodemailer.createTransport({
         user: process.env.EMAIL_USER, // Utilisez la variable d'environnement
         pass: process.env.EMAIL_PASSWORD, // Utilisez la variable d'environnement
     },
+    tls: {
+        rejectUnauthorized: false, // Ignore les erreurs SSL
+    }
 });
 
 module.exports.recupass = async (req, res) => {
@@ -199,7 +211,6 @@ module.exports.recupass = async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: "Utilisateur non trouvé." }); // Si l'utilisateur n'existe pas, renvoyer une erreur 404
         }
-
         // Génération d'un token de réinitialisation (valide 1h)
         const resetToken = crypto.randomBytes(32).toString("hex"); // Génère un token aléatoire
         user.resetToken = resetToken; // Associe le token à l'utilisateur
@@ -253,20 +264,20 @@ module.exports.last_id_dossier = async (req, res) => {
 
 }
 // Rechercher des raisons sociales similaires
-module.exports.search_rs= async(req,res)=>{
+module.exports.search_rs = async (req, res) => {
 
-        try {
-            const searchTerm = req.query.q;
-            if (!searchTerm) {
-                return res.status(400).json({ error: "Paramètre de recherche manquant" });
-            }
-    
-            const clients = await Client.find({ raison_sociale: new RegExp(searchTerm, 'i') }).limit(10);
-    
-            res.json(clients);
-        } catch (error) {
-            console.error("Erreur API:", error);
-            res.status(500).json({ error: "Erreur interne du serveur" });
-        }   
-    
+    try {
+        const searchTerm = req.query.q;
+        if (!searchTerm) {
+            return res.status(400).json({ error: "Paramètre de recherche manquant" });
+        }
+
+        const clients = await Client.find({ raison_sociale: new RegExp(searchTerm, 'i') }).limit(10);
+
+        res.json(clients);
+    } catch (error) {
+        console.error("Erreur API:", error);
+        res.status(500).json({ error: "Erreur interne du serveur" });
+    }
+
 }

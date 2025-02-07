@@ -8,6 +8,10 @@ const postSchema = mongoose.Schema(
             required: true,
             unique: true,
         },
+        Civilite: {
+            type: String,
+            reuired: true,
+        },
         raison_sociale: {
             type: String,
             required: true,
@@ -16,13 +20,20 @@ const postSchema = mongoose.Schema(
             type: String,
             required: true,
         },
+        Code_postale: {
+            type: Number,
+        },
         commune_correspondante: { // Modification du nom du champ
             type: String,
             required: true,
         },
-        Num_pic_identite: { // Nouveau champ
-            type: String,
-            required: false,
+        Num_pic_identite: {
+            type: new mongoose.Schema({
+                numero: { type: String, required: false }, // Numéro PIC Identité
+                delivre_par: { type: String, required: false }, // Autorité qui a délivré
+                date_delivrance: { type: Date, required: false }, // Date de délivrance
+            }),
+            required: false
         },
         Adresse_branchement: { // Nouveau champ
             required: true,
