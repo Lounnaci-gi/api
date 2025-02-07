@@ -145,12 +145,50 @@ document.getElementById('raisonSociale').addEventListener('input', async functio
 
         // Vider la liste avant d'ajouter les nouvelles suggestions
         datalist.innerHTML = '';
-
+        // Pour filtere le tableau 
+        let i = 1;
+        const ttable = document.getElementsByClassName("liste-clients")[0];
+        ttable.innerHTML = `
+        <thead>  
+        <tr>
+            <th>N°</th>
+            <th>N° Dossier</th>
+            <th>Statut</th>
+            <th>Raison Sociale</th>
+            <th>Adresse</th>
+            <th>Commune</th>
+            <th>N° Pièce d'identité</th>
+            <th>N° Délivrer par</th>
+            <th>Telephone</th>
+            <th>Email</th>
+            <th>Date Dépot</th>
+        </tr>
+        </thead>`;
+        const tbody = document.createElement('tbody');
         // Ajouter les résultats à la liste déroulante
         data.forEach(clients => {
             const option = document.createElement('option');
             option.value = clients.raison_sociale;  // Ajustez selon le format de votre API
             datalist.appendChild(option);
+            // Dessiner le tableau
+            const row = document.createElement("tr");
+            row.innerHTML = `                       
+                        <td>${String(i++).padStart(3, "0")}</td>
+                        <td>${clients.Id_Dossier}</td>
+                        <td>${clients.type_client}</td>
+                        <td>${clients.raison_sociale}</td>
+                        <td>${clients.Adresse_correspondante}</td>
+                        <td>${clients.commune_correspondante}</td>
+                        <td>${clients.Num_pic_identite?.numero || ""}</td>
+                        <td>${clients.Num_pic_identite?.delivre_par || ""}</td>
+                        <td>${clients.telephone}</td>
+                        <td>${clients.email}</td>
+                        <td>${new Date(clients.createdAt).toLocaleDateString('fr-FR')}</td>
+
+                        `;
+            tbody.appendChild(row);
+            ttable.appendChild(tbody);
+            
         });
 
     } catch (error) {
@@ -168,7 +206,6 @@ document.getElementById('liste-clients').addEventListener('click', async () => {
             throw new Error(`Erreur HTTP : ${response.status}`);
         }
         const posts = await response.json();
-        const count = posts.length;
         let i = 1;
         const ttable = document.getElementsByClassName("liste-clients")[0];
         ttable.innerHTML = `
