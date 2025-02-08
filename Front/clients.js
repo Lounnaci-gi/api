@@ -7,13 +7,8 @@ document.getElementById('AjouterClient').addEventListener('click', async () => {
         const response = await fetch('http://localhost:3000/users/last_id_dossier');
         const data = await response.json();
         if (data) {
-<<<<<<< HEAD
-            /*document.getElementById('idDossier').value = data.idDossier;*/
-            document.getElementById('idDossier').innerText = data.idDossier;
-=======
             document.getElementById('idDossier').value = data.idDossier;
 
->>>>>>> ba1ec336f604c503fa1a2f3e460d02c78161cea7
         }
     } catch (error) {
         Swal.fire({
