@@ -132,7 +132,7 @@ document.getElementById('raisonSociale').addEventListener('input', async functio
     // Si l'utilisateur a tapé moins de 2 caractères, on ne fait pas de requête
     if (inputValue.length < 2) {
         datalist.innerHTML = '';
-        return;
+        //  return;
     }
 
     try {
@@ -153,14 +153,9 @@ document.getElementById('raisonSociale').addEventListener('input', async functio
         <tr>
             <th>N°</th>
             <th>N° Dossier</th>
-            <th>Statut</th>
             <th>Raison Sociale</th>
             <th>Adresse</th>
-            <th>Commune</th>
-            <th>N° Pièce d'identité</th>
-            <th>N° Délivrer par</th>
-            <th>Telephone</th>
-            <th>Email</th>
+            <th>Commune</th>  
             <th>Date Dépot</th>
         </tr>
         </thead>`;
@@ -175,14 +170,9 @@ document.getElementById('raisonSociale').addEventListener('input', async functio
             row.innerHTML = `                       
                         <td>${String(i++).padStart(3, "0")}</td>
                         <td>${clients.Id_Dossier}</td>
-                        <td>${clients.type_client}</td>
                         <td>${clients.raison_sociale}</td>
                         <td>${clients.Adresse_correspondante}</td>
                         <td>${clients.commune_correspondante}</td>
-                        <td>${clients.Num_pic_identite?.numero || ""}</td>
-                        <td>${clients.Num_pic_identite?.delivre_par || ""}</td>
-                        <td>${clients.telephone}</td>
-                        <td>${clients.email}</td>
                         <td>${new Date(clients.createdAt).toLocaleDateString('fr-FR')}</td>
 
                         `;
