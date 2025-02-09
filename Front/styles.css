@@ -968,27 +968,43 @@ footer {
 }
 
 .liste-clients i {
-    padding-left: 5px;
-    padding-right: 5px;
+    padding: 3px;
     font-size: 18px;
 }
 
 .bxs-message-square-edit {
     color: #00abf0;
+    border-radius: 50%;
+}
+.bxs-message-square-edit:hover {
+    color: var(--secondary-color);
+    background-color:var(--primary-color);
+    box-shadow: 0 0 10px var(--primary-color);
 }
 
 .bxs-message-square-x {
-    color: rgb(248, 137, 137);
+    color: #f88989;
+    border-radius: 50%;
+}
+.bxs-message-square-x:hover {
+    color: var(--secondary-color);
+    background-color:#f88989;
+    box-shadow: 0 0 10px #f88989;
 }
 
 .bxs-printer {
-    color: rgb(161, 161, 233);
+    color: #98eeea;
+    border-radius: 50%;
+}
+.bxs-printer:hover {
+    color: var(--secondary-color);
+    background-color: #98eeea;
+    box-shadow: 0 0 10px #98eeea;
 }
 
-.liste-clients i:hover {
-    cursor: pointer;
-    box-shadow: 0 0 10px #00abf0;
-}
+ .liste-clients i:hover {
+    cursor: pointer;   
+} 
 
 .liste-clients {
     width: 95%;
