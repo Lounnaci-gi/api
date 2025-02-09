@@ -954,13 +954,38 @@ footer {
 
 .table-container {
     /* display: flex; */
-    justify-content: center; /* Centre horizontalement */
-    align-items: center; /* Centre verticalement */
-    min-height: 100vh; /* Assure un centrage sur toute la hauteur */
+    justify-content: center;
+    /* Centre horizontalement */
+    align-items: center;
+    /* Centre verticalement */
+    min-height: 100vh;
+    /* Assure un centrage sur toute la hauteur */
     width: 100%;
-    padding: 20px; /* Ajoute un peu d'espace autour */
-    overflow-x: auto; /* Ajoute un défilement horizontal si nécessaire */
+    padding: 20px;
+    /* Ajoute un peu d'espace autour */
+    overflow-x: auto;
+    /* Ajoute un défilement horizontal si nécessaire */
 }
+
+.liste-clients i {
+    font-size: 18px;
+    padding: auto;
+}
+
+.bxs-message-square-edit{
+    color: #00abf0;
+}
+.bxs-message-square-x{
+    color: red;
+}
+.bxs-printer{
+    color: blue;
+}
+
+.liste-clients i:hover {
+    cursor: pointer;
+}
+
 .liste-clients {
     width: 95%;
     max-width: 100%;
@@ -971,7 +996,8 @@ footer {
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 0 10px rgba(0, 171, 240, 0.5);
-    font-size: 12px;  /* Taille de police réduite */
+    font-size: 12px;
+    /* Taille de police réduite */
 }
 
 .liste-clients th,
@@ -996,7 +1022,13 @@ footer {
 }
 
 .liste-clients tr:hover {
-    background-color: rgba(0, 171, 240, 0.2);
+    background-color: #00abf033;
+}
+
+.liste-clients th:hover {
+    cursor: pointer;
+    background-color: #00abf033;
+    color: #00abf0;
 }
 
 /* Style pour les écrans mobiles */
@@ -1016,11 +1048,13 @@ footer {
         font-size: 11px;
     }
 }
-.global-container{
+
+.global-container {
     display: flex;
     width: 100%;
 }
-.global-container .liste-clients{
+
+.global-container .liste-clients {
     width: 50%;
     padding: 5px;
     font-size: 12px;
