@@ -59,7 +59,7 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
     }
 
     const phoneRegex = /^\d+$/;
-    if (!phoneRegex.test(telephone)) {
+    if (!phoneRegex.test(telephone) && telephone) {
         return Swal.fire({
             title: 'Erreur',
             text: 'Numéro de téléphone invalide. Veuillez entrer uniquement des chiffres.',
@@ -118,22 +118,12 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
             text: 'Données envoyées avec succès.',
             icon: 'success',
             confirmButtonText: 'OK'
-        }).then(async () => {
+        }).then(() => {
             document.getElementById('addClientForm').reset(); // Réinitialisation du formulaire
             document.querySelector('.client-section').style.display = 'none'; // Masquer le formulaire
             document.querySelector('.footer').style.marginTop = '50%'; // Ajuster le footer
-            // 👉 Demander à l'utilisateur s'il veut imprimer
-            const printConfirmation = await Swal.fire({
-                title: 'Impression',
-                text: 'Voulez-vous imprimer les détails du client ?',
-                icon: 'info',
-                showCancelButton: true,
-                confirmButtonText: 'Oui, imprimer',
-                cancelButtonText: 'Non'
-            });
-            if (printConfirmation.isConfirmed) {
-                printClientDetails(datas);
-            }
+
+
         });
 
     } catch (error) {
@@ -146,96 +136,6 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
     }
 });
 
-// 👉 Fonction d'impression
-function printClientDetails(client) {
-    const printWindow = window.open('', '', 'width=800,height=600');
-    printWindow.document.write(`<!DOCTYPE html>
-    <html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Accusé de Réception</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                margin: 20px;
-                padding: 20px;
-            }
-            .container {
-                width: 21cm;
-                height: 29.7cm;
-                padding: 30px;
-                border: 2px solid black;
-                position: relative;
-            }
-            .header {
-                text-align: center;
-                font-weight: bold;
-            }
-            .logo {
-                width: 80px;
-                position: absolute;
-                top: 20px;
-                left: 20px;
-            }
-            .section {
-                margin-top: 20px;
-            }
-            .section p {
-                font-size: 16px;
-                margin: 5px 0;
-            }
-            .signature {
-                margin-top: 50px;
-                text-align: right;
-                font-style: italic;
-            }
-            @media print {
-                .no-print {
-                    display: none;
-                }
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <img src="logo.png" alt="Logo" class="logo">
-            <div class="header">
-                <p>ALGERIENNE DES EAUX</p>
-                <p>Zone d'Alger - Unité de Médéa</p>
-                <h2>Accusé de réception N° <span id="num_reception"></span></h2>
-            </div>
-            <div class="section">
-                <p><strong>Agence de :</strong> <span id="agence"></span></p>
-                <p><strong>Nom :</strong> <span id="nom"></span></p>
-                <p><strong>Prénom :</strong> <span id="prenom"></span></p>
-                <p><strong>Adresse :</strong> <span id="adresse"></span></p>
-                <p><strong>Nature de la doléance :</strong> <span id="doleance"></span></p>
-                <p><strong>Date de réception :</strong> <span id="date_reception"></span></p>
-            </div>
-            <div class="signature">
-                <p><em>Le responsable commercial :</em></p>
-            </div>
-        </div>
-        <button class="no-print" onclick="printClientDetails()">Imprimer</button>
-        <script>
-            function printClientDetails(client) {
-                document.getElementById("num_reception").textContent = ${client.id_dossier}|| "";
-                document.getElementById("agence").textContent = ${client.raison_sociale} || "";
-                document.getElementById("nom").textContent = ${client.raison_sociale} || "";
-                document.getElementById("prenom").textContent = ${client.raison_sociale} || "";
-                document.getElementById("adresse").textContent =${client.raison_sociale}|| "";
-                document.getElementById("doleance").textContent = ${client.raison_sociale}|| "";
-                document.getElementById("date_reception").textContent = ${client.raison_sociale}|| "";
-                window.print();
-            }
-        </script>
-    </body>
-    </html>
-    
-    `);
-    printWindow.document.close();
-}
 // Fonction debounce
 function debounce(func, delay) {
     let timeoutId;
@@ -303,6 +203,10 @@ async function searchRaisonSociale() {
             row.innerHTML = `<td colspan="6" style="text-align:center;">Aucun résultat trouvé</td>`;
             tbody.appendChild(row);
             ttable.appendChild(tbody);
+            setTimeout(() => {
+                ttable.innerHTML = ``;
+            }, 3000);
+
         }
     } catch (error) {
         console.error("Erreur lors de la récupération des raisons sociales :", error);

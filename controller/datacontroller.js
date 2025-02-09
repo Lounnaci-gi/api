@@ -281,3 +281,30 @@ module.exports.search_rs = async (req, res) => {
     }
 
 }
+
+// afficher les enregistrement de jours
+module.exports.records_de_jours = async (req, res) => {
+
+    try {
+        const searchTerm = req.query.q;
+        if (!searchTerm) {
+            return res.status(400).json({ error: "Paramètre de recherche manquant" });
+        }
+        // Convertir `searchTerm` en objet Date (sans les heures)
+        const date = new Date(searchTerm);
+        if (isNaN(date.getTime())) {
+            return res.status(400).json({ error: "Date invalide" });
+        }
+        // Définir les bornes temporelles du jour (de 00:00:00 à 23:59:59)
+        const startOfDay = new Date(date.setHours(0, 0, 0, 0));
+        const endOfDay = new Date(date.setHours(23, 59, 59, 999));
+
+        const clients = await Client.find({ createdAt: { $gte: startOfDay, $lte: endOfDay } });
+
+        res.json(clients);
+    } catch (error) {
+        console.error("Erreur API:", error);
+        res.status(500).json({ error: "Erreur interne du serveur" });
+    }
+
+}
