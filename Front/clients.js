@@ -1,8 +1,8 @@
 // 👉 Afficher le formulaire lors du clic sur "Ajouter un client"
 document.getElementById('AjouterClient').addEventListener('click', async () => {
+    // document.querySelector('.table-container').style.display = 'none';
     document.querySelector('.client-section').style.display = 'flex';
     document.querySelector('.footer').style.marginTop = 'auto';
-
     try {
         const response = await fetch('http://localhost:3000/users/last_id_dossier');
         const data = await response.json();
@@ -22,7 +22,6 @@ document.getElementById('AjouterClient').addEventListener('click', async () => {
 
 document.getElementById('addClientForm').addEventListener('submit', async (event) => {
     event.preventDefault(); // Empêche le rechargement de la page
-
     const getValue = (id) => document.getElementById(id).value.trim();
 
     const id_dossier = getValue('idDossier');
@@ -128,7 +127,6 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
 
 document.getElementById('raisonSociale').addEventListener('input', async function () {
     const inputValue = this.value.trim();
-
     // Si l'utilisateur a tapé moins de 2 caractères, on ne fait pas de requête
     if (inputValue.length < 2) {
         document.getElementsByClassName("liste-clients")[0].innerHTML = '';
@@ -192,6 +190,7 @@ document.getElementById('raisonSociale').addEventListener('input', async functio
 // liste des clients 
 
 document.getElementById('liste-clients').addEventListener('click', async () => {
+    document.querySelector('.client-section').style.display = 'none';
     try {
         const response = await fetch("http://localhost:3000/users", { method: 'GET' });
         if (!response.ok) {
