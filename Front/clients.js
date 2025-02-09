@@ -128,60 +128,60 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
 
 document.getElementById('raisonSociale').addEventListener('input', async function () {
     const inputValue = this.value.trim();
+
     // Si l'utilisateur a tapé moins de 2 caractères, on ne fait pas de requête
     if (inputValue.length < 2) {
-        const ttable = document.getElementsByClassName("liste-clients")[0];
-        ttable.innerHTML = '';
+        document.getElementsByClassName("liste-clients")[0].innerHTML = '';
         return;
     }
 
     try {
-        const response = await fetch(`http://localhost:3000/users/search_rs?q=${inputValue}`);
+        const response = await fetch(`http://localhost:3000/users/search_rs?q=${encodeURIComponent(inputValue)}`);
         if (!response.ok) {
             throw new Error(`Erreur HTTP: ${response.status}`);
         }
 
         const data = await response.json();
-
-        // Vider le tableau avant d'ajouter les nouvelles suggestions
-        // ttable.innerHTML ='';
-        // Pour filtere le tableau 
-        let i = 1;
         const ttable = document.getElementsByClassName("liste-clients")[0];
+        
+        // Réinitialisation du tableau
         ttable.innerHTML = `
         <thead>  
-        <tr>
-            <th>N°</th>
-            <th>N° Dossier</th>
-            <th>Raison Sociale</th>
-            <th>Adresse</th>
-            <th>Commune</th>  
-            <th>Date Dépot</th>
-        </tr>
+            <tr>
+                <th>N°</th>
+                <th>N° Dossier</th>
+                <th>Raison Sociale</th>
+                <th>Adresse</th>
+                <th>Commune</th>  
+                <th>Date Dépot</th>
+            </tr>
         </thead>`;
+
         const tbody = document.createElement('tbody');
-        if (!data.length==0) {
-            // Ajouter les résultats à la liste déroulante
-            data.forEach(clients => {
-                // Dessiner le tableau
+
+        if (data.length > 0) {
+            let i = 1;
+            // Ajouter les résultats à la liste
+            data.forEach(client => {
                 const row = document.createElement("tr");
                 row.innerHTML = `                       
-                        <td>${String(i++).padStart(3, "0")}</td>
-                        <td>${clients.Id_Dossier}</td>
-                        <td>${clients.raison_sociale}</td>
-                        <td>${clients.Adresse_correspondante}</td>
-                        <td>${clients.commune_correspondante}</td>
-                        <td>${new Date(clients.createdAt).toLocaleDateString('fr-FR')}</td>
-
-                        `;
+                    <td>${String(i++).padStart(3, "0")}</td>
+                    <td>${client.Id_Dossier}</td>
+                    <td>${client.raison_sociale}</td>
+                    <td>${client.Adresse_correspondante}</td>
+                    <td>${client.commune_correspondante}</td>
+                    <td>${new Date(client.createdAt).toLocaleDateString('fr-FR')}</td>`;
                 tbody.appendChild(row);
-                ttable.appendChild(tbody);
-
             });
-        }
-        else {
-            ttable.innerHTML = '';
-            return;
+
+            // Ajouter `tbody` une seule fois après la boucle
+            ttable.appendChild(tbody);
+        } else {
+            // Ajouter une ligne indiquant qu'aucun résultat n'a été trouvé
+            const row = document.createElement("tr");
+            row.innerHTML = `<td colspan="6" style="text-align:center;">Aucun résultat trouvé</td>`;
+            tbody.appendChild(row);
+            ttable.appendChild(tbody);
         }
     } catch (error) {
         console.error("Erreur lors de la récupération des raisons sociales :", error);

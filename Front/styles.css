@@ -18,8 +18,6 @@
 body {
     background-color: var(--secondary-color);
     color: var(--text-color);
-    display: flex; /* Ajout de flex display pour aligner les sections côte à côte */
-    flex-direction: row; /* Direction des éléments en ligne */
 }
 
 .client-form button {
@@ -662,14 +660,12 @@ footer {
     color: white;
     text-align: center;
     max-width: 100%;
-    display: block; /* Modifier de none à block pour afficher la section */
-    justify-content: flex-start; /* Aligner à gauche */
-    align-items: flex-start; /* Aligner en haut */
+    display: flex;
+    display: none;
+    justify-content: center;
+    align-items: center;
     min-height: 100vh;
-    width: 50%; /* Définir la largeur à 50% pour occuper la moitié de l'écran */
-    box-sizing: border-box; /* Inclure padding et border dans la largeur */
-    padding-right: 20px; /* Ajouter un espace à droite pour séparer de la table */
-
+    /* Assure que la section prend toute la hauteur de la page */
 }
 
 .client-container {
@@ -738,8 +734,6 @@ footer {
         padding-top: 20%;
         padding-left: 2%;
         padding-right: 2%;
-        width: 100%; /* La section client prend toute la largeur sur mobile */
-        padding-right: 0; /* Supprimer l'espace à droite sur mobile */
     }
 
     .client-container {
@@ -758,10 +752,6 @@ footer {
         /* Largeur légèrement augmentée pour les mobiles */
         font-size: 12px;
         padding: 6px;
-    }
-
-    body {
-        flex-direction: column; /* Retour à la disposition verticale sur mobile */
     }
 }
 
@@ -965,12 +955,11 @@ footer {
 .table-container {
     /* display: flex; */
     justify-content: center; /* Centre horizontalement */
-    align-items: flex-start; /* Aligner en haut */
+    align-items: center; /* Centre verticalement */
     min-height: 100vh; /* Assure un centrage sur toute la hauteur */
-    width: 50%; /* Définir la largeur à 50% pour occuper la moitié de l'écran */
+    width: 100%;
     padding: 20px; /* Ajoute un peu d'espace autour */
     overflow-x: auto; /* Ajoute un défilement horizontal si nécessaire */
-    box-sizing: border-box; /* Inclure padding et border dans la largeur */
 }
 .liste-clients {
     width: 95%;
