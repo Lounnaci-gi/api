@@ -968,22 +968,26 @@ footer {
 }
 
 .liste-clients i {
+    padding-left: 5px;
+    padding-right: 5px;
     font-size: 18px;
-    padding: auto;
 }
 
-.bxs-message-square-edit{
+.bxs-message-square-edit {
     color: #00abf0;
 }
-.bxs-message-square-x{
-    color: red;
+
+.bxs-message-square-x {
+    color: rgb(248, 137, 137);
 }
-.bxs-printer{
-    color: blue;
+
+.bxs-printer {
+    color: rgb(161, 161, 233);
 }
 
 .liste-clients i:hover {
     cursor: pointer;
+    box-shadow: 0 0 10px #00abf0;
 }
 
 .liste-clients {

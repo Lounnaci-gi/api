@@ -265,7 +265,7 @@ document.getElementById('liste-clients').addEventListener('click', async () => {
                     <td>${client.email}</td>
                     <td>${new Date(client.createdAt).toLocaleDateString('fr-FR')}</td>
                     <td>
-                        <i class='bx bxs-message-square-edit'>
+                        <i class='bx bxs-message-square-edit'></i>
                         <i class='bx bxs-message-square-x'></i>
                         <i class='bx bxs-printer' >
                     </td>
