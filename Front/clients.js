@@ -384,3 +384,28 @@ document.getElementById("numPicIdentite").addEventListener('blur', () => {
     }
 
 })
+
+document.getElementById('devis').addEventListener('click',()=>{
+    Swal.fire({
+        title: 'Connexion',
+        html:
+            '<input id="swal-email" class="swal2-input" placeholder="Email">' +
+            '<input id="swal-password" class="swal2-input" type="password" placeholder="Mot de passe">',
+        focusConfirm: false,
+        preConfirm: () => {
+            const email = document.getElementById('swal-email').value;
+            const password = document.getElementById('swal-password').value;
+            if (!email || !password) {
+                Swal.showValidationMessage('Veuillez remplir tous les champs.');
+            }
+            return { email, password };
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Se connecter',
+        cancelButtonText: 'Annuler'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire('Données soumises', `Email : ${result.value.email}<br>Mot de passe : ${result.value.password}`, 'success');
+        }
+    });
+})

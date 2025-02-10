@@ -44,6 +44,7 @@ body {
     background-color: var(--secondary-color);
     animation: show-content 1.2s linear forwards;
     animation-delay: 1s;
+    box-shadow: 0 0 10px var(--secondary-color);
 }
 
 @keyframes show-content {
@@ -752,14 +753,14 @@ footer {
     /* Coins arrondis */
     border: 1px solid #00abf0 !important;
     /* Bordure bleue */
-    box-shadow: 0 0 10px rgba(0, 171, 240, 0.5) !important;
+    box-shadow: 0 0 10px #00abf0 !important;
     /* Ombre bleue */
     color: white !important;
     /* Texte blanc */
 }
 
 .swal2-title {
-    font-size: 24px !important;
+    font-size: 20px !important;
     /* Taille du titre */
     color: #00abf0 !important;
     /* Couleur du titre */
@@ -781,9 +782,9 @@ footer {
     /* Suppression de la bordure */
     border-radius: 5px !important;
     /* Coins arrondis */
-    padding: 10px 20px !important;
+    padding: 5px 10px !important;
     /* Espacement interne */
-    font-size: 16px !important;
+    font-size: 14px !important;
     /* Taille de la police */
     font-weight: 600 !important;
     /* Poids de la police */
@@ -807,7 +808,7 @@ footer {
 .swal2-close {
     color: #00abf0 !important;
     /* Couleur de l'icône de fermeture */
-    font-size: 24px !important;
+    font-size: 16px !important;
     /* Taille de l'icône */
 }
 
@@ -819,6 +820,7 @@ footer {
 .swal2-popup {
     animation: fadeIn 0.5s ease-in-out;
 }
+
 
 @keyframes fadeIn {
     from {
@@ -965,9 +967,10 @@ footer {
     color: #00abf0;
     border-radius: 50%;
 }
+
 .bxs-message-square-edit:hover {
     color: var(--secondary-color);
-    background-color:var(--primary-color);
+    background-color: var(--primary-color);
     box-shadow: 0 0 10px var(--primary-color);
 }
 
@@ -975,9 +978,10 @@ footer {
     color: #f88989;
     border-radius: 50%;
 }
+
 .bxs-message-square-x:hover {
     color: var(--secondary-color);
-    background-color:#f88989;
+    background-color: #f88989;
     box-shadow: 0 0 10px #f88989;
 }
 
@@ -985,15 +989,16 @@ footer {
     color: #98eeea;
     border-radius: 50%;
 }
+
 .bxs-printer:hover {
     color: var(--secondary-color);
     background-color: #98eeea;
     box-shadow: 0 0 10px #98eeea;
 }
 
- .liste-clients i:hover {
-    cursor: pointer;   
-} 
+.liste-clients i:hover {
+    cursor: pointer;
+}
 
 .liste-clients {
     width: 95%;
