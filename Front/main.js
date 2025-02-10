@@ -65,11 +65,16 @@ document.getElementById('submit').addEventListener('click', async (event) => {
         closeLogin();
 
         // Réinitialiser les champs du formulaire
-        document.getElementById('user').value = "";
-        document.getElementById('password').value = "";
+        document.getElementById('connexion').reset();
 
     } catch (err) {
         showLoginError(); // Fait vibrer la boîte en cas d'échec
+        Swal.fire({
+            title: 'Erreur de connexion',
+            text: err.message || 'Échec de l’authentification.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
     }
 });
 
@@ -81,8 +86,7 @@ function showLoginError() {
 
         setTimeout(() => {
             loginModal.classList.remove('shake'); // Retire l’animation après 400ms
-            document.getElementById('user').value = "";
-            document.getElementById('password').value = "";
+            document.getElementById('connexion').reset(); //Réinitialiser les champs du formulaire
         }, 400);
     }
 }
@@ -196,7 +200,13 @@ async function sendPasswordReset() {
             throw new Error(result.message || "Erreur lors de la réinitialisation.");
         }
 
-        alert("Un e-mail de réinitialisation a été envoyé.");
+        Swal.fire({
+            title: 'E-mail envoyé',
+            text: 'Veuillez vérifier votre boîte de réception.',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
+        
         showLoginForm();
 
     } catch (err) {
