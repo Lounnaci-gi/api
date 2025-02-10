@@ -370,10 +370,17 @@ dateInput.addEventListener('blur', function () {
     }
 });
 
-document.getElementById("numPicIdentite").addEventListener('blur',()=>{
-    if (!document.getElementById("numPicIdentite").value) {
-        document.getElementById("delivrePar").style.display="required";
-        document.getElementById("dateDelivrance").style.display="required";
+document.getElementById("numPicIdentite").addEventListener('blur', () => {
+    if (document.getElementById("numPicIdentite").value.trim() !== '') {
+        document.getElementById("delivrePar").setAttribute("required", true);
+        document.getElementById("dateDelivrance").setAttribute("required", true);
+        document.getElementById("delivrePar").removeAttribute("readonly");
+        document.getElementById("dateDelivrance").removeAttribute("readonly");
+    } else {
+        document.getElementById("delivrePar").setAttribute("readonly",true);
+        document.getElementById("dateDelivrance").setAttribute("readonly",true);
+        document.getElementById("delivrePar").value='';
+        document.getElementById("dateDelivrance").value='';
     }
 
 })
