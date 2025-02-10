@@ -954,13 +954,22 @@ footer {
 
 .table-container {
     /* display: flex; */
-    justify-content: center; /* Centre horizontalement */
-    align-items: center; /* Centre verticalement */
-    min-height: 100vh; /* Assure un centrage sur toute la hauteur */
-    width: 100%;
-    padding: 20px; /* Ajoute un peu d'espace autour */
-    overflow-x: auto; /* Ajoute un défilement horizontal si nécessaire */
+    justify-content: center;
+    /* Centre horizontalement */
+    align-items: center;
+    /* Centre verticalement */
+    min-height: 100vh;
+    /* Assure un centrage sur toute la hauteur */
+    min-width: 100%;
+    max-width: 100%;
+    padding: 20px;
+    /* Ajoute un peu d'espace autour */
+    overflow-x: auto;
+    /* Ajoute un défilement horizontal si nécessaire */
+    overflow-y: auto;
+    /* Ajoute un défilement horizontal si nécessaire */
 }
+
 .liste-clients {
     width: 95%;
     max-width: 100%;
@@ -971,7 +980,8 @@ footer {
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 0 10px rgba(0, 171, 240, 0.5);
-    font-size: 12px;  /* Taille de police réduite */
+    font-size: 12px;
+    /* Taille de police réduite */
 }
 
 .liste-clients th,
@@ -988,6 +998,7 @@ footer {
     color: #1f242d;
     font-weight: bold;
     font-size: 13px;
+    cursor: pointer;
     /* Taille légèrement plus grande pour les en-têtes */
 }
 
@@ -1016,11 +1027,13 @@ footer {
         font-size: 11px;
     }
 }
-.global-container{
+
+.global-container {
     display: flex;
     width: 100%;
 }
-.global-container .liste-clients{
+
+.global-container .liste-clients {
     width: 50%;
     padding: 5px;
     font-size: 12px;
