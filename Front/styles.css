@@ -960,15 +960,51 @@ footer {
     /* Centre verticalement */
     min-height: 100vh;
     /* Assure un centrage sur toute la hauteur */
-    min-width: 100%;
-    max-width: 100%;
+    width: 100%;
     padding: 20px;
     /* Ajoute un peu d'espace autour */
     overflow-x: auto;
     /* Ajoute un défilement horizontal si nécessaire */
-    overflow-y: auto;
-    /* Ajoute un défilement horizontal si nécessaire */
 }
+
+.liste-clients i {
+    padding: 3px;
+    font-size: 18px;
+}
+
+.bxs-message-square-edit {
+    color: #00abf0;
+    border-radius: 50%;
+}
+.bxs-message-square-edit:hover {
+    color: var(--secondary-color);
+    background-color:var(--primary-color);
+    box-shadow: 0 0 10px var(--primary-color);
+}
+
+.bxs-message-square-x {
+    color: #f88989;
+    border-radius: 50%;
+}
+.bxs-message-square-x:hover {
+    color: var(--secondary-color);
+    background-color:#f88989;
+    box-shadow: 0 0 10px #f88989;
+}
+
+.bxs-printer {
+    color: #98eeea;
+    border-radius: 50%;
+}
+.bxs-printer:hover {
+    color: var(--secondary-color);
+    background-color: #98eeea;
+    box-shadow: 0 0 10px #98eeea;
+}
+
+ .liste-clients i:hover {
+    cursor: pointer;   
+} 
 
 .liste-clients {
     width: 95%;
@@ -1007,7 +1043,13 @@ footer {
 }
 
 .liste-clients tr:hover {
-    background-color: rgba(0, 171, 240, 0.2);
+    background-color: #00abf033;
+}
+
+.liste-clients th:hover {
+    cursor: pointer;
+    background-color: #00abf033;
+    color: #00abf0;
 }
 
 /* Style pour les écrans mobiles */

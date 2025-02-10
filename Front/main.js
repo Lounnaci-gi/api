@@ -36,7 +36,12 @@ document.getElementById('submit').addEventListener('click', async (event) => {
 
     // Vérification des champs vides
     if (!user || !password) {
-        showLoginError();
+        Swal.fire({
+            title: 'Erreur',
+            text: 'Veuillez remplir tous les champs.',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
         return;
     }
 
@@ -63,68 +68,97 @@ document.getElementById('submit').addEventListener('click', async (event) => {
         // Afficher le nom d'utilisateur sans guillemets
         document.getElementsByClassName('logo')[0].innerText = result.data.nomUtilisateur;
         closeLogin();
-        
+
         // Réinitialiser les champs du formulaire
-        document.getElementById('user').value = "";
-        document.getElementById('password').value = "";
+        document.getElementById('connexion').reset();
 
     } catch (err) {
-        showLoginError(); // Fait vibrer la boîte en cas d'échec
+        Swal.fire({
+            title: 'Erreur de connexion',
+            text: err.message || 'Échec de l’authentification.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
     }
 });
 
-function showLoginError() {
-    const loginModal = document.querySelector('.modal-content'); // Sélection de la boîte de connexion
-
-    if (loginModal) {
-        loginModal.classList.add('shake'); // Ajoute l’animation
-
-        setTimeout(() => {
-            loginModal.classList.remove('shake'); // Retire l’animation après 400ms
-            document.getElementById('user').value = "";
-            document.getElementById('password').value = "";
-        }, 400);
-    }
-}
-
-
-
 
 // Fonction inscription nouveau utilistaeur
-
-document.getElementById('inscrire').addEventListener('click',  async function (event) {
+document.getElementById('inscrire').addEventListener('click', async function (event) {
+    event.preventDefault(); // Empêcher l'envoi du formulaire par défaut
     const nomComplet = document.querySelector("input[name='nomComplet']").value.trim();
     const nomUtilisateur = document.querySelector("input[name='nomUtilisateurs']").value.trim();
     const email = document.querySelector("input[name='email']").value.trim();
     const password = document.querySelector("input[name='motDePasse']").value.trim();
-    const confirmPassword = document.querySelector("input[placeholder='Confirmer le mot de passe']").value.trim();
-    if (!password || !confirmPassword) {
-        alert("Veuillez remplir tous les champs.");
-    } else if (password !== confirmPassword) {
-        alert("Les mots de passe ne correspondent pas.");
-        document.querySelector("input[placeholder='Confirmer le mot de passe']").value = "";
-        confirmPassword.focus();
-        event.preventDefault(); // Bloquer l'envoi du formulaire
+    const confirmPasswordInput = document.querySelector("input[placeholder='Confirmer le mot de passe']");
+    const confirmPassword = confirmPasswordInput.value.trim();
+
+    // Vérifier si tous les champs sont remplis
+    if (!nomComplet || !nomUtilisateur || !email || !password || !confirmPassword) {
+        Swal.fire({
+            title: 'Erreur',
+            text: 'Veuillez remplir tous les champs.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+        return;
     }
-    const datas = { nomComplet: nomComplet, nomUtilisateur: nomUtilisateur, email: email, motDePasse: password };
-    
-        try {
-            const response = await fetch('http://localhost:3000/users/newuser', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(datas),
+
+    // Vérifier si les mots de passe correspondent
+    if (password !== confirmPassword) {
+        Swal.fire({
+            title: 'Attention',
+            text: 'Les mots de passe ne correspondent pas.',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
+        confirmPasswordInput.value = "";
+        confirmPasswordInput.focus(); // Remettre le focus sur le champ
+        return;
+    }
+
+    // Création de l'objet de données à envoyer
+    const datas = {
+        nomComplet: nomComplet,
+        nomUtilisateur: nomUtilisateur,
+        email: email,
+        motDePasse: password
+    };
+
+    try {
+        const response = await fetch('http://localhost:3000/users/newuser', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(datas),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            Swal.fire({
+                title: 'Succès',
+                text: 'Inscription réussie !',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                closeLogin(); // Fermer le formulaire si nécessaire
             });
-    
-            const result = await response.json();
-    
-            if (response.ok) {
-                closeLogin();
-            } else {
-                alert(result.message || "Erreur lors de la connexion.");
-            }
-        } catch (err) {
-            alert("Une erreur s'est produite lors de la récupération des données.");
+        } else {
+            Swal.fire({
+                title: 'Erreur',
+                text: result.message || 'Erreur lors de l\'inscription.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
         }
+    } catch (err) {
+        Swal.fire({
+            title: 'Erreur',
+            text: 'Une erreur s\'est produite lors de la récupération des données.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    }
 });
 
 
@@ -139,7 +173,12 @@ async function sendPasswordReset() {
     const email = document.getElementById('emailReset').value.trim();
 
     if (!email) {
-        alert("Veuillez entrer une adresse e-mail.");
+        Swal.fire({
+            title: 'Attention',
+            text: 'Veuillez entrer une adresse e-mail.',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
         return;
     }
 
@@ -156,10 +195,21 @@ async function sendPasswordReset() {
             throw new Error(result.message || "Erreur lors de la réinitialisation.");
         }
 
-        alert("Un e-mail de réinitialisation a été envoyé.");
+        Swal.fire({
+            title: 'E-mail envoyé',
+            text: 'Veuillez vérifier votre boîte de réception.',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
+        
         showLoginForm();
 
     } catch (err) {
-        alert(err.message);
+        Swal.fire({
+            title: 'E-mail envoyé',
+            text: err.message || 'Erreur lors de la connexion au serveur.',
+            icon: 'erreur',
+            confirmButtonText: 'OK'
+        });        
     }
 }

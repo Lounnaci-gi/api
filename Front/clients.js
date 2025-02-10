@@ -1,14 +1,24 @@
 // 👉 Afficher le formulaire lors du clic sur "Ajouter un client"
 document.getElementById('AjouterClient').addEventListener('click', async () => {
-    // document.querySelector('.table-container').style.display = 'none';
+    const ttable = document.getElementsByClassName("liste-clients")[0];
     document.querySelector('.client-section').style.display = 'flex';
     document.querySelector('.footer').style.marginTop = 'auto';
+    ttable.innerHTML = '';
+    // Afficher le loader avec SweetAlert2
+    Swal.fire({
+        title: 'Chargement...',
+        html: 'Veuillez patienter...',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
     try {
         const response = await fetch('http://localhost:3000/users/last_id_dossier');
         const data = await response.json();
         if (data) {
             document.getElementById('idDossier').value = data.idDossier;
-
+            Swal.close();
         }
     } catch (error) {
         Swal.fire({
@@ -49,7 +59,7 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
     }
 
     const phoneRegex = /^\d+$/;
-    if (!phoneRegex.test(telephone)) {
+    if (!phoneRegex.test(telephone) && telephone) {
         return Swal.fire({
             title: 'Erreur',
             text: 'Numéro de téléphone invalide. Veuillez entrer uniquement des chiffres.',
@@ -112,6 +122,8 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
             document.getElementById('addClientForm').reset(); // Réinitialisation du formulaire
             document.querySelector('.client-section').style.display = 'none'; // Masquer le formulaire
             document.querySelector('.footer').style.marginTop = '50%'; // Ajuster le footer
+
+
         });
 
     } catch (error) {
@@ -124,12 +136,25 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
     }
 });
 
+// Fonction debounce
+function debounce(func, delay) {
+    let timeoutId;
+    return function (...args) {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+            func.apply(this, args);
+        }, delay);
+    };
+}
 
-document.getElementById('raisonSociale').addEventListener('input', async function () {
-    const inputValue = this.value.trim();
+// Fonction de recherche
+async function searchRaisonSociale() {
+    const inputValue = document.getElementById('raisonSociale').value.trim();
+    const ttable = document.getElementsByClassName("liste-clients")[0];
+
     // Si l'utilisateur a tapé moins de 2 caractères, on ne fait pas de requête
     if (inputValue.length < 2) {
-        document.getElementsByClassName("liste-clients")[0].innerHTML = '';
+        ttable.innerHTML = '';
         return;
     }
 
@@ -140,8 +165,7 @@ document.getElementById('raisonSociale').addEventListener('input', async functio
         }
 
         const data = await response.json();
-        const ttable = document.getElementsByClassName("liste-clients")[0];
-        
+
         // Réinitialisation du tableau
         ttable.innerHTML = `
         <thead>  
@@ -172,7 +196,6 @@ document.getElementById('raisonSociale').addEventListener('input', async functio
                 tbody.appendChild(row);
             });
 
-            // Ajouter `tbody` une seule fois après la boucle
             ttable.appendChild(tbody);
         } else {
             // Ajouter une ligne indiquant qu'aucun résultat n'a été trouvé
@@ -180,68 +203,106 @@ document.getElementById('raisonSociale').addEventListener('input', async functio
             row.innerHTML = `<td colspan="6" style="text-align:center;">Aucun résultat trouvé</td>`;
             tbody.appendChild(row);
             ttable.appendChild(tbody);
+            setTimeout(() => {
+                ttable.innerHTML = ``;
+            }, 3000);
+
         }
     } catch (error) {
         console.error("Erreur lors de la récupération des raisons sociales :", error);
+        // Afficher un message d'erreur à l'utilisateur
+        ttable.innerHTML = '<tr><td colspan="6" style="text-align:center; color: red;">Erreur lors de la récupération des données</td></tr>';
     }
-});
+}
+
+// Appliquer le debounce à la fonction de recherche
+const debouncedSearch = debounce(searchRaisonSociale, 300);
+
+// Ajouter l'événement input avec le debounce
+document.getElementById('raisonSociale').addEventListener('input', debouncedSearch);
 
 
 // liste des clients 
-
 document.getElementById('liste-clients').addEventListener('click', async () => {
+    const ttable = document.getElementsByClassName("liste-clients")[0];
+    // Afficher le loader avec SweetAlert2
+    Swal.fire({
+        title: 'Chargement...',
+        html: 'Veuillez patienter...',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
     document.querySelector('.client-section').style.display = 'none';
+
     try {
         const response = await fetch("http://localhost:3000/users", { method: 'GET' });
         if (!response.ok) {
             throw new Error(`Erreur HTTP : ${response.status}`);
         }
-        const posts = await response.json();
-        let i = 1;
-        const ttable = document.getElementsByClassName("liste-clients")[0];
+
+        const clients = await response.json();
         ttable.innerHTML = `
         <thead>  
-        <tr>
-            <th>N°</th>
-            <th>N° Dossier</th>
-            <th>Statut</th>
-            <th>Raison Sociale</th>
-            <th>Adresse</th>
-            <th>Commune</th>
-            <th>N° Pièce d'identité</th>
-            <th>N° Délivrer par</th>
-            <th>Telephone</th>
-            <th>Email</th>
-            <th>Date Dépot</th>
-        </tr>
+            <tr>
+                <th>N°</th>
+                <th>N° Dossier</th>
+                <th>Statut</th>
+                <th>Raison Sociale</th>
+                <th>Adresse</th>
+                <th>Commune</th>
+                <th>N° Pièce d'identité</th>
+                <th>N° Délivrer par</th>
+                <th>Telephone</th>
+                <th>Email</th>
+                <th>Date Dépot</th>
+                <th>Actions</th>
+            </tr>
         </thead>`;
+
         const tbody = document.createElement('tbody');
 
-        posts.forEach(e => {
+        if (clients.length > 0) {
+            let i = 1;
+            clients.forEach(client => {
+                const row = document.createElement("tr");
+                row.innerHTML = `                       
+                    <td>${String(i++).padStart(3, "0")}</td>
+                    <td>${client.Id_Dossier}</td>
+                    <td>${client.type_client}</td>
+                    <td>${client.raison_sociale}</td>
+                    <td>${client.Adresse_correspondante}</td>
+                    <td>${client.commune_correspondante}</td>
+                    <td>${client.Num_pic_identite?.numero || ""}</td>
+                    <td>${client.Num_pic_identite?.delivre_par || ""}</td>
+                    <td>${client.telephone}</td>
+                    <td>${client.email}</td>
+                    <td>${new Date(client.createdAt).toLocaleDateString('fr-FR')}</td>
+                    <td>
+                        <i class='bx bxs-message-square-edit'></i>
+                        <i class='bx bxs-message-square-x'></i>
+                        <i class='bx bxs-printer' >
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        } else {
             const row = document.createElement("tr");
-            row.innerHTML = `                       
-                        <td>${String(i++).padStart(3, "0")}</td>
-                        <td>${e.Id_Dossier}</td>
-                        <td>${e.type_client}</td>
-                        <td>${e.raison_sociale}</td>
-                        <td>${e.Adresse_correspondante}</td>
-                        <td>${e.commune_correspondante}</td>
-                        <td>${e.Num_pic_identite?.numero || ""}</td>
-                        <td>${e.Num_pic_identite?.delivre_par || ""}</td>
-                        <td>${e.telephone}</td>
-                        <td>${e.email}</td>
-                        <td>${new Date(e.createdAt).toLocaleDateString('fr-FR')}</td>
-
-                        `;
+            row.innerHTML = `<td colspan="11" style="text-align:center;">Aucun client trouvé</td>`;
             tbody.appendChild(row);
-            ttable.appendChild(tbody);
-        });
+        }
 
+        ttable.appendChild(tbody);
+        Swal.close();
 
-    }
-    catch (error) {
+    } catch (error) {
         console.error("Erreur :", error);
-        alert("Une erreur s'est produite lors de la récupération des données.");
+        Swal.fire({
+            title: 'Erreur',
+            text: 'Impossible de récupérer les clients.',
+            icon: 'error'
+        });
     }
-
 });
