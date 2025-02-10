@@ -171,12 +171,22 @@ function showForgotPassword() {
 // Envoyer la demande de réinitialisation
 async function sendPasswordReset() {
     const email = document.getElementById('emailReset').value.trim();
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     if (!email) {
         Swal.fire({
             title: 'Attention',
             text: 'Veuillez entrer une adresse e-mail.',
             icon: 'warning',
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
+    if (!emailRegex.test(email)) {
+        Swal.fire({
+            title: 'E-mail invalide',
+            text: 'Veuillez entrer une adresse e-mail valide.',
+            icon: 'error',
             confirmButtonText: 'OK'
         });
         return;
@@ -201,15 +211,15 @@ async function sendPasswordReset() {
             icon: 'success',
             confirmButtonText: 'OK'
         });
-        
+
         showLoginForm();
 
     } catch (err) {
         Swal.fire({
-            title: 'E-mail envoyé',
+            title: 'E-mail non envoyé',
             text: err.message || 'Erreur lors de la connexion au serveur.',
-            icon: 'erreur',
+            icon: 'error',
             confirmButtonText: 'OK'
-        });        
+        });
     }
 }
