@@ -36,16 +36,14 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    padding: 20px 10%;
+    padding: 10px 3%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 100;
-    background-color: transparent;
-    visibility: hidden;
-    opacity: 0;
-    animation: show-content 1.5s linear forwards;
-    animation-delay: 1.2s;
+    background-color: var(--secondary-color);
+    animation: show-content 1.2s linear forwards;
+    animation-delay: 1s;
 }
 
 @keyframes show-content {
@@ -66,27 +64,17 @@ a {
     text-decoration: none;
 }
 
-/*---------------------------*/
 /* Styles pour la barre de navigation */
 .navbar {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 15px;
-    /*background: #1f242d;*/
     background: transparent;
-    padding: 15px 0;
-    opacity: 0;
-    /* Masquer par défaut */
-    transition: opacity 0.3s ease-in-out;
-    /* Animation de transition */
+    padding: 5px 5px;
 }
 
-/* Afficher la barre de navigation au survol */
-.header:hover .navbar {
-    opacity: 1;
-    /* Rendre visible */
-}
+
 
 /* Styles pour les liens de la barre de navigation */
 .navbar a {
@@ -146,6 +134,7 @@ a {
     display: flex;
     opacity: 0.8;
     transform: translateY(0);
+    border-radius: 15px;
 }
 
 .home {
