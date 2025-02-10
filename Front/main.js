@@ -182,7 +182,7 @@ async function sendPasswordReset() {
         });
         return;
     }
-    
+
     try {
         const response = await fetch('http://localhost:3000/users/reset-password', {
             method: 'POST',
@@ -198,7 +198,7 @@ async function sendPasswordReset() {
 
         Swal.fire({
             title: 'E-mail envoyé',
-            text: 'Veuillez vérifier votre boîte de réception.',
+            text: `Un e-mail de réinitialisation a été envoyé à ${result.email}. Veuillez vérifier votre boîte de réception.`,
             icon: 'success',
             confirmButtonText: 'OK'
         });
@@ -208,9 +208,10 @@ async function sendPasswordReset() {
     } catch (err) {
         Swal.fire({
             title: 'E-mail non envoyé',
-            text: err.message || 'Erreur lors de la connexion au serveur.',
+            text: err.message,
             icon: 'error',
             confirmButtonText: 'OK'
         });
+        return;
     }
 }

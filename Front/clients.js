@@ -306,3 +306,66 @@ document.getElementById('liste-clients').addEventListener('click', async () => {
         });
     }
 });
+//-------------------------------
+const dateInput = document.getElementById('dateDelivrance');
+
+// Vérification en temps réel pour le jour et le mois
+dateInput.addEventListener('input', function () {
+    let value = this.value.replace(/[^0-9]/g, ''); // Supprime tout caractère non numérique
+    let formattedValue = '';
+
+    if (value.length >= 1) {
+        let jour = value.substring(0, 2);
+        if (parseInt(jour) > 31) {
+            Swal.fire({
+                title: 'Date invalide',
+                text: 'Le jour ne peut pas dépasser 31.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            jour = '31'; // Limite à 31
+        }
+        formattedValue += jour;
+    }
+
+    if (value.length > 2) {
+        let mois = value.substring(2, 4);
+        if (parseInt(mois) > 12) {
+            Swal.fire({
+                title: 'Date invalide',
+                text: 'Le mois ne peut pas dépasser 12.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            mois = '12'; // Limite à 12
+        }
+        formattedValue += '/' + mois;
+    }
+
+    if (value.length > 4) {
+        let annee = value.substring(4, 8);
+        formattedValue += '/' + annee; // Ajoute l'année mais ne la vérifie pas encore
+    }
+
+    this.value = formattedValue; // Met à jour le champ avec le bon format
+});
+
+// Vérification de l'année uniquement après perte de focus
+dateInput.addEventListener('blur', function () {
+    let parts = this.value.split('/');
+    if (parts.length === 3) {
+        let annee = parseInt(parts[2]);
+        let anneeActuelle = new Date().getFullYear();
+
+        if (annee < 1900 || annee > anneeActuelle + 10) {
+            Swal.fire({
+                title: 'Date invalide',
+                text: `L'année doit être comprise entre 1900 et ${anneeActuelle}.`,
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            parts[2] = anneeActuelle.toString(); // Corrige l'année
+            this.value = parts.join('/'); // Met à jour avec la correction
+        }
+    }
+});

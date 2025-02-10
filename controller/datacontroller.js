@@ -209,7 +209,7 @@ module.exports.recupass = async (req, res) => {
         // Recherche de l'utilisateur dans la base de données
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(404).json({ message: "Utilisateur non trouvé." }); // Si l'utilisateur n'existe pas, renvoyer une erreur 404
+            return res.status(404).json({ message: `Utilisateur non trouvé.` }); // Si l'utilisateur n'existe pas, renvoyer une erreur 404
         }
         // Génération d'un token de réinitialisation (valide 1h)
         const resetToken = crypto.randomBytes(32).toString("hex"); // Génère un token aléatoire
@@ -227,10 +227,13 @@ module.exports.recupass = async (req, res) => {
             subject: "Réinitialisation du mot de passe",
             text: `Cliquez sur le lien suivant pour réinitialiser votre mot de passe : ${resetLink}`,
         });
-        console.log("E-mail envoyé avec succès.");
 
         // Réponse indiquant que l'e-mail a été envoyé
-        res.json({ message: "Un e-mail de réinitialisation a été envoyé." });
+        res.json({ 
+            message: `Un e-mail de réinitialisation a été envoyé à ${user.email}.`,
+            email: user.email // Ajouter l'email pour l'afficher côté frontend
+        });
+        
 
     } catch (err) {
         console.error("Erreur dans recupass :", err); // Affiche l'erreur complète
