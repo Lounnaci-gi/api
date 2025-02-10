@@ -173,25 +173,16 @@ async function sendPasswordReset() {
     const email = document.getElementById('emailReset').value.trim();
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-    if (!email) {
+    if (!email || !emailRegex.test(email)) {
         Swal.fire({
             title: 'Attention',
-            text: 'Veuillez entrer une adresse e-mail.',
+            text: !email ? 'Veuillez entrer une adresse e-mail.' : 'Veuillez entrer une adresse e-mail valide.',
             icon: 'warning',
             confirmButtonText: 'OK'
         });
         return;
     }
-    if (!emailRegex.test(email)) {
-        Swal.fire({
-            title: 'E-mail invalide',
-            text: 'Veuillez entrer une adresse e-mail valide.',
-            icon: 'error',
-            confirmButtonText: 'OK'
-        });
-        return;
-    }
-
+    
     try {
         const response = await fetch('http://localhost:3000/users/reset-password', {
             method: 'POST',
