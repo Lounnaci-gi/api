@@ -36,7 +36,12 @@ document.getElementById('submit').addEventListener('click', async (event) => {
 
     // Vérification des champs vides
     if (!user || !password) {
-        showLoginError();
+        Swal.fire({
+            title: 'Erreur',
+            text: 'Veuillez remplir tous les champs.',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
         return;
     }
 
@@ -68,7 +73,6 @@ document.getElementById('submit').addEventListener('click', async (event) => {
         document.getElementById('connexion').reset();
 
     } catch (err) {
-        showLoginError(); // Fait vibrer la boîte en cas d'échec
         Swal.fire({
             title: 'Erreur de connexion',
             text: err.message || 'Échec de l’authentification.',
@@ -77,20 +81,6 @@ document.getElementById('submit').addEventListener('click', async (event) => {
         });
     }
 });
-
-function showLoginError() {
-    const loginModal = document.querySelector('.modal-content'); // Sélection de la boîte de connexion
-
-    if (loginModal) {
-        loginModal.classList.add('shake'); // Ajoute l’animation
-
-        setTimeout(() => {
-            loginModal.classList.remove('shake'); // Retire l’animation après 400ms
-            document.getElementById('connexion').reset(); //Réinitialiser les champs du formulaire
-        }, 400);
-    }
-}
-
 
 
 // Fonction inscription nouveau utilistaeur
@@ -183,7 +173,12 @@ async function sendPasswordReset() {
     const email = document.getElementById('emailReset').value.trim();
 
     if (!email) {
-        alert("Veuillez entrer une adresse e-mail.");
+        Swal.fire({
+            title: 'Attention',
+            text: 'Veuillez entrer une adresse e-mail.',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
         return;
     }
 
@@ -210,6 +205,11 @@ async function sendPasswordReset() {
         showLoginForm();
 
     } catch (err) {
-        alert(err.message);
+        Swal.fire({
+            title: 'E-mail envoyé',
+            text: err.message || 'Erreur lors de la connexion au serveur.',
+            icon: 'erreur',
+            confirmButtonText: 'OK'
+        });        
     }
 }
