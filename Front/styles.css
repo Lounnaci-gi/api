@@ -20,12 +20,12 @@ body {
     color: var(--text-color);
 }
 
-.client-form button {
+.client-section button {
     background: var(--primary-color);
     color: var(--secondary-color);
 }
 
-.client-form button:hover {
+.client-section button:hover {
     background: transparent;
     color: var(--primary-color);
 }
@@ -643,79 +643,110 @@ footer {
 }
 
 .client-section {
-    padding-top: 10%;
-    padding-left: 5px;
-    padding-right: 5px;
-    background-color: #1f242d;
-    color: white;
-    text-align: center;
-    max-width: 100%;
-    display: flex;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    /* Assure que la section prend toute la hauteur de la page */
-}
-
-.client-container {
-    /* Largeur maximale réduite pour un formulaire compact */
-    width: 40vw;
-    margin: 0 auto;
     padding: 20px;
-    background: #2a2f3a;
+    padding-top: 80px;
+    background-color: #2a2f3a;
+    box-shadow: 0 0 10px #2a2f3a;
+    color: var(--text-color);
+    text-align: center;
+    width: 90%;
+    margin: 10px auto;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
-
-.client-container h2 {
-    font-size: 25px;
-    margin-bottom: 20px;
-    color: #00abf0;
-}
-
-.client-form {
+    min-height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    /* Espacement réduit entre les éléments */
+    justify-content: center;
+    align-items: center;
 }
 
-.client-form h3 {
+
+.souligner {
     font-size: 1.2em;
     font-weight: 500;
     margin-bottom: 15px;
     color: #00abf0;
 }
 
-.client-form input,
-.client-form select {
+/* Champs input et select */
+.client-section input,
+.client-section select {
     width: 100%;
-    /* Largeur de 100% pour s'adapter au conteneur */
-    padding: 8px;
-    /* Padding réduit */
+    padding: 10px;
     margin: 5px 0;
     border: 1px solid #00abf0;
     border-radius: 5px;
     background-color: transparent;
     color: white;
-    font-size: 0.8em;
-    /* Taille de police réduite */
+    font-size: 1em;
     text-transform: capitalize;
+    appearance: none;
 }
 
-
-.client-form input::placeholder,
-.client-form select::placeholder {
+.client-section input::placeholder,
+.client-section select::placeholder {
     color: #aaa;
 }
 
-.client-form select {
-    appearance: none;
-    /* Supprime l'apparence par défaut du select */
-    background-color: transparent;
+
+.client-section button {
+    width: 15%;
+    padding: 8px;
+    background: #00abf0;
+    border: none;
+    border-radius: 15px;
+    color: #1f242d;
+    font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
+    /* transition: background 0.3s, color 0.3s, box-shadow 0.3s; */
+    text-align: center;
+    margin-top: 15px;
 }
+
+.client-section button:hover {
+    background: transparent;
+    color: #00abf0;
+    box-shadow: 0 0 10px #00abf0;
+}
+
+.civi,
+.adresse-group,
+.identite-group,
+.contact-group {
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.souligner {
+    display: inline-block;
+    position: relative;
+    padding-bottom: 5px;
+    /* Espace entre le texte et la ligne */
+}
+
+.souligner::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    /* Épaisseur du soulignement */
+    width: 0;
+    /* La ligne est invisible au départ */
+    background-color: var(--text-color);
+    /* Couleur du soulignement */
+    transition: width 0.4s ease-in-out;
+    /* Animation fluide */
+}
+
+/* Effet au survol */
+.souligner:hover::after {
+    width: 50%;
+    /* La ligne se dessine complètement de gauche à droite */
+}
+
 
 
 /* Styles pour les écrans mobiles */
@@ -730,14 +761,14 @@ footer {
         padding: 15px;
     }
 
-    .client-form input,
-    .client-form select {
+    .client-section input,
+    .client-section select {
         font-size: 12px;
         /* Taille de police encore plus réduite pour les mobiles */
         padding: 6px;
     }
 
-    .client-form button {
+    .client-section button {
         width: 60%;
         /* Largeur légèrement augmentée pour les mobiles */
         font-size: 12px;
@@ -836,23 +867,15 @@ footer {
 }
 
 
-.civi {
-    display: flex;
-    gap: 15px;
-}
 
 
 /* Ajustement de la disposition des groupes */
-.adresse-group,
-.identite-group,
-.contact-group,
 .id-type-group,
 .commune-group {
     display: flex;
     gap: 15px;
     justify-content: flex-start;
     align-items: center;
-    margin-bottom: 15px;
     /* Augmente l'espace vertical entre les groupes */
 }
 
@@ -910,33 +933,9 @@ footer {
 }
 
 /* Assurer une bonne lisibilité */
-.client-form {
+.client-section {
     text-align: left;
 }
-
-
-
-.client-form button {
-    width: 15%;
-    padding: 8px;
-    background: #00abf0;
-    border: none;
-    border-radius: 15px;
-    color: #1f242d;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.3s, color 0.3s, box-shadow 0.3s;
-    text-align: center;
-    margin-top: 15px;
-}
-
-.client-form button:hover {
-    background: transparent;
-    color: #00abf0;
-    box-shadow: 0 0 10px #00abf0;
-}
-
 
 .adresse-group input {
     width: 50%;
@@ -1062,16 +1061,4 @@ footer {
     .liste-clients th {
         font-size: 11px;
     }
-}
-
-.global-container {
-    display: flex;
-    width: 100%;
-}
-
-.global-container .liste-clients {
-    width: 50%;
-    padding: 5px;
-    font-size: 12px;
-
 }
