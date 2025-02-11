@@ -1,7 +1,6 @@
 // 👉 Afficher le formulaire lors du clic sur "Ajouter un client"
 document.getElementById('AjouterClient').addEventListener('click', async () => {
     const ttable = document.getElementsByClassName("liste-clients")[0];
-    document.querySelector('.client-section').style.display = 'flex';
     document.querySelector('.footer').style.marginTop = 'auto';
     ttable.innerHTML = '';
     // Afficher le loader avec SweetAlert2

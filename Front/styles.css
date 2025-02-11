@@ -20,17 +20,6 @@ body {
     color: var(--text-color);
 }
 
-.client-section button {
-    background: var(--primary-color);
-    color: var(--secondary-color);
-}
-
-.client-section button:hover {
-    background: transparent;
-    color: var(--primary-color);
-}
-
-
 .header {
     position: fixed;
     top: 0;
@@ -397,11 +386,6 @@ a {
     }
 }
 
-/* Classe qui déclenche la vibration */
-.shake {
-    animation: shake 0.4s ease-in-out;
-}
-
 
 /* Style du formulaire de récupération */
 #forgotPasswordForm {
@@ -643,29 +627,38 @@ footer {
 }
 
 .client-section {
-    padding: 80px 20px 20px;
-    /* Corrige le conflit de padding */
+    padding: 60px 20px;
+    /* Réduction du padding haut */
     background-color: #2a2f3a;
-    box-shadow: 0 0 10px #2a2f3a;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    /* Ombre plus visible */
     color: var(--text-color);
-    text-align: center;
+    text-align: left;
+    /* Texte aligné à gauche */
     width: 90%;
-    margin: 10px auto;
+    margin: 20px auto;
+    /* Centrage horizontal */
     border-radius: 10px;
     min-height: 100vh;
-    /* Assure la pleine hauteur de l'écran */
+    /* Pleine hauteur de l'écran */
     display: flex;
+    /* Utilisation de Flexbox */
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    /* Affichage vertical */
+    justify-content: flex-start;
+    /* Les éléments s’empilent du haut vers le bas */
+    align-items: flex-start;
+    /* Aligne les éléments à gauche */
     gap: 15px;
-    /* Ajoute de l'espacement entre les éléments */
+    /* Espacement entre les éléments */
 }
+
+
 
 /* Champs input et select */
 .client-section input,
 .client-section select {
-    width: 100%;
+    width: 80%;
     padding: 10px;
     margin: 5px 2px;
     border: 1px solid #00abf0;
@@ -693,7 +686,6 @@ footer {
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
-    /* transition: background 0.3s, color 0.3s, box-shadow 0.3s; */
     text-align: center;
     margin-top: 15px;
 }
@@ -704,20 +696,18 @@ footer {
     box-shadow: 0 0 10px #00abf0;
 }
 
-.civi,
-.adresse-group,
-.identite-group,
-.contact-group {
+.civi {
     display: flex;
     gap: 15px;
     justify-content: space-between;
-    width: 100%;
+    width: 80%;
 }
 
 .souligner {
     display: inline-block;
     position: relative;
-    padding-bottom: 5px; /* Espace entre le texte et la ligne */
+    padding-bottom: 5px;
+    /* Espace entre le texte et la ligne */
     color: #00abf0;
     font-size: 1.2em;
     font-weight: 500;
@@ -730,15 +720,20 @@ footer {
     position: absolute;
     left: 0;
     bottom: 0;
-    height: 2px; /* Épaisseur du soulignement */
-    width: 0; /* La ligne est invisible au départ */
-    background-color: #00abf0; /* Couleur du soulignement corrigée */
-    transition: width 0.5s ease-in-out; /* Animation fluide */
+    height: 2px;
+    /* Épaisseur du soulignement */
+    width: 0;
+    /* La ligne est invisible au départ */
+    background-color: var(--text-color);
+    /* Couleur du soulignement corrigée */
+    transition: width 0.5s ease-in-out;
+    /* Animation fluide */
 }
 
 /* Effet de soulignement au survol */
 .souligner:hover::after {
-    width: 100%; /* La ligne se dessine complètement de gauche à droite */
+    width: 100%;
+    /* La ligne se dessine complètement de gauche à droite */
 }
 
 /* Facultatif : Ajustement de l'offset du soulignement */
@@ -864,38 +859,14 @@ footer {
     }
 }
 
-
-
-
-/* Ajustement de la disposition des groupes */
-.id-type-group,
-.commune-group {
-    display: flex;
-    gap: 15px;
-    justify-content: flex-start;
-    align-items: center;
-    /* Augmente l'espace vertical entre les groupes */
-}
-
-/* Taille ajustée des champs */
-.adresse-group input,
-.identite-group input,
-.contact-group input,
-.id-type-group input,
-.id-type-group select,
-.commune-group input {
-    flex: 1;
-    min-width: 0;
-}
-
 #idDossier,
 #telephone,
-#typeClient,
 #codePostal {
     width: 20%;
 }
 
-#civilite {
+#civilite,
+#typeClient {
     width: 25%;
 }
 
@@ -915,7 +886,6 @@ footer {
 
 #idDossier,
 #telephone,
-#typeClient,
 #civilite,
 #codePostal,
 #email,
@@ -924,13 +894,12 @@ footer {
 #adresseCorrespondante,
 #adresseBranchement {
     background-color: #2a2f3a;
-    gap: 20px;
 }
+
 
 /* Mofifier le style de id_dossier */
 #idDossier {
     border: none;
-    width: 23%;
 }
 
 /* Assurer une bonne lisibilité */
@@ -938,10 +907,6 @@ footer {
     text-align: left;
 }
 
-.adresse-group input {
-    width: 50%;
-    padding: 10px;
-}
 
 .table-container {
     /* display: flex; */
@@ -1062,4 +1027,12 @@ footer {
     .liste-clients th {
         font-size: 11px;
     }
+}
+
+#addClientForm {
+    width: 90%;
+}
+
+#addClientForm input {
+    background-color: transparent;
 }
