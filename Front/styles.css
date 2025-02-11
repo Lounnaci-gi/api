@@ -643,8 +643,8 @@ footer {
 }
 
 .client-section {
-    padding: 20px;
-    padding-top: 80px;
+    padding: 80px 20px 20px;
+    /* Corrige le conflit de padding */
     background-color: #2a2f3a;
     box-shadow: 0 0 10px #2a2f3a;
     color: var(--text-color);
@@ -652,19 +652,14 @@ footer {
     width: 90%;
     margin: 10px auto;
     border-radius: 10px;
-    min-height: 100%;
+    min-height: 100vh;
+    /* Assure la pleine hauteur de l'écran */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
-
-
-.souligner {
-    font-size: 1.2em;
-    font-weight: 500;
-    margin-bottom: 15px;
-    color: #00abf0;
+    gap: 15px;
+    /* Ajoute de l'espacement entre les éléments */
 }
 
 /* Champs input et select */
@@ -672,14 +667,14 @@ footer {
 .client-section select {
     width: 100%;
     padding: 10px;
-    margin: 5px 0;
+    margin: 5px 2px;
     border: 1px solid #00abf0;
     border-radius: 5px;
     background-color: transparent;
     color: white;
     font-size: 1em;
     text-transform: capitalize;
-    appearance: none;
+    appearance: auto;
 }
 
 .client-section input::placeholder,
@@ -722,31 +717,34 @@ footer {
 .souligner {
     display: inline-block;
     position: relative;
-    padding-bottom: 5px;
-    /* Espace entre le texte et la ligne */
+    padding-bottom: 5px; /* Espace entre le texte et la ligne */
+    color: #00abf0;
+    font-size: 1.2em;
+    font-weight: 500;
+    margin-bottom: 15px;
 }
 
+/* Ajout du soulignement */
 .souligner::after {
     content: "";
     position: absolute;
     left: 0;
     bottom: 0;
-    height: 2px;
-    /* Épaisseur du soulignement */
-    width: 0;
-    /* La ligne est invisible au départ */
-    background-color: var(--text-color);
-    /* Couleur du soulignement */
-    transition: width 0.4s ease-in-out;
-    /* Animation fluide */
+    height: 2px; /* Épaisseur du soulignement */
+    width: 0; /* La ligne est invisible au départ */
+    background-color: #00abf0; /* Couleur du soulignement corrigée */
+    transition: width 0.5s ease-in-out; /* Animation fluide */
 }
 
-/* Effet au survol */
+/* Effet de soulignement au survol */
 .souligner:hover::after {
-    width: 50%;
-    /* La ligne se dessine complètement de gauche à droite */
+    width: 100%; /* La ligne se dessine complètement de gauche à droite */
 }
 
+/* Facultatif : Ajustement de l'offset du soulignement */
+.souligner {
+    text-underline-offset: 4px;
+}
 
 
 /* Styles pour les écrans mobiles */
@@ -893,9 +891,12 @@ footer {
 #idDossier,
 #telephone,
 #typeClient,
-#civilite,
 #codePostal {
     width: 20%;
+}
+
+#civilite {
+    width: 25%;
 }
 
 #email {
