@@ -622,11 +622,6 @@ footer {
 
 /* Styles pour la section de gestion des clients */
 
-#typeClient {
-    background-color: #2a2f3a;
-}
-
-/* debut */
 .client-section {
     padding: 60px 20px;
     background-color: #2a2f3a;
@@ -695,14 +690,14 @@ footer {
 }
 
 
-/* fin. */
-
 
 .civi {
     display: flex;
     gap: 15px;
-    justify-content: space-between;
-    width: 80%;
+    width: 90%;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
 }
 
 .souligner {
@@ -865,11 +860,6 @@ footer {
 #telephone,
 #codePostal {
     width: 20%;
-}
-
-#civilite,
-#typeClient {
-    width: 25%;
 }
 
 #email {
@@ -1038,10 +1028,30 @@ footer {
     margin-bottom: 20px;
 }
 
-#civilite{
-    height: 50px;
-    margin-top: 20px;
-}
-.code_dossier{
+ #civilite {
+    width: 20%;
+    cursor: pointer;
+} 
+
+.num_dossier {
     display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    gap: 10px;
+}
+
+#numPicIdentite,
+#dateDelivrance {
+    width: 20%;
+}
+
+#delivrePar {
+    width: 30%;
+}
+
+#typeClient {
+    background-color: #2a2f3a;
+    cursor: pointer;
+    width: 16%;
 }
