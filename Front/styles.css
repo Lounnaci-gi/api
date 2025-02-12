@@ -626,11 +626,11 @@ footer {
     background-color: #2a2f3a;
 }
 
+/* debut */
 .client-section {
     padding: 60px 20px;
-    /* Réduction du padding haut */
     background-color: #2a2f3a;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 10px #00000033;
     /* Ombre plus visible */
     color: var(--text-color);
     text-align: left;
@@ -641,7 +641,7 @@ footer {
     border-radius: 10px;
     min-height: 100vh;
     /* Pleine hauteur de l'écran */
-    display: flex;
+    display: block;
     /* Utilisation de Flexbox */
     flex-direction: column;
     /* Affichage vertical */
@@ -652,8 +652,6 @@ footer {
     gap: 15px;
     /* Espacement entre les éléments */
 }
-
-
 
 /* Champs input et select */
 .client-section input,
@@ -695,6 +693,10 @@ footer {
     color: #00abf0;
     box-shadow: 0 0 10px #00abf0;
 }
+
+
+/* fin. */
+
 
 .civi {
     display: flex;
@@ -902,11 +904,6 @@ footer {
     border: none;
 }
 
-/* Assurer une bonne lisibilité */
-.client-section {
-    text-align: left;
-}
-
 
 .table-container {
     /* display: flex; */
@@ -1031,8 +1028,20 @@ footer {
 
 #addClientForm {
     width: 90%;
+    display: block;
 }
 
 #addClientForm input {
     background-color: transparent;
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#civilite{
+    height: 50px;
+    margin-top: 20px;
+}
+.code_dossier{
+    display: flex;
 }
