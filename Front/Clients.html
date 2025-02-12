@@ -67,12 +67,12 @@
         </div>
     </header>
 
-    
+
     <section class="client-section">
         <h3 class="souligner">Formulaire d’enregistrement des nouveaux clients</h3>
         <form id="addClientForm">
             <div class="num_dossier">
-                <span >Demande n°: </span> 
+                <span>Demande n°: </span>
                 <input type="text" id="idDossier" required maxlength="6" readonly>
             </div>
             <select id="typeClient" required>
@@ -111,13 +111,14 @@
             <input type="tel" id="telephone" placeholder="Téléphone" maxlength="10">
             <button type="submit" class="btn">Créer</button>
         </form>
-
-
     </section>
-    <div class="table-container">
-        <table class="liste-clients">
 
-        </table>
+
+    <div class="table-container">
+        <div class="table-wrapper"> 
+            <h3 class="souligner">Liste des clients</h3>
+            <table class="liste-clients"></table>
+        </div>
     </div>
 
 

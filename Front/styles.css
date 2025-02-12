@@ -694,7 +694,7 @@ footer {
 .civi {
     display: flex;
     gap: 15px;
-    width: 90%;
+    width: 70%;
     flex-direction: row;
     justify-content: start;
     align-items: center;
@@ -896,18 +896,34 @@ footer {
 
 
 .table-container {
-    /* display: flex; */
-    justify-content: center;
-    /* Centre horizontalement */
-    align-items: center;
-    /* Centre verticalement */
+    padding: 60px 20px;
+    background-color: #2a2f3a;
+    box-shadow: 0 0 10px #00000033;
+    /* Ombre plus visible */
+    color: var(--text-color);
+    text-align: left;
+    /* Texte aligné à gauche */
+    width: 90%;
+    margin: 20px auto;
+    /* Centrage horizontal */
+    border-radius: 10px;
     min-height: 100vh;
-    /* Assure un centrage sur toute la hauteur */
+    /* Pleine hauteur de l'écran */
+    display: block;
+    /* Utilisation de Flexbox */
+    flex-direction: column;
+    /* Affichage vertical */
+    justify-content: flex-start;
+    /* Les éléments s’empilent du haut vers le bas */
+    align-items: flex-start;
+    /* Aligne les éléments à gauche */
+    gap: 15px;
+    /* Espacement entre les éléments */
+}
+
+.table-wrapper {
     width: 100%;
-    padding: 20px;
-    /* Ajoute un peu d'espace autour */
     overflow-x: auto;
-    /* Ajoute un défilement horizontal si nécessaire */
 }
 
 .liste-clients i {
@@ -953,10 +969,10 @@ footer {
 }
 
 .liste-clients {
-    width: 95%;
+    width: auto;
     max-width: 100%;
     border-collapse: collapse;
-    margin-top: 15%;
+    margin-top: 5%;
     background-color: #2a2f3a;
     color: white;
     border-radius: 10px;
@@ -1028,10 +1044,10 @@ footer {
     margin-bottom: 20px;
 }
 
- #civilite {
+#civilite {
     width: 20%;
     cursor: pointer;
-} 
+}
 
 .num_dossier {
     display: flex;
@@ -1053,5 +1069,5 @@ footer {
 #typeClient {
     background-color: #2a2f3a;
     cursor: pointer;
-    width: 16%;
+    width: 14%;
 }
