@@ -4,6 +4,11 @@ document.getElementById('AjouterClient').addEventListener('click', async () => {
     const ttable = document.getElementsByClassName("liste-clients")[0];
     document.querySelector('.footer').style.marginTop = 'auto';
     ttable.innerHTML = '';
+    // Cacher le tableau
+    var element = document.getElementsByClassName('table-container')[0];
+    if (getComputedStyle(element).visibility === "visible") {
+        element.style.visibility = "hidden";
+    }
     // Afficher le loader avec SweetAlert2
     Swal.fire({
         title: 'Chargement...',
@@ -149,9 +154,9 @@ function debounce(func, delay) {
 
 // Fonction de recherche
 async function searchRaisonSociale() {
+    var element = document.getElementsByClassName('table-container')[0];
     const inputValue = document.getElementById('raisonSociale').value.trim();
     const ttable = document.getElementsByClassName("liste-clients")[0];
-
     // Si l'utilisateur a tapé moins de 2 caractères, on ne fait pas de requête
     if (inputValue.length < 2) {
         ttable.innerHTML = '';
@@ -165,7 +170,6 @@ async function searchRaisonSociale() {
         }
 
         const data = await response.json();
-
         // Réinitialisation du tableau
         ttable.innerHTML = `
         <thead>  
@@ -175,6 +179,8 @@ async function searchRaisonSociale() {
                 <th>Raison Sociale</th>
                 <th>Adresse</th>
                 <th>Commune</th>  
+                <th>Telephone</th>
+                <th>Email</th>
                 <th>Date Dépot</th>
             </tr>
         </thead>`;
@@ -182,6 +188,10 @@ async function searchRaisonSociale() {
         const tbody = document.createElement('tbody');
 
         if (data.length > 0) {
+
+            if (getComputedStyle(element).visibility === "hidden") {
+                element.style.visibility = "visible";
+            }
             let i = 1;
             // Ajouter les résultats à la liste
             data.forEach(client => {
@@ -192,11 +202,19 @@ async function searchRaisonSociale() {
                     <td>${client.raison_sociale}</td>
                     <td>${client.Adresse_correspondante}</td>
                     <td>${client.commune_correspondante}</td>
+                    <td>${client.telephone}</td>
+                    <td>${client.email}</td>
                     <td>${new Date(client.createdAt).toLocaleDateString('fr-FR')}</td>`;
                 tbody.appendChild(row);
             });
-
             ttable.appendChild(tbody);
+            const tfoot = document.createElement('tfoot');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td colspan="7"><strong>Nombre d'occurences correspondantes</strong></td>
+            <td><strong>${i - 1}</strong></td>`;
+            tfoot.appendChild(tr);
+            ttable.appendChild(tfoot);
+
         } else {
             // Ajouter une ligne indiquant qu'aucun résultat n'a été trouvé
             const row = document.createElement("tr");
@@ -205,7 +223,8 @@ async function searchRaisonSociale() {
             ttable.appendChild(tbody);
             setTimeout(() => {
                 ttable.innerHTML = ``;
-            }, 3000);
+                document.getElementsByClassName('table-container')[0].style.visibility = "hidden";
+            }, 1000);
 
         }
     } catch (error) {
@@ -263,8 +282,12 @@ document.getElementById('liste-clients').addEventListener('click', async () => {
         </thead>`;
 
         const tbody = document.createElement('tbody');
+        var element = document.getElementsByClassName('table-container')[0];
 
         if (clients.length > 0) {
+            if (getComputedStyle(element).visibility === "hidden") {
+                element.style.visibility = "visible";
+            }
             let i = 1;
             clients.forEach(client => {
                 const row = document.createElement("tr");
@@ -293,8 +316,8 @@ document.getElementById('liste-clients').addEventListener('click', async () => {
             row.innerHTML = `<td colspan="11" style="text-align:center;">Aucun client trouvé</td>`;
             tbody.appendChild(row);
         }
-
         ttable.appendChild(tbody);
+
         Swal.close();
 
     } catch (error) {
@@ -377,15 +400,15 @@ document.getElementById("numPicIdentite").addEventListener('blur', () => {
         document.getElementById("delivrePar").removeAttribute("readonly");
         document.getElementById("dateDelivrance").removeAttribute("readonly");
     } else {
-        document.getElementById("delivrePar").setAttribute("readonly",true);
-        document.getElementById("dateDelivrance").setAttribute("readonly",true);
-        document.getElementById("delivrePar").value='';
-        document.getElementById("dateDelivrance").value='';
+        document.getElementById("delivrePar").setAttribute("readonly", true);
+        document.getElementById("dateDelivrance").setAttribute("readonly", true);
+        document.getElementById("delivrePar").value = '';
+        document.getElementById("dateDelivrance").value = '';
     }
 
 })
 
-document.getElementById('devis').addEventListener('click',()=>{
+document.getElementById('devis').addEventListener('click', () => {
     Swal.fire({
         title: 'Connexion',
         html:
