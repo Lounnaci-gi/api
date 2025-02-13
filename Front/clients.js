@@ -5,10 +5,9 @@ document.getElementById('AjouterClient').addEventListener('click', async () => {
     document.querySelector('.footer').style.marginTop = 'auto';
     ttable.innerHTML = '';
     // Cacher le tableau
-    var element = document.getElementsByClassName('table-container')[0];
-    if (getComputedStyle(element).style.display === "block") {
+    var element = document.querySelector('.table-container');
         element.style.display = "none";
-    }
+    
     // Afficher le loader avec SweetAlert2
     Swal.fire({
         title: 'Chargement...',
@@ -154,12 +153,12 @@ function debounce(func, delay) {
 
 // Fonction de recherche
 async function searchRaisonSociale() {
-    var element = document.getElementsByClassName('table-container')[0];
     const inputValue = document.getElementById('raisonSociale').value.trim();
     const ttable = document.getElementsByClassName("liste-clients")[0];
+    var element = document.querySelector('.table-container');
     // Si l'utilisateur a tapé moins de 2 caractères, on ne fait pas de requête
     if (inputValue.length < 2) {
-        ttable.innerHTML = '';
+        element.style.display='none';
         return;
     }
 
@@ -186,48 +185,35 @@ async function searchRaisonSociale() {
         </thead>`;
 
         const tbody = document.createElement('tbody');
+            if (data.length > 0) {
+                    element.style.display = "block";              
+                // element.classList.remove("hidden"); // Afficher
+                let i = 1;
+                // Ajouter les résultats à la liste
+                data.forEach(client => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `                       
+                        <td>${String(i++).padStart(3, "0")}</td>
+                        <td>${client.Id_Dossier}</td>
+                        <td>${client.raison_sociale}</td>
+                        <td>${client.Adresse_correspondante}</td>
+                        <td>${client.commune_correspondante}</td>
+                        <td>${client.telephone}</td>
+                        <td>${client.email}</td>
+                        <td>${new Date(client.createdAt).toLocaleDateString('fr-FR')}</td>`;
+                    tbody.appendChild(row);
+                });
+                ttable.appendChild(tbody);
+                const tfoot = document.createElement('tfoot');
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td colspan="7"><strong>Nombre d'occurences correspondantes</strong></td>
+                <td><strong>${i - 1}</strong></td>`;
+                tfoot.appendChild(tr);
+                ttable.appendChild(tfoot);
 
-        if (data.length > 0) {
-
-            if (getComputedStyle(element).display === "none") {
-                element.style.display = "block";
-
-            }
-            let i = 1;
-            // Ajouter les résultats à la liste
-            data.forEach(client => {
-                const row = document.createElement("tr");
-                row.innerHTML = `                       
-                    <td>${String(i++).padStart(3, "0")}</td>
-                    <td>${client.Id_Dossier}</td>
-                    <td>${client.raison_sociale}</td>
-                    <td>${client.Adresse_correspondante}</td>
-                    <td>${client.commune_correspondante}</td>
-                    <td>${client.telephone}</td>
-                    <td>${client.email}</td>
-                    <td>${new Date(client.createdAt).toLocaleDateString('fr-FR')}</td>`;
-                tbody.appendChild(row);
-            });
-            ttable.appendChild(tbody);
-            const tfoot = document.createElement('tfoot');
-            const tr = document.createElement('tr');
-            tr.innerHTML = `<td colspan="7"><strong>Nombre d'occurences correspondantes</strong></td>
-            <td><strong>${i - 1}</strong></td>`;
-            tfoot.appendChild(tr);
-            ttable.appendChild(tfoot);
-
-        } else {
-            // Ajouter une ligne indiquant qu'aucun résultat n'a été trouvé
-            const row = document.createElement("tr");
-            row.innerHTML = `<td colspan="6" style="text-align:center;">Aucun résultat trouvé</td>`;
-            tbody.appendChild(row);
-            ttable.appendChild(tbody);
-            setTimeout(() => {
-                ttable.innerHTML = ``;
-                document.getElementsByClassName('table-container')[0].style.display = "none";
-            }, 1000);
-
-        }
+             } else {
+                 element.style.display = "none";
+             }
     } catch (error) {
         console.error("Erreur lors de la récupération des raisons sociales :", error);
         // Afficher un message d'erreur à l'utilisateur
@@ -283,13 +269,10 @@ document.getElementById('liste-clients').addEventListener('click', async () => {
         </thead>`;
 
         const tbody = document.createElement('tbody');
-        var element = document.getElementsByClassName('table-container')[0];
+        var element = document.querySelector('.table-container');
 
         if (clients.length > 0) {
-            if (getComputedStyle(element).display === "none") {
                 element.style.display = "block";
-
-            }
             let i = 1;
             clients.forEach(client => {
                 const row = document.createElement("tr");
