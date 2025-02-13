@@ -920,7 +920,7 @@ footer {
     /* Aligne les éléments à gauche */
     gap: 15px;
     /* Espacement entre les éléments */
-    visibility: hidden;
+    display: none;
     /* Rendre le tableau invisible */
 }
 

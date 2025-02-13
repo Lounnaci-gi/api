@@ -7,7 +7,7 @@ document.getElementById('AjouterClient').addEventListener('click', async () => {
     // Cacher le tableau
     var element = document.getElementsByClassName('table-container')[0];
     if (getComputedStyle(element).style.display === "block") {
-        element.style.visibility = "non";
+        element.style.display = "none";
     }
     // Afficher le loader avec SweetAlert2
     Swal.fire({
@@ -189,8 +189,9 @@ async function searchRaisonSociale() {
 
         if (data.length > 0) {
 
-            if (getComputedStyle(element).visibility === "hidden") {
-                element.style.visibility = "visible";
+            if (getComputedStyle(element).display === "none") {
+                element.style.display = "block";
+
             }
             let i = 1;
             // Ajouter les résultats à la liste
@@ -223,7 +224,7 @@ async function searchRaisonSociale() {
             ttable.appendChild(tbody);
             setTimeout(() => {
                 ttable.innerHTML = ``;
-                document.getElementsByClassName('table-container')[0].style.visibility = "hidden";
+                document.getElementsByClassName('table-container')[0].style.display = "none";
             }, 1000);
 
         }
@@ -285,8 +286,9 @@ document.getElementById('liste-clients').addEventListener('click', async () => {
         var element = document.getElementsByClassName('table-container')[0];
 
         if (clients.length > 0) {
-            if (getComputedStyle(element).visibility === "hidden") {
-                element.style.visibility = "visible";
+            if (getComputedStyle(element).display === "none") {
+                element.style.display = "block";
+
             }
             let i = 1;
             clients.forEach(client => {
@@ -433,7 +435,7 @@ document.getElementById('devis').addEventListener('click', () => {
     });
 })
 
-const edit = document.getElementsByClassName('bxs-message-square-edit')[0];
-edit.addEventListener('click',()=>{
-    alert('ok');
-})
+// const edit = document.getElementsByClassName('bxs-message-square-edit')[0];
+// edit.addEventListener('click',()=>{
+//     alert('ok');
+// })
