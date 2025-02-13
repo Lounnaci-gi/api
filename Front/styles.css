@@ -907,7 +907,8 @@ footer {
     margin: 20px auto;
     /* Centrage horizontal */
     border-radius: 10px;
-    min-height: 100vh;
+    /* min-height: 100vh; */
+    height: auto;
     /* Pleine hauteur de l'écran */
     display: block;
     /* Utilisation de Flexbox */
@@ -920,6 +921,7 @@ footer {
     gap: 15px;
     /* Espacement entre les éléments */
     visibility: hidden;
+    /* Rendre le tableau invisible */
 }
 
 .table-wrapper {

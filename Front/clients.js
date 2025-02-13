@@ -6,8 +6,8 @@ document.getElementById('AjouterClient').addEventListener('click', async () => {
     ttable.innerHTML = '';
     // Cacher le tableau
     var element = document.getElementsByClassName('table-container')[0];
-    if (getComputedStyle(element).visibility === "visible") {
-        element.style.visibility = "hidden";
+    if (getComputedStyle(element).style.display === "block") {
+        element.style.visibility = "non";
     }
     // Afficher le loader avec SweetAlert2
     Swal.fire({
@@ -431,4 +431,9 @@ document.getElementById('devis').addEventListener('click', () => {
             Swal.fire('Données soumises', `Email : ${result.value.email}<br>Mot de passe : ${result.value.password}`, 'success');
         }
     });
+})
+
+const edit = document.getElementsByClassName('bxs-message-square-edit')[0];
+edit.addEventListener('click',()=>{
+    alert('ok');
 })
