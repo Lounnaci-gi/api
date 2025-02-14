@@ -6,8 +6,8 @@ document.getElementById('AjouterClient').addEventListener('click', async () => {
     ttable.innerHTML = '';
     // Cacher le tableau
     var element = document.querySelector('.table-container');
-        element.style.display = "none";
-    
+    element.style.display = "none";
+
     // Afficher le loader avec SweetAlert2
     Swal.fire({
         title: 'Chargement...',
@@ -158,7 +158,8 @@ async function searchRaisonSociale() {
     var element = document.querySelector('.table-container');
     // Si l'utilisateur a tapé moins de 2 caractères, on ne fait pas de requête
     if (inputValue.length < 2) {
-        element.style.display='none';
+        element.style.display = 'none';
+        document.getElementById('nbr_dossier').textContent = '';
         return;
     }
 
@@ -185,14 +186,15 @@ async function searchRaisonSociale() {
         </thead>`;
 
         const tbody = document.createElement('tbody');
-            if (data.length > 0) {
-                    element.style.display = "block";              
-                // element.classList.remove("hidden"); // Afficher
-                let i = 1;
-                // Ajouter les résultats à la liste
-                data.forEach(client => {
-                    const row = document.createElement("tr");
-                    row.innerHTML = `                       
+        if (data.length > 0) {
+            document.getElementById('nbr_dossier').textContent = `${String(data.length).padStart(2, '0')} Clients potentiellement correspondants trouvés.`;
+            element.style.display = "block";
+            // element.classList.remove("hidden"); // Afficher
+            let i = 1;
+            // Ajouter les résultats à la liste
+            data.forEach(client => {
+                const row = document.createElement("tr");
+                row.innerHTML = `                       
                         <td>${String(i++).padStart(3, "0")}</td>
                         <td>${client.Id_Dossier}</td>
                         <td>${client.raison_sociale}</td>
@@ -201,19 +203,19 @@ async function searchRaisonSociale() {
                         <td>${client.telephone}</td>
                         <td>${client.email}</td>
                         <td>${new Date(client.createdAt).toLocaleDateString('fr-FR')}</td>`;
-                    tbody.appendChild(row);
-                });
-                ttable.appendChild(tbody);
-                const tfoot = document.createElement('tfoot');
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td colspan="7"><strong>Nombre d'occurences correspondantes</strong></td>
+                tbody.appendChild(row);
+            });
+            ttable.appendChild(tbody);
+            const tfoot = document.createElement('tfoot');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td colspan="7"><strong>Nombre d'occurences correspondantes</strong></td>
                 <td><strong>${i - 1}</strong></td>`;
-                tfoot.appendChild(tr);
-                ttable.appendChild(tfoot);
+            tfoot.appendChild(tr);
+            ttable.appendChild(tfoot);
 
-             } else {
-                 element.style.display = "none";
-             }
+        } else {
+            element.style.display = "none";
+        }
     } catch (error) {
         console.error("Erreur lors de la récupération des raisons sociales :", error);
         // Afficher un message d'erreur à l'utilisateur
@@ -272,7 +274,7 @@ document.getElementById('liste-clients').addEventListener('click', async () => {
         var element = document.querySelector('.table-container');
 
         if (clients.length > 0) {
-                element.style.display = "block";
+            element.style.display = "block";
             let i = 1;
             clients.forEach(client => {
                 const row = document.createElement("tr");
@@ -394,31 +396,26 @@ document.getElementById("numPicIdentite").addEventListener('blur', () => {
 })
 
 document.getElementById('devis').addEventListener('click', () => {
-    Swal.fire({
-        title: 'Connexion',
-        html:
-            '<input id="swal-email" class="swal2-input" placeholder="Email">' +
-            '<input id="swal-password" class="swal2-input" type="password" placeholder="Mot de passe">',
-        focusConfirm: false,
-        preConfirm: () => {
-            const email = document.getElementById('swal-email').value;
-            const password = document.getElementById('swal-password').value;
-            if (!email || !password) {
-                Swal.showValidationMessage('Veuillez remplir tous les champs.');
-            }
-            return { email, password };
-        },
-        showCancelButton: true,
-        confirmButtonText: 'Se connecter',
-        cancelButtonText: 'Annuler'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            Swal.fire('Données soumises', `Email : ${result.value.email}<br>Mot de passe : ${result.value.password}`, 'success');
-        }
-    });
+    enregistrements_dossiers_journaliers();
 })
 
 // const edit = document.getElementsByClassName('bxs-message-square-edit')[0];
 // edit.addEventListener('click',()=>{
 //     alert('ok');
 // })
+
+function enregistrements_dossiers_journaliers() {
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0];
+    console.log(formattedDate); // Exemple : "2025-02-14"
+
+    try {
+        const response = fetch(`http://localhost:3000/users/records_de_jours?q=${formattedDate}`, { method: 'get' });
+        if (!response) {
+            console.log(response);
+        }
+
+    } catch (error) {
+
+    }
+}

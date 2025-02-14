@@ -1077,3 +1077,9 @@ footer {
 .hidden { 
     display: none !important; /* !important pour éviter les conflits */
 }
+
+#nbr_dossier{
+    color: #18ebe0;
+    font-size: 12px;
+    word-wrap: normal;
+}
