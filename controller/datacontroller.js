@@ -303,9 +303,11 @@ module.exports.records_de_jours = async (req, res) => {
         const endOfDay = new Date(date.setHours(23, 59, 59, 999));
 
         const clients = await Client.find({ createdAt: { $gte: startOfDay, $lte: endOfDay } });
-
-        if (clients.length === 0) {
-            return res.json({ message: `Aucun dossier trouvé pour la journée du ${searchTerm}` });
+        
+        
+        if (clients.length ===0) {
+            // return res.json({ message: `Aucun dossier trouvé pour la journée du ${searchTerm}` });
+            return res.json([]);
         }
         return res.json(clients);
 

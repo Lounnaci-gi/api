@@ -428,6 +428,15 @@ async function enregistrements_dossiers_journaliers() {
         }
 
         const clients = await response.json();
+        if (clients.length===0){
+            Swal.fire({
+                title: 'Information',
+                text: `Aucun dossier enregistré le ${formattedDate}.`,
+                icon: 'info',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
         ttable.innerHTML = `
         <thead>  
             <tr>
@@ -475,12 +484,7 @@ async function enregistrements_dossiers_journaliers() {
                 tbody.appendChild(row);
             });
         } else {
-            Swal.fire({
-                title: 'Erreur',
-                text: message,
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
+            
             const row = document.createElement("tr");
             row.innerHTML = `<td colspan="11" style="text-align:center;">Aucun client trouvé</td>`;
             tbody.appendChild(row);
@@ -495,7 +499,7 @@ async function enregistrements_dossiers_journaliers() {
     } catch (error) {
         Swal.fire({
             title: 'Erreur',
-            text: `Une erreur s'est produite lors de la récupération des clients : ${error}`,
+            text: `Une erreur s'est produite : ${error.message}`,
             icon: 'error',
             confirmButtonText: 'OK'
         });
