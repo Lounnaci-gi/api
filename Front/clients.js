@@ -232,7 +232,7 @@ document.getElementById('raisonSociale').addEventListener('input', debouncedSear
 
 // liste des clients 
 document.getElementById('liste-clients').addEventListener('click', async () => {
-    const ttable = document.getElementsByClassName("liste-clients")[0];
+    const ttable = document.querySelector(".liste-clients");
     // Afficher le loader avec SweetAlert2
     Swal.fire({
         title: 'Chargement...',
@@ -308,7 +308,6 @@ document.getElementById('liste-clients').addEventListener('click', async () => {
         Swal.close();
 
     } catch (error) {
-        console.error("Erreur :", error);
         Swal.fire({
             title: 'Erreur',
             text: 'Impossible de récupérer les clients.',
@@ -404,18 +403,101 @@ document.getElementById('devis').addEventListener('click', () => {
 //     alert('ok');
 // })
 
-function enregistrements_dossiers_journaliers() {
+async function enregistrements_dossiers_journaliers() {
+    const ttable = document.querySelector(".liste-clients");
     const today = new Date();
     const formattedDate = today.toISOString().split('T')[0];
-    console.log(formattedDate); // Exemple : "2025-02-14"
+    Swal.fire({
+        title: 'Chargement...',
+        html: 'Veuillez patienter...',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
 
     try {
-        const response = fetch(`http://localhost:3000/users/records_de_jours?q=${formattedDate}`, { method: 'get' });
-        if (!response) {
-            console.log(response);
+        const response = await fetch(`http://localhost:3000/users/records_de_jours?q=${formattedDate}`, { method: 'get' });
+        if (!response.ok) {
+            Swal.fire({
+                title: 'Erreur',
+                text: 'Impossible de récupérer les clients.',
+                icon: 'error'
+            });
+            return;
         }
 
-    } catch (error) {
+        const clients = await response.json();
+        ttable.innerHTML = `
+        <thead>  
+            <tr>
+                <th>N°</th>
+                <th>N° Dossier</th>
+                <th>Statut</th>
+                <th>Raison Sociale</th>
+                <th>Adresse</th>
+                <th>Commune</th>
+                <th>N° Pièce d'identité</th>
+                <th>N° Délivrer par</th>
+                <th>Telephone</th>
+                <th>Email</th>
+                <th>Date Dépot</th>
+                <th>Actions</th>
+            </tr>
+        </thead>`;
 
+        const tbody = document.createElement('tbody');
+        var element = document.querySelector('.table-container');
+
+        if (clients.length > 0) {
+            element.style.display = "block";
+            let i = 1;
+            clients.forEach(client => {
+                const row = document.createElement("tr");
+                row.innerHTML = `                       
+                    <td>${String(i++).padStart(3, "0")}</td>
+                    <td>${client.Id_Dossier}</td>
+                    <td>${client.type_client}</td>
+                    <td>${client.raison_sociale}</td>
+                    <td>${client.Adresse_correspondante}</td>
+                    <td>${client.commune_correspondante}</td>
+                    <td>${client.Num_pic_identite?.numero || ""}</td>
+                    <td>${client.Num_pic_identite?.delivre_par || ""}</td>
+                    <td>${client.telephone}</td>
+                    <td>${client.email}</td>
+                    <td>${new Date(client.createdAt).toLocaleDateString('fr-FR')}</td>
+                    <td>
+                        <i class='bx bxs-message-square-edit'></i>
+                        <i class='bx bxs-message-square-x'></i>
+                        <i class='bx bxs-printer' >
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        } else {
+            Swal.fire({
+                title: 'Erreur',
+                text: message,
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            const row = document.createElement("tr");
+            row.innerHTML = `<td colspan="11" style="text-align:center;">Aucun client trouvé</td>`;
+            tbody.appendChild(row);
+
+        }
+        ttable.appendChild(tbody);
+
+       
+        
+        Swal.close();
+
+    } catch (error) {
+        Swal.fire({
+            title: 'Erreur',
+            text: `Une erreur s'est produite lors de la récupération des clients : ${error}`,
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
     }
 }

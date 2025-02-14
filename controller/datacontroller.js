@@ -229,11 +229,11 @@ module.exports.recupass = async (req, res) => {
         });
 
         // Réponse indiquant que l'e-mail a été envoyé
-        res.json({ 
+        res.json({
             message: `Un e-mail de réinitialisation a été envoyé à ${user.email}.`,
             email: user.email // Ajouter l'email pour l'afficher côté frontend
         });
-        
+
 
     } catch (err) {
         console.error("Erreur dans recupass :", err); // Affiche l'erreur complète
@@ -304,7 +304,11 @@ module.exports.records_de_jours = async (req, res) => {
 
         const clients = await Client.find({ createdAt: { $gte: startOfDay, $lte: endOfDay } });
 
-        res.json(clients);
+        if (clients.length === 0) {
+            return res.json({ message: `Aucun dossier trouvé pour la journée du ${searchTerm}` });
+        }
+        return res.json(clients);
+
     } catch (error) {
         console.error("Erreur API:", error);
         res.status(500).json({ error: "Erreur interne du serveur" });
