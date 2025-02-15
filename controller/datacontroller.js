@@ -287,32 +287,35 @@ module.exports.search_rs = async (req, res) => {
 
 // afficher les enregistrement de jours
 module.exports.records_de_jours = async (req, res) => {
-
     try {
-        const searchTerm = req.query.q;
-        if (!searchTerm) {
-            return res.status(400).json({ error: "Date manquant" });
-        }
-        // Convertir `searchTerm` en objet Date (sans les heures)
-        const date = new Date(searchTerm);
-        if (isNaN(date.getTime())) {
-            return res.status(400).json({ error: "Date invalide" });
-        }
-        // Définir les bornes temporelles du jour (de 00:00:00 à 23:59:59)
-        const startOfDay = new Date(date.setHours(0, 0, 0, 0));
-        const endOfDay = new Date(date.setHours(23, 59, 59, 999));
+        const { date_debut, date_fin } = req.query; // 🟢 Correction ici (GET request)
 
-        const clients = await Client.find({ createdAt: { $gte: startOfDay, $lte: endOfDay } });
-        
-        
-        if (clients.length === 0) {
-            // return res.json({ message: `Aucun dossier trouvé pour la journée du ${searchTerm}` });
-            return res.json([]);
+        if (!date_debut || !date_fin) {
+            return res.status(400).json({ error: "Les deux dates sont requises." });
         }
+
+        // 🟢 Conversion au bon format : YYYY-MM-DD
+         // Convertir le format "DD/MM/YYYY" en "YYYY-MM-DD"
+         const [jourD, moisD, anneeD] = date_debut.split('/');
+         const [jourF, moisF, anneeF] = date_fin.split('/');
+         const startDate = new Date(`${anneeD}-${moisD}-${jourD}T00:00:00.000Z`);
+         const endDate = new Date(`${anneeF}-${moisF}-${jourF}T23:59:59.999Z`);
+
+
+        // Vérification si les dates sont valides
+        if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+            return res.status(400).json({ error: "Dates invalides." });
+        }
+
+        // 🟢 Requête MongoDB pour filtrer les enregistrements par `createdAt`
+        const clients = await Client.find({
+            createdAt: { $gte: startDate, $lte: endDate }
+        }).sort({ createdAt: 1 });
+
         return res.json(clients);
 
     } catch (error) {
+        console.error("Erreur serveur :", error);
         res.status(500).json({ error: "Erreur interne du serveur" });
     }
-
-}
+};

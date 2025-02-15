@@ -317,67 +317,67 @@ document.getElementById('liste-clients').addEventListener('click', async () => {
 });
 //-------------------------------
 // const dateInput = document.getElementById('dateDelivrance');
-document.querySelectorAll('.date_client').forEach(dateInput=>{
-// Vérification en temps réel pour le jour et le mois
-dateInput.addEventListener('input', function () {
-    let value = this.value.replace(/[^0-9]/g, ''); // Supprime tout caractère non numérique
-    let formattedValue = '';
+document.querySelectorAll('.date_client').forEach(dateInput => {
+    // Vérification en temps réel pour le jour et le mois
+    dateInput.addEventListener('input', function () {
+        let value = this.value.replace(/[^0-9]/g, ''); // Supprime tout caractère non numérique
+        let formattedValue = '';
 
-    if (value.length >= 1) {
-        let jour = value.substring(0, 2);
-        if (parseInt(jour) > 31) {
-            Swal.fire({
-                title: 'Date invalide',
-                text: 'Le jour ne peut pas dépasser 31.',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-            jour = '31'; // Limite à 31
+        if (value.length >= 1) {
+            let jour = value.substring(0, 2);
+            if (parseInt(jour) > 31) {
+                Swal.fire({
+                    title: 'Date invalide',
+                    text: 'Le jour ne peut pas dépasser 31.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+                jour = '31'; // Limite à 31
+            }
+            formattedValue += jour;
         }
-        formattedValue += jour;
-    }
 
-    if (value.length > 2) {
-        let mois = value.substring(2, 4);
-        if (parseInt(mois) > 12) {
-            Swal.fire({
-                title: 'Date invalide',
-                text: 'Le mois ne peut pas dépasser 12.',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-            mois = '12'; // Limite à 12
+        if (value.length > 2) {
+            let mois = value.substring(2, 4);
+            if (parseInt(mois) > 12) {
+                Swal.fire({
+                    title: 'Date invalide',
+                    text: 'Le mois ne peut pas dépasser 12.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+                mois = '12'; // Limite à 12
+            }
+            formattedValue += '/' + mois;
         }
-        formattedValue += '/' + mois;
-    }
 
-    if (value.length > 4) {
-        let annee = value.substring(4, 8);
-        formattedValue += '/' + annee; // Ajoute l'année mais ne la vérifie pas encore
-    }
-
-    this.value = formattedValue; // Met à jour le champ avec le bon format
-});
-
-// Vérification de l'année uniquement après perte de focus
-dateInput.addEventListener('blur', function () {
-    let parts = this.value.split('/');
-    if (parts.length === 3) {
-        let annee = parseInt(parts[2]);
-        let anneeActuelle = new Date().getFullYear();
-
-        if (annee < 1900 || annee > anneeActuelle + 10) {
-            Swal.fire({
-                title: 'Date invalide',
-                text: `L'année doit être comprise entre 1900 et ${anneeActuelle}.`,
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-            parts[2] = anneeActuelle.toString(); // Corrige l'année
-            this.value = parts.join('/'); // Met à jour avec la correction
+        if (value.length > 4) {
+            let annee = value.substring(4, 8);
+            formattedValue += '/' + annee; // Ajoute l'année mais ne la vérifie pas encore
         }
-    }
-});
+
+        this.value = formattedValue; // Met à jour le champ avec le bon format
+    });
+
+    // Vérification de l'année uniquement après perte de focus
+    dateInput.addEventListener('blur', function () {
+        let parts = this.value.split('/');
+        if (parts.length === 3) {
+            let annee = parseInt(parts[2]);
+            let anneeActuelle = new Date().getFullYear();
+
+            if (annee < 1900 || annee > anneeActuelle + 10) {
+                Swal.fire({
+                    title: 'Date invalide',
+                    text: `L'année doit être comprise entre 1900 et ${anneeActuelle}.`,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+                parts[2] = anneeActuelle.toString(); // Corrige l'année
+                this.value = parts.join('/'); // Met à jour avec la correction
+            }
+        }
+    });
 
 });
 
@@ -401,15 +401,32 @@ document.getElementById('devis').addEventListener('click', () => {
     enregistrements_dossiers_journaliers();
 })
 
-// const edit = document.getElementsByClassName('bxs-message-square-edit')[0];
-// edit.addEventListener('click',()=>{
-//     alert('ok');
-// })
+
 
 async function enregistrements_dossiers_journaliers() {
     const ttable = document.querySelector(".liste-clients");
-    const today = new Date();
-    const formattedDate = today.toISOString().split('T')[0];
+    const date_debut = document.querySelector("#date_debut").value;
+    const date_fin = document.querySelector("#date_fin").value;
+
+
+    if (!date_debut || !date_fin) {
+        Swal.fire({
+            title: 'Erreur',
+            text: 'Veuillez sélectionner une plage de dates.',
+            icon: 'error'
+        });
+        return;
+    }
+    // Vérification que date_debut ≤ date_fin
+    if (new Date(date_debut) > new Date(date_fin)) {
+        Swal.fire({
+            title: 'Erreur',
+            text: 'La date de début ne peut pas être après la date de fin.',
+            icon: 'error'
+        });
+        return;
+    }
+
     Swal.fire({
         title: 'Chargement...',
         html: 'Veuillez patienter...',
@@ -420,7 +437,11 @@ async function enregistrements_dossiers_journaliers() {
     });
 
     try {
-        const response = await fetch(`http://localhost:3000/users/records_de_jours?q=${formattedDate}`, { method: 'get' });
+
+        const response = await fetch(`http://localhost:3000/users/records_de_jours?date_debut=${date_debut}&date_fin=${date_fin}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        });
         if (!response.ok) {
             Swal.fire({
                 title: 'Erreur',
@@ -431,10 +452,10 @@ async function enregistrements_dossiers_journaliers() {
         }
 
         const clients = await response.json();
-        if (clients.length===0){
+        if (clients.length === 0) {
             Swal.fire({
                 title: 'Information',
-                text: `Aucun dossier enregistré le ${formattedDate}.`,
+                text: `Aucun dossier enregistré entre le ${date_debut} et le ${date_fin}.`,
                 icon: 'info',
                 confirmButtonText: 'OK'
             });
@@ -487,7 +508,7 @@ async function enregistrements_dossiers_journaliers() {
                 tbody.appendChild(row);
             });
         } else {
-            
+
             const row = document.createElement("tr");
             row.innerHTML = `<td colspan="11" style="text-align:center;">Aucun client trouvé</td>`;
             tbody.appendChild(row);
@@ -495,8 +516,8 @@ async function enregistrements_dossiers_journaliers() {
         }
         ttable.appendChild(tbody);
 
-       
-        
+
+
         Swal.close();
 
     } catch (error) {
