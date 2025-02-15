@@ -93,7 +93,7 @@
                     <option value="EURL">EURL</option>
                 </select>
                 <input type="text" id="raisonSociale" placeholder="Raison Sociale" required maxlength="60">
-                <span id ="nbr_dossier"></span>
+                <span id="nbr_dossier"></span>
             </div>
 
             <input type="text" id="adresseCorrespondante" placeholder="Adresse Correspondante" required maxlength="120">
@@ -102,7 +102,7 @@
 
             <input type="text" id="numPicIdentite" placeholder="Numéro PIC Identité" maxlength="18">
             <input type="text" id="delivrePar" placeholder="Délivré par" maxlength="50" readonly>
-            <input type="text" id="dateDelivrance" placeholder="Date de délivrance" maxlength="10" readonly>
+            <input type="text" id="dateDelivrance" class="date_client" placeholder="Date de délivrance" maxlength="10" readonly>
 
             <input type="text" id="adresseBranchement" placeholder="Adresse de Branchement" required maxlength="120">
             <input type="text" id="CommuneBranchement" placeholder="Commune" required maxlength="60">
@@ -116,8 +116,12 @@
 
 
     <div class="table-container">
-        <div class="table-wrapper"> 
+        <div class="table-wrapper">
             <h3 class="souligner">Liste des clients</h3>
+            <div class="filter_liste">
+                <input type="text" class="date_client" placeholder="Début">
+                <input type="text" class="date_client" placeholder="Fin">
+            </div>
             <table class="liste-clients"></table>
         </div>
     </div>

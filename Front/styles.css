@@ -649,6 +649,7 @@ footer {
 }
 
 /* Champs input et select */
+.filter_liste input,
 .client-section input,
 .client-section select {
     width: 80%;
@@ -1082,4 +1083,24 @@ footer {
     color: #18ebe0;
     font-size: 12px;
     word-wrap: normal;
+}
+.filter_liste {
+    padding : 0;
+    margin: 0;
+    gap: 20px;
+
+}
+
+.filter_liste input {
+    width: 20%;
+    padding: top 10px;
+    margin: 5px 2px;
+    border: 1px solid #00abf0;
+    border-radius: 5px;
+    background-color: transparent;
+    color: white;
+    font-size: 0.8em;
+    text-transform: capitalize;
+    appearance: auto;
+    gap: 20px;
 }

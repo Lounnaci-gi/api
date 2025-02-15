@@ -291,7 +291,7 @@ module.exports.records_de_jours = async (req, res) => {
     try {
         const searchTerm = req.query.q;
         if (!searchTerm) {
-            return res.status(400).json({ error: "Paramètre de recherche manquant" });
+            return res.status(400).json({ error: "Date manquant" });
         }
         // Convertir `searchTerm` en objet Date (sans les heures)
         const date = new Date(searchTerm);
@@ -305,14 +305,13 @@ module.exports.records_de_jours = async (req, res) => {
         const clients = await Client.find({ createdAt: { $gte: startOfDay, $lte: endOfDay } });
         
         
-        if (clients.length ===0) {
+        if (clients.length === 0) {
             // return res.json({ message: `Aucun dossier trouvé pour la journée du ${searchTerm}` });
             return res.json([]);
         }
         return res.json(clients);
 
     } catch (error) {
-        console.error("Erreur API:", error);
         res.status(500).json({ error: "Erreur interne du serveur" });
     }
 

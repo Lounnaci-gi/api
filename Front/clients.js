@@ -316,8 +316,8 @@ document.getElementById('liste-clients').addEventListener('click', async () => {
     }
 });
 //-------------------------------
-const dateInput = document.getElementById('dateDelivrance');
-
+// const dateInput = document.getElementById('dateDelivrance');
+document.querySelectorAll('.date_client').forEach(dateInput=>{
 // Vérification en temps réel pour le jour et le mois
 dateInput.addEventListener('input', function () {
     let value = this.value.replace(/[^0-9]/g, ''); // Supprime tout caractère non numérique
@@ -378,6 +378,9 @@ dateInput.addEventListener('blur', function () {
         }
     }
 });
+
+});
+
 
 document.getElementById("numPicIdentite").addEventListener('blur', () => {
     if (document.getElementById("numPicIdentite").value.trim() !== '') {
