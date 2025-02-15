@@ -397,7 +397,7 @@ document.getElementById("numPicIdentite").addEventListener('blur', () => {
 
 })
 
-document.getElementById('devis').addEventListener('click', () => {
+document.getElementById('filter').addEventListener('click', () => {
     enregistrements_dossiers_journaliers();
 })
 

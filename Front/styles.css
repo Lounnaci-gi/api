@@ -1075,25 +1075,30 @@ footer {
     cursor: pointer;
     width: 14%;
 }
-.hidden { 
-    display: none !important; /* !important pour éviter les conflits */
+
+.hidden {
+    display: none !important;
+    /* !important pour éviter les conflits */
 }
 
-#nbr_dossier{
+#nbr_dossier {
     color: #18ebe0;
     font-size: 12px;
     word-wrap: normal;
 }
-.filter_liste {
-    padding : 0;
-    margin: 0;
-    gap: 20px;
 
+.filter_liste {
+    display: flex; /* Ajout pour alignement horizontal */
+    align-items: center;
+    gap: 20px;
+    justify-content: left;
+    margin: 0;
+    padding: 0;
 }
 
 .filter_liste input {
     width: 20%;
-    padding: top 10px;
+    padding: 10px; /* Correction de l'erreur */
     margin: 5px 2px;
     border: 1px solid #00abf0;
     border-radius: 5px;
@@ -1101,6 +1106,29 @@ footer {
     color: white;
     font-size: 0.8em;
     text-transform: capitalize;
-    appearance: auto;
-    gap: 20px;
+    appearance: none; /* Amélioration pour uniformité */
+}
+
+.sci a {
+    display: inline-flex;
+    align-items: center; /* Correction */
+    justify-content: center; /* Correction */
+    padding: 10px;
+    border-radius: 50%;
+    font-size: 20px;
+    color: #00abf0;
+    margin: 0 10px; /* Réduction de l'espace pour une meilleure harmonie */
+    transition: 0.3s;
+}
+
+.sci a:hover {
+    background: #00abf0;
+    color: #1f242d;
+    box-shadow: 0 0 10px #00abf0;
+}
+
+.sci a:active {
+    background: #1f242d;
+    color: #00abf0;
+    box-shadow: 0 0 10px #00abf0;
 }
