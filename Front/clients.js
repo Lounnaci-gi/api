@@ -215,6 +215,7 @@ async function searchRaisonSociale() {
 
         } else {
             element.style.display = "none";
+            document.getElementById('nbr_dossier').textContent = '';
         }
     } catch (error) {
         console.error("Erreur lors de la récupération des raisons sociales :", error);
