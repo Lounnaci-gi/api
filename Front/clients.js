@@ -1,4 +1,19 @@
-var element = document.querySelector('.table-container');
+export function showAlert(title, text, icon) {
+    return Swal.fire({
+        title,
+        text,
+        icon,
+        confirmButtonText: 'OK'
+    });
+}
+
+function validatePhoneNumber(phone) {
+    return /^\d{10}$/.test(phone);
+}
+
+function validatePostalCode(code) {
+    return /^\d{5}$/.test(code);
+}
 
 // 👉 Afficher le formulaire lors du clic sur "Ajouter un client"
 document.getElementById('AjouterClient').addEventListener('click', async () => {
@@ -7,9 +22,9 @@ document.getElementById('AjouterClient').addEventListener('click', async () => {
     document.querySelector('.footer').style.marginTop = 'auto';
     ttable.innerHTML = '';
     // Cacher le tableau
-    if (element) {
-        element.classList.toggle("hidden");
-    }
+    var element = document.querySelector('.table-container');
+    element.style.display = "none";
+
     // Afficher le loader avec SweetAlert2
     Swal.fire({
         title: 'Chargement...',
@@ -56,24 +71,18 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
     const telephone = getValue('telephone');
 
     if (!id_dossier || !raisonSociale || !typeClient || !adresseBranchement || !adresseCorrespondante) {
-        return Swal.fire({
-            title: 'Erreur',
-            text: 'Veuillez remplir tous les champs obligatoires.',
-            icon: 'warning',
-            confirmButtonText: 'OK'
-        });
+        return showAlert('Attention','Veuillez remplir tous les champs obligatoires.','warning');
     }
 
-    const phoneRegex = /^\d+$/;
-    if (!phoneRegex.test(telephone) && telephone) {
-        return Swal.fire({
-            title: 'Erreur',
-            text: 'Numéro de téléphone invalide. Veuillez entrer uniquement des chiffres.',
-            icon: 'error',
-            confirmButtonText: 'OK'
-        });
+    if (!validatePhoneNumber(telephone)) {
+        showAlert("Erreur", "Le numéro de téléphone doit contenir exactement 10 chiffres.", "error");
+        return;
     }
-
+    
+    if (!validatePostalCode(code_postale)) {
+        showAlert("Erreur", "Le code postal doit contenir exactement 5 chiffres.", "error");
+        return;
+    }
     // 👉 Affichage de la boîte de confirmation avant soumission
     const confirmation = await Swal.fire({
         title: 'Confirmation',
@@ -118,27 +127,15 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
         if (!response.ok) {
             throw new Error(`Erreur HTTP: ${response.status}`);
         }
-
-        Swal.fire({
-            title: 'Succès !',
-            text: 'Données envoyées avec succès.',
-            icon: 'success',
-            confirmButtonText: 'OK'
-        }).then(() => {
+        showAlert('Succès !','Données envoyées avec succès.','success')
+        .then(() => {
             document.getElementById('addClientForm').reset(); // Réinitialisation du formulaire
             document.querySelector('.client-section').style.display = 'none'; // Masquer le formulaire
             document.querySelector('.footer').style.marginTop = '50%'; // Ajuster le footer
-
-
         });
 
     } catch (error) {
-        Swal.fire({
-            title: 'Erreur',
-            text: `Une erreur s'est produite : ${error.message}`,
-            icon: 'error',
-            confirmButtonText: 'OK'
-        });
+        showAlert('Erreur',`Une erreur s'est produite : ${error.message}`,'error');
     }
 });
 
@@ -157,9 +154,11 @@ function debounce(func, delay) {
 async function searchRaisonSociale() {
     const inputValue = document.getElementById('raisonSociale').value.trim();
     const ttable = document.getElementsByClassName("liste-clients")[0];
+    var element = document.querySelector('.table-container');
     // Si l'utilisateur a tapé moins de 2 caractères, on ne fait pas de requête
     if (inputValue.length < 2) {
-        ttable.innerHTML = '';
+        element.style.display = 'none';
+        document.getElementById('nbr_dossier').textContent = '';
         return;
     }
 
@@ -186,45 +185,36 @@ async function searchRaisonSociale() {
         </thead>`;
 
         const tbody = document.createElement('tbody');
-
         if (data.length > 0) {
-            if (element) {
-                element.classList.toggle("hidden");
-            }
+            document.getElementById('nbr_dossier').textContent = `${String(data.length).padStart(2, '0')} Clients potentiellement correspondants trouvés.`;
+            element.style.display = "block";
+            // element.classList.remove("hidden"); // Afficher
             let i = 1;
             // Ajouter les résultats à la liste
             data.forEach(client => {
                 const row = document.createElement("tr");
                 row.innerHTML = `                       
-                    <td>${String(i++).padStart(3, "0")}</td>
-                    <td>${client.Id_Dossier}</td>
-                    <td>${client.raison_sociale}</td>
-                    <td>${client.Adresse_correspondante}</td>
-                    <td>${client.commune_correspondante}</td>
-                    <td>${client.telephone}</td>
-                    <td>${client.email}</td>
-                    <td>${new Date(client.createdAt).toLocaleDateString('fr-FR')}</td>`;
+                        <td>${String(i++).padStart(3, "0")}</td>
+                        <td>${client.Id_Dossier}</td>
+                        <td>${client.raison_sociale}</td>
+                        <td>${client.Adresse_correspondante}</td>
+                        <td>${client.commune_correspondante}</td>
+                        <td>${client.telephone}</td>
+                        <td>${client.email}</td>
+                        <td>${new Date(client.createdAt).toLocaleDateString('fr-FR')}</td>`;
                 tbody.appendChild(row);
             });
             ttable.appendChild(tbody);
             const tfoot = document.createElement('tfoot');
             const tr = document.createElement('tr');
             tr.innerHTML = `<td colspan="7"><strong>Nombre d'occurences correspondantes</strong></td>
-            <td><strong>${i - 1}</strong></td>`;
+                <td><strong>${i - 1}</strong></td>`;
             tfoot.appendChild(tr);
             ttable.appendChild(tfoot);
 
         } else {
-            // Ajouter une ligne indiquant qu'aucun résultat n'a été trouvé
-            const row = document.createElement("tr");
-            row.innerHTML = `<td colspan="6" style="text-align:center;">Aucun résultat trouvé</td>`;
-            tbody.appendChild(row);
-            ttable.appendChild(tbody);
-            setTimeout(() => {
-                ttable.innerHTML = ``;
-                element.classList.toggle("hidden");
-            }, 1000);
-
+            element.style.display = "none";
+            document.getElementById('nbr_dossier').textContent = '';
         }
     } catch (error) {
         console.error("Erreur lors de la récupération des raisons sociales :", error);
@@ -242,7 +232,7 @@ document.getElementById('raisonSociale').addEventListener('input', debouncedSear
 
 // liste des clients 
 document.getElementById('liste-clients').addEventListener('click', async () => {
-    const ttable = document.getElementsByClassName("liste-clients")[0];
+    const ttable = document.querySelector(".liste-clients");
     // Afficher le loader avec SweetAlert2
     Swal.fire({
         title: 'Chargement...',
@@ -281,12 +271,10 @@ document.getElementById('liste-clients').addEventListener('click', async () => {
         </thead>`;
 
         const tbody = document.createElement('tbody');
+        var element = document.querySelector('.table-container');
 
         if (clients.length > 0) {
-            if (getComputedStyle(element).display === "none") {
-                element.style.display = "block";
-
-            }
+            element.style.display = "block";
             let i = 1;
             clients.forEach(client => {
                 const row = document.createElement("tr");
@@ -320,77 +308,60 @@ document.getElementById('liste-clients').addEventListener('click', async () => {
         Swal.close();
 
     } catch (error) {
-        console.error("Erreur :", error);
-        Swal.fire({
-            title: 'Erreur',
-            text: 'Impossible de récupérer les clients.',
-            icon: 'error'
-        });
+        showAlert('Erreur', 'Impossible de récupérer les clients.', 'error');
     }
 });
 //-------------------------------
-const dateInput = document.getElementById('dateDelivrance');
+// const dateInput = document.getElementById('dateDelivrance');
+document.querySelectorAll('.date_client').forEach(dateInput => {
+    // Vérification en temps réel pour le jour et le mois
+    dateInput.addEventListener('input', function () {
+        let value = this.value.replace(/[^0-9]/g, ''); // Supprime tout caractère non numérique
+        let formattedValue = '';
 
-// Vérification en temps réel pour le jour et le mois
-dateInput.addEventListener('input', function () {
-    let value = this.value.replace(/[^0-9]/g, ''); // Supprime tout caractère non numérique
-    let formattedValue = '';
-
-    if (value.length >= 1) {
-        let jour = value.substring(0, 2);
-        if (parseInt(jour) > 31) {
-            Swal.fire({
-                title: 'Date invalide',
-                text: 'Le jour ne peut pas dépasser 31.',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-            jour = '31'; // Limite à 31
+        if (value.length >= 1) {
+            let jour = value.substring(0, 2);
+            if (parseInt(jour) > 31) {
+                showAlert('Date invalide','Le jour ne peut pas dépasser 31.','error');
+                jour = '31'; // Limite à 31
+            }
+            formattedValue += jour;
         }
-        formattedValue += jour;
-    }
 
-    if (value.length > 2) {
-        let mois = value.substring(2, 4);
-        if (parseInt(mois) > 12) {
-            Swal.fire({
-                title: 'Date invalide',
-                text: 'Le mois ne peut pas dépasser 12.',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-            mois = '12'; // Limite à 12
+        if (value.length > 2) {
+            let mois = value.substring(2, 4);
+            if (parseInt(mois) > 12) {
+                showAlert('Date invalide', 'Le mois ne peut pas dépasser 12.', 'error');
+                mois = '12'; // Limite à 12
+            }
+            formattedValue += '/' + mois;
         }
-        formattedValue += '/' + mois;
-    }
 
-    if (value.length > 4) {
-        let annee = value.substring(4, 8);
-        formattedValue += '/' + annee; // Ajoute l'année mais ne la vérifie pas encore
-    }
+        if (value.length > 4) {
+            let annee = value.substring(4, 8);
+            formattedValue += '/' + annee; // Ajoute l'année mais ne la vérifie pas encore
+        }
 
-    this.value = formattedValue; // Met à jour le champ avec le bon format
+        this.value = formattedValue; // Met à jour le champ avec le bon format
+    });
+
+    // Vérification de l'année uniquement après perte de focus
+    dateInput.addEventListener('blur', function () {
+        let parts = this.value.split('/');
+        if (parts.length === 3) {
+            let annee = parseInt(parts[2]);
+            let anneeActuelle = new Date().getFullYear();
+
+            if (annee < 1900 || annee > anneeActuelle + 10) {
+                showAlert('Date invalide', `L'année doit être comprise entre 1900 et ${anneeActuelle}.`, 'error');
+                parts[2] = anneeActuelle.toString(); // Corrige l'année
+                this.value = parts.join('/'); // Met à jour avec la correction
+            }
+        }
+    });
+
 });
 
-// Vérification de l'année uniquement après perte de focus
-dateInput.addEventListener('blur', function () {
-    let parts = this.value.split('/');
-    if (parts.length === 3) {
-        let annee = parseInt(parts[2]);
-        let anneeActuelle = new Date().getFullYear();
-
-        if (annee < 1900 || annee > anneeActuelle + 10) {
-            Swal.fire({
-                title: 'Date invalide',
-                text: `L'année doit être comprise entre 1900 et ${anneeActuelle}.`,
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-            parts[2] = anneeActuelle.toString(); // Corrige l'année
-            this.value = parts.join('/'); // Met à jour avec la correction
-        }
-    }
-});
 
 document.getElementById("numPicIdentite").addEventListener('blur', () => {
     if (document.getElementById("numPicIdentite").value.trim() !== '') {
@@ -407,32 +378,109 @@ document.getElementById("numPicIdentite").addEventListener('blur', () => {
 
 })
 
-document.getElementById('devis').addEventListener('click', () => {
-    Swal.fire({
-        title: 'Connexion',
-        html:
-            '<input id="swal-email" class="swal2-input" placeholder="Email">' +
-            '<input id="swal-password" class="swal2-input" type="password" placeholder="Mot de passe">',
-        focusConfirm: false,
-        preConfirm: () => {
-            const email = document.getElementById('swal-email').value;
-            const password = document.getElementById('swal-password').value;
-            if (!email || !password) {
-                Swal.showValidationMessage('Veuillez remplir tous les champs.');
-            }
-            return { email, password };
-        },
-        showCancelButton: true,
-        confirmButtonText: 'Se connecter',
-        cancelButtonText: 'Annuler'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            Swal.fire('Données soumises', `Email : ${result.value.email}<br>Mot de passe : ${result.value.password}`, 'success');
-        }
-    });
+document.getElementById('filter').addEventListener('click', () => {
+    enregistrements_dossiers_journaliers();
 })
 
-// const edit = document.getElementsByClassName('bxs-message-square-edit')[0];
-// edit.addEventListener('click',()=>{
-//     alert('ok');
-// })
+
+
+async function enregistrements_dossiers_journaliers() {
+    const ttable = document.querySelector(".liste-clients");
+    const date_debut = document.querySelector("#date_debut").value;
+    const date_fin = document.querySelector("#date_fin").value;
+
+
+    if (!date_debut || !date_fin) {
+        showAlert('Erreur','Veuillez sélectionner une plage de dates.','error');
+        return;
+    }
+    // Vérification que date_debut ≤ date_fin
+    if (new Date(date_debut) > new Date(date_fin)) {
+        showAlert('Erreur','La date de début ne peut pas être après la date de fin.','error');
+        return;
+    }
+
+    Swal.fire({
+        title: 'Chargement...',
+        html: 'Veuillez patienter...',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
+    try {
+
+        const response = await fetch(`http://localhost:3000/users/records_de_jours?date_debut=${date_debut}&date_fin=${date_fin}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        if (!response.ok) {
+            showAlert('Erreur','Impossible de récupérer les clients.','error');
+            return;
+        }
+
+        const clients = await response.json();
+        if (clients.length === 0) {
+            showAlert('Information',`Aucun dossier enregistré entre le ${date_debut} et le ${date_fin}.`,'info');
+            return;
+        }
+        ttable.innerHTML = `
+        <thead>  
+            <tr>
+                <th>N°</th>
+                <th>N° Dossier</th>
+                <th>Statut</th>
+                <th>Raison Sociale</th>
+                <th>Adresse</th>
+                <th>Commune</th>
+                <th>N° Pièce d'identité</th>
+                <th>N° Délivrer par</th>
+                <th>Telephone</th>
+                <th>Email</th>
+                <th>Date Dépot</th>
+                <th>Actions</th>
+            </tr>
+        </thead>`;
+
+        const tbody = document.createElement('tbody');
+        var element = document.querySelector('.table-container');
+
+        if (clients.length > 0) {
+            element.style.display = "block";
+            let i = 1;
+            clients.forEach(client => {
+                const row = document.createElement("tr");
+                row.innerHTML = `                       
+                    <td>${String(i++).padStart(3, "0")}</td>
+                    <td>${client.Id_Dossier}</td>
+                    <td>${client.type_client}</td>
+                    <td>${client.raison_sociale}</td>
+                    <td>${client.Adresse_correspondante}</td>
+                    <td>${client.commune_correspondante}</td>
+                    <td>${client.Num_pic_identite?.numero || ""}</td>
+                    <td>${client.Num_pic_identite?.delivre_par || ""}</td>
+                    <td>${client.telephone}</td>
+                    <td>${client.email}</td>
+                    <td>${new Date(client.createdAt).toLocaleDateString('fr-FR')}</td>
+                    <td>
+                        <i class='bx bxs-message-square-edit'></i>
+                        <i class='bx bxs-message-square-x'></i>
+                        <i class='bx bxs-printer' >
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        } else {
+
+            const row = document.createElement("tr");
+            row.innerHTML = `<td colspan="11" style="text-align:center;">Aucun client trouvé</td>`;
+            tbody.appendChild(row);
+        }
+        ttable.appendChild(tbody);
+        Swal.close();
+    } catch (error) {
+        showAlert('Erreur',`Une erreur s'est produite : ${error.message}`,'error');
+    }
+}
+
