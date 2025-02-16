@@ -859,7 +859,8 @@ footer {
 
 #idDossier,
 #telephone,
-#codePostal {
+#codePostal,
+#codePostal1 {
     width: 20%;
 }
 
@@ -881,6 +882,7 @@ footer {
 #telephone,
 #civilite,
 #codePostal,
+#codePostal1,
 #email,
 #communeCorrespondante,
 #CommuneBranchement,
@@ -1131,4 +1133,9 @@ footer {
     background: #1f242d;
     color: #00abf0;
     box-shadow: 0 0 10px #00abf0;
+}
+
+
+.hidden {
+    display: none !important;
 }

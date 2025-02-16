@@ -1,4 +1,12 @@
-const btn = document.getElementById('btn');
+function showAlert(title, text, icon) {
+    return Swal.fire({
+        title,
+        text,
+        icon,
+        confirmButtonText: 'OK'
+    });
+}
+
 
 function toggleMenu() {
     const navbar = document.querySelector('.navbar');
@@ -36,12 +44,12 @@ document.getElementById('submit').addEventListener('click', async (event) => {
 
     // Vérification des champs vides
     if (!user || !password) {
-        Swal.fire({
-            title: 'Erreur',
-            text: 'Veuillez remplir tous les champs.',
-            icon: 'warning',
-            confirmButtonText: 'OK'
-        });
+        showAlert('Erreur', 'Veuillez remplir tous les champs.', 'warning');
+        return;
+    }
+    
+    if (!navigator.onLine) {
+        showAlert("Problème de connexion", "Vous êtes hors ligne. Vérifiez votre connexion Internet.", "error");
         return;
     }
 
@@ -73,12 +81,7 @@ document.getElementById('submit').addEventListener('click', async (event) => {
         document.getElementById('connexion').reset();
 
     } catch (err) {
-        Swal.fire({
-            title: 'Erreur de connexion',
-            text: err.message || 'Échec de l’authentification.',
-            icon: 'error',
-            confirmButtonText: 'OK'
-        });
+        showAlert("Erreur de connexion", err.message || 'Échec de l’authentification.', "error");
     }
 });
 
@@ -95,23 +98,13 @@ document.getElementById('inscrire').addEventListener('click', async function (ev
 
     // Vérifier si tous les champs sont remplis
     if (!nomComplet || !nomUtilisateur || !email || !password || !confirmPassword) {
-        Swal.fire({
-            title: 'Erreur',
-            text: 'Veuillez remplir tous les champs.',
-            icon: 'error',
-            confirmButtonText: 'OK'
-        });
+        showAlert("Erreur", 'Veuillez remplir tous les champs.', "error");
         return;
     }
 
     // Vérifier si les mots de passe correspondent
     if (password !== confirmPassword) {
-        Swal.fire({
-            title: 'Attention',
-            text: 'Les mots de passe ne correspondent pas.',
-            icon: 'warning',
-            confirmButtonText: 'OK'
-        });
+        showAlert("Attention", 'Les mots de passe ne correspondent pas.', "warning");
         confirmPasswordInput.value = "";
         confirmPasswordInput.focus(); // Remettre le focus sur le champ
         return;
@@ -135,29 +128,15 @@ document.getElementById('inscrire').addEventListener('click', async function (ev
         const result = await response.json();
 
         if (response.ok) {
-            Swal.fire({
-                title: 'Succès',
-                text: 'Inscription réussie !',
-                icon: 'success',
-                confirmButtonText: 'OK'
-            }).then(() => {
-                closeLogin(); // Fermer le formulaire si nécessaire
-            });
+            showAlert("Succès", 'Inscription réussie !', "success")
+                .then(() => {
+                    closeLogin(); // Fermer le formulaire si nécessaire
+                });
         } else {
-            Swal.fire({
-                title: 'Erreur',
-                text: result.message || 'Erreur lors de l\'inscription.',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
+            showAlert("Erreur", result.message || `Erreur lors de l'inscription.`, "error");
         }
     } catch (err) {
-        Swal.fire({
-            title: 'Erreur',
-            text: 'Une erreur s\'est produite lors de la récupération des données.',
-            icon: 'error',
-            confirmButtonText: 'OK'
-        });
+        showAlert("Erreur", `Une erreur s\'est produite lors de la récupération des données.`, "error");
     }
 });
 
@@ -174,12 +153,7 @@ async function sendPasswordReset() {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     if (!email || !emailRegex.test(email)) {
-        Swal.fire({
-            title: 'Attention',
-            text: !email ? 'Veuillez entrer une adresse e-mail.' : 'Veuillez entrer une adresse e-mail valide.',
-            icon: 'warning',
-            confirmButtonText: 'OK'
-        });
+        showAlert("Attention", !email ? 'Veuillez entrer une adresse e-mail.' : 'Veuillez entrer une adresse e-mail valide.', "warning");
         return;
     }
 
@@ -195,23 +169,11 @@ async function sendPasswordReset() {
         if (!response.ok) {
             throw new Error(result.message || "Erreur lors de la réinitialisation.");
         }
-
-        Swal.fire({
-            title: 'E-mail envoyé',
-            text: `Un e-mail de réinitialisation a été envoyé à ${result.email}. Veuillez vérifier votre boîte de réception.`,
-            icon: 'success',
-            confirmButtonText: 'OK'
-        });
-
+        showAlert("Succès", `Un e-mail de réinitialisation a été envoyé à ${result.email}. Veuillez vérifier votre boîte de réception.`, "success");
         showLoginForm();
 
     } catch (err) {
-        Swal.fire({
-            title: 'E-mail non envoyé',
-            text: err.message,
-            icon: 'error',
-            confirmButtonText: 'OK'
-        });
+        showAlert("Erreur", 'E-mail non envoyé', "error");
         return;
     }
 }

@@ -186,7 +186,7 @@ module.exports.getuser = async (req, res) => {
 
         res.status(200).json({ success: true, data: userData });
     } catch (err) {
-        console.error("Erreur dans getuser :", err);
+        console.error("Erreur de Connexion :", err);
         res.status(500).json({ success: false, message: "Une erreur est survenue lors de la connexion." });
     }
 };
