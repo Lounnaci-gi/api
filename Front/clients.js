@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-function showAlert(title, text, icon = "info") {
-=======
 function showAlert(title, text, icon) {
->>>>>>> fb4508cf42b75c33688c7bc239689a4c71e8a36b
     return Swal.fire({
         title,
         text,
@@ -11,8 +7,6 @@ function showAlert(title, text, icon) {
     });
 }
 
-<<<<<<< HEAD
-=======
 function validatePhoneNumber(phone) {
     return /^\d{10}$/.test(phone);
 }
@@ -21,7 +15,6 @@ function validatePostalCode(code) {
     return /^\d{5}$/.test(code);
 }
 
->>>>>>> fb4508cf42b75c33688c7bc239689a4c71e8a36b
 // 👉 Afficher le formulaire lors du clic sur "Ajouter un client"
 document.getElementById('AjouterClient').addEventListener('click', async () => {
     document.querySelector('.client-section').style.display = 'flex';
@@ -73,12 +66,7 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
     const telephone = getValue('telephone');
 
     if (!id_dossier || !raisonSociale || !typeClient || !adresseBranchement || !adresseCorrespondante) {
-<<<<<<< HEAD
-        return showAlert('Erreur', 'Veuillez remplir tous les champs obligatoires.', 'warning');
-
-=======
         return showAlert('Attention','Veuillez remplir tous les champs obligatoires.','warning');
->>>>>>> fb4508cf42b75c33688c7bc239689a4c71e8a36b
     }
 
     if (!validatePhoneNumber(telephone)) {
@@ -491,3 +479,18 @@ async function enregistrements_dossiers_journaliers() {
     }
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+    // Vérifier si l'utilisateur est déjà hors ligne au chargement
+    if (!navigator.onLine) {
+        showAlert("Problème de connexion", "Vous êtes hors ligne.", "error");
+    }
+
+    // Événements pour détecter les changements de connexion en temps réel
+    window.addEventListener('offline', () => {
+        showAlert("Problème de connexion", "Vous êtes hors ligne.", "error");
+    });
+
+    window.addEventListener('online', () => {
+        showAlert("Connexion rétablie", "Vous êtes de nouveau en ligne.", "success");
+    });
+});

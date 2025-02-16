@@ -7,6 +7,7 @@ function showAlert(title, text, icon) {
     });
 }
 
+const loginModal = document.querySelector("#loginModal");
 
 function toggleMenu() {
     const navbar = document.querySelector('.navbar');
@@ -27,13 +28,13 @@ function showLoginForm() {
 
 // Fonction pour ouvrir le modal (connexion par défaut)
 function openLogin() {
-    document.getElementById("loginModal").style.display = "block";
+    loginModal.style.display = "block";
     showLoginForm(); // Afficher le formulaire de connexion par défaut
 }
 
 // Fonction pour fermer le modal
 function closeLogin() {
-    document.getElementById("loginModal").style.display = "none";
+    loginModal.style.display = "none";
 }
 
 document.getElementById('submit').addEventListener('click', async (event) => {
@@ -48,12 +49,7 @@ document.getElementById('submit').addEventListener('click', async (event) => {
         return;
     }
     
-    if (!navigator.onLine) {
-        showAlert("Problème de connexion", "Vous êtes hors ligne. Vérifiez votre connexion Internet.", "error");
-        return;
-    }
-
-    const datas = { nomUtilisateur: user, motDePasse: password };
+      const datas = { nomUtilisateur: user, motDePasse: password };
 
     try {
         const response = await fetch('http://localhost:3000/users/getuser', {
@@ -177,3 +173,19 @@ async function sendPasswordReset() {
         return;
     }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Vérifier si l'utilisateur est déjà hors ligne au chargement
+    if (!navigator.onLine) {
+        showAlert("Problème de connexion", "Vous êtes hors ligne.", "error");
+    }
+
+    // Événements pour détecter la perte et le retour de connexion
+    window.addEventListener('offline', () => {
+        showAlert("Problème de connexion", "Vous êtes hors ligne.", "error");
+    });
+
+    window.addEventListener('online', () => {
+        showAlert("Connexion rétablie", "Vous êtes de nouveau en ligne.", "success");
+    });
+});
