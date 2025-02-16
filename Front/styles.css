@@ -927,9 +927,51 @@ footer {
     /* Rendre le tableau invisible */
 }
 
+/* Wrapper pour ajouter la barre de défilement en haut */
 .table-wrapper {
     width: 100%;
     overflow-x: auto;
+    overflow-y: auto; /* Activer le scroll vertical */
+    max-height: 85vh; /* Hauteur max pour forcer le scroll vertical */
+    position: relative;
+}
+/* Barre de défilement horizontale en haut */
+.table-wrapper::before {
+    content: "";
+    display: block;
+    height: 20px; /* Hauteur de la barre en haut */
+    position: absolute;
+    top: 0;
+    width: 100%;
+    overflow-x: auto;
+}
+/* Appliquer un scroll personnalisé */
+.table-wrapper::-webkit-scrollbar {
+    height: 8px; /* Hauteur de la scrollbar horizontale */
+    width: 8px; /* Largeur de la scrollbar verticale */
+}
+.table-wrapper::-webkit-scrollbar-thumb {
+    background-color: #00abf0; /* Couleur du curseur */
+    border-radius: 10px;
+}
+.table-wrapper::-webkit-scrollbar-track {
+    background-color: #1f242d; /* Couleur de fond de la barre */
+}
+
+/* Styles de la table pour éviter qu'elle ne dépasse */
+.liste-clients {
+    width: 100%;
+    min-width: 800px; /* Pour forcer le scroll horizontal si nécessaire */
+    border-collapse: collapse;
+    white-space: nowrap; /* Empêcher le texte de passer à la ligne */
+    font-size: 12px;
+}
+
+.liste-clients thead {
+    position: sticky;
+    top: 0;
+    background-color: #00abf0; /* Fond de l'en-tête */
+    z-index: 10;
 }
 
 .liste-clients i {
@@ -974,19 +1016,7 @@ footer {
     cursor: pointer;
 }
 
-.liste-clients {
-    width: auto;
-    max-width: 100%;
-    border-collapse: collapse;
-    margin-top: 5%;
-    background-color: #2a2f3a;
-    color: white;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 0 10px rgba(0, 171, 240, 0.5);
-    font-size: 12px;
-    /* Taille de police réduite */
-}
+
 
 .liste-clients th,
 .liste-clients td {
@@ -997,13 +1027,13 @@ footer {
     min-width: max-content;
 }
 
+/* Ajuster les cellules de l'en-tête */
 .liste-clients th {
-    background-color: #00abf0;
-    color: #1f242d;
+    padding: 10px;
+    text-align: center;
     font-weight: bold;
-    font-size: 13px;
-    cursor: pointer;
-    /* Taille légèrement plus grande pour les en-têtes */
+    border-bottom: 2px solid #1f242d;
+    color: #1f242d;
 }
 
 .liste-clients tr:nth-child(even) {
