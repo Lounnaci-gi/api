@@ -1,3 +1,5 @@
+import { showAlert } from './clients.js';
+
 const btn = document.getElementById('btn');
 
 function toggleMenu() {

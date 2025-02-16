@@ -1,4 +1,4 @@
-function showAlert(title, text, icon) {
+export function showAlert(title, text, icon) {
     return Swal.fire({
         title,
         text,
@@ -483,3 +483,4 @@ async function enregistrements_dossiers_journaliers() {
         showAlert('Erreur',`Une erreur s'est produite : ${error.message}`,'error');
     }
 }
+
