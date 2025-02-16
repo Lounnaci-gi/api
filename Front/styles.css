@@ -930,7 +930,8 @@ footer {
     width: 100%;
     max-height: 85vh;
     overflow-x: auto;
-    overflow-y: auto; /* Activer le scroll vertical */
+    overflow-y: auto;
+    /* Activer le scroll vertical */
     position: relative;
 }
 
@@ -938,38 +939,49 @@ footer {
 .table-wrapper::before {
     content: "";
     display: block;
-    height: 20px; /* Hauteur de la barre en haut */
+    height: 20px;
+    /* Hauteur de la barre en haut */
     position: absolute;
     top: 0;
     width: 100%;
     overflow-x: auto;
 }
+
 /* Appliquer un scroll personnalisé */
 .table-wrapper::-webkit-scrollbar {
-    height: 8px; /* Hauteur de la scrollbar horizontale */
-    width: 8px; /* Largeur de la scrollbar verticale */
+    height: 8px;
+    /* Hauteur de la scrollbar horizontale */
+    width: 8px;
+    /* Largeur de la scrollbar verticale */
 }
+
 .table-wrapper::-webkit-scrollbar-thumb {
-    background-color: #00abf0; /* Couleur du curseur */
+    background-color: #00abf0;
+    /* Couleur du curseur */
     border-radius: 10px;
 }
+
 .table-wrapper::-webkit-scrollbar-track {
-    background-color: #1f242d; /* Couleur de fond de la barre */
+    background-color: #1f242d;
+    /* Couleur de fond de la barre */
 }
 
 /* Styles de la table pour éviter qu'elle ne dépasse */
 .liste-clients {
     width: 100%;
-    min-width: 800px; /* Pour forcer le scroll horizontal si nécessaire */
+    min-width: 800px;
+    /* Pour forcer le scroll horizontal si nécessaire */
     border-collapse: collapse;
-    white-space: nowrap; /* Empêcher le texte de passer à la ligne */
+    white-space: nowrap;
+    /* Empêcher le texte de passer à la ligne */
     font-size: 12px;
 }
 
 .liste-clients thead {
     position: sticky;
     top: 0;
-    background-color: #00abf0; /* Fond de l'en-tête */
+    background-color: #00abf0;
+    /* Fond de l'en-tête */
     z-index: 10;
 }
 
@@ -1017,13 +1029,19 @@ footer {
 
 
 
-.liste-clients th,
 .liste-clients td {
     border: 1px solid #00abf0;
     padding: 8px;
     text-align: center;
     white-space: nowrap;
     min-width: max-content;
+    transition: transform 0.3s ease-in-out;
+}
+
+.liste-clients td:hover {
+    text-shadow: var(--text-color) 0 0 10px;
+    cursor: pointer;
+    transform: scale(1.07);
 }
 
 .liste-clients th {
@@ -1035,11 +1053,13 @@ footer {
     cursor: pointer;
     transition: background-color 0.3s ease-in-out;
 }
+
 .liste-clients th:hover {
     background-color: #2a2f3a;
     color: #00abf0;
     cursor: pointer;
 }
+
 
 
 .liste-clients tr:nth-child(even) {
@@ -1122,7 +1142,8 @@ footer {
 }
 
 .filter_liste {
-    display: flex; /* Ajout pour alignement horizontal */
+    display: flex;
+    /* Ajout pour alignement horizontal */
     align-items: center;
     gap: 20px;
     justify-content: left;
@@ -1132,7 +1153,8 @@ footer {
 
 .filter_liste input {
     width: 20%;
-    padding: 10px; /* Correction de l'erreur */
+    padding: 10px;
+    /* Correction de l'erreur */
     margin: 5px 2px;
     border: 1px solid #00abf0;
     border-radius: 5px;
@@ -1140,18 +1162,22 @@ footer {
     color: white;
     font-size: 0.8em;
     text-transform: capitalize;
-    appearance: none; /* Amélioration pour uniformité */
+    appearance: none;
+    /* Amélioration pour uniformité */
 }
 
 .sci a {
     display: inline-flex;
-    align-items: center; /* Correction */
-    justify-content: center; /* Correction */
+    align-items: center;
+    /* Correction */
+    justify-content: center;
+    /* Correction */
     padding: 10px;
     border-radius: 50%;
     font-size: 20px;
     color: #00abf0;
-    margin: 0 10px; /* Réduction de l'espace pour une meilleure harmonie */
+    margin: 0 10px;
+    /* Réduction de l'espace pour une meilleure harmonie */
     transition: 0.3s;
 }
 
@@ -1171,4 +1197,3 @@ footer {
 .hidden {
     display: none !important;
 }
-

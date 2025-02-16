@@ -42,7 +42,7 @@ document.getElementById('AjouterClient').addEventListener('click', async () => {
             Swal.close();
         }
     } catch (error) {
-        showAlert('Erreur', `Une erreur s'est produite lors de la récupération de l'ID Dossier : ${error.message}`,'error');
+        showAlert('Erreur', `Une erreur s'est produite lors de la récupération de l'ID Dossier : ${error.message}`, 'error');
     }
 });
 
@@ -66,14 +66,14 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
     const telephone = getValue('telephone');
 
     if (!id_dossier || !raisonSociale || !typeClient || !adresseBranchement || !adresseCorrespondante) {
-        return showAlert('Attention','Veuillez remplir tous les champs obligatoires.','warning');
+        return showAlert('Attention', 'Veuillez remplir tous les champs obligatoires.', 'warning');
     }
 
     if (!validatePhoneNumber(telephone)) {
         showAlert("Erreur", "Le numéro de téléphone doit contenir exactement 10 chiffres.", "error");
         return;
     }
-    
+
     if (!validatePostalCode(code_postale)) {
         showAlert("Erreur", "Le code postal doit contenir exactement 5 chiffres.", "error");
         return;
@@ -122,15 +122,15 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
         if (!response.ok) {
             throw new Error(`Erreur HTTP: ${response.status}`);
         }
-        showAlert('Succès !','Données envoyées avec succès.','success')
-        .then(() => {
-            document.getElementById('addClientForm').reset(); // Réinitialisation du formulaire
-            document.querySelector('.client-section').style.display = 'none'; // Masquer le formulaire
-            document.querySelector('.footer').style.marginTop = '50%'; // Ajuster le footer
-        });
+        showAlert('Succès !', 'Données envoyées avec succès.', 'success')
+            .then(() => {
+                document.getElementById('addClientForm').reset(); // Réinitialisation du formulaire
+                document.querySelector('.client-section').style.display = 'none'; // Masquer le formulaire
+                document.querySelector('.footer').style.marginTop = '50%'; // Ajuster le footer
+            });
 
     } catch (error) {
-        showAlert('Erreur',`Une erreur s'est produite : ${error.message}`,'error');
+        showAlert('Erreur', `Une erreur s'est produite : ${error.message}`, 'error');
     }
 });
 
@@ -170,12 +170,16 @@ async function searchRaisonSociale() {
             <tr>
                 <th>N°</th>
                 <th>N° Dossier</th>
+                <th>Statut</th>
                 <th>Raison Sociale</th>
                 <th>Adresse</th>
-                <th>Commune</th>  
+                <th>Commune</th>
+                <th>N° Pièce d'identité</th>
+                <th>N° Délivrer par</th>
                 <th>Telephone</th>
                 <th>Email</th>
                 <th>Date Dépot</th>
+                <th>Actions</th>
             </tr>
         </thead>`;
 
@@ -190,19 +194,27 @@ async function searchRaisonSociale() {
                 const row = document.createElement("tr");
                 row.innerHTML = `                       
                         <td>${String(i++).padStart(3, "0")}</td>
-                        <td>${client.Id_Dossier}</td>
-                        <td>${client.raison_sociale}</td>
-                        <td>${client.Adresse_correspondante}</td>
-                        <td>${client.commune_correspondante}</td>
-                        <td>${client.telephone}</td>
-                        <td>${client.email}</td>
-                        <td>${new Date(client.createdAt).toLocaleDateString('fr-FR')}</td>`;
+                    <td>${client.Id_Dossier}</td>
+                    <td>${client.type_client}</td>
+                    <td>${client.raison_sociale}</td>
+                    <td>${client.Adresse_correspondante}</td>
+                    <td>${client.commune_correspondante}</td>
+                    <td>${client.Num_pic_identite?.numero || ""}</td>
+                    <td>${client.Num_pic_identite?.delivre_par || ""}</td>
+                    <td>${client.telephone}</td>
+                    <td>${client.email}</td>
+                    <td>${new Date(client.createdAt).toLocaleDateString('fr-FR')}</td>
+                    <td>
+                        <i class='bx bxs-message-square-edit'></i>
+                        <i class='bx bxs-message-square-x'></i>
+                        <i class='bx bxs-printer' >
+                    </td>`;
                 tbody.appendChild(row);
             });
             ttable.appendChild(tbody);
             const tfoot = document.createElement('tfoot');
             const tr = document.createElement('tr');
-            tr.innerHTML = `<td colspan="7"><strong>Nombre d'occurences correspondantes</strong></td>
+            tr.innerHTML = `<td colspan="2"><strong>Nombre d'occurences correspondantes</strong></td>
                 <td><strong>${i - 1}</strong></td>`;
             tfoot.appendChild(tr);
             ttable.appendChild(tfoot);
@@ -317,7 +329,7 @@ document.querySelectorAll('.date_client').forEach(dateInput => {
         if (value.length >= 1) {
             let jour = value.substring(0, 2);
             if (parseInt(jour) > 31) {
-                showAlert('Date invalide','Le jour ne peut pas dépasser 31.','error');
+                showAlert('Date invalide', 'Le jour ne peut pas dépasser 31.', 'error');
                 jour = '31'; // Limite à 31
             }
             formattedValue += jour;
@@ -386,12 +398,12 @@ async function enregistrements_dossiers_journaliers() {
 
 
     if (!date_debut || !date_fin) {
-        showAlert('Erreur','Veuillez sélectionner une plage de dates.','error');
+        showAlert('Erreur', 'Veuillez sélectionner une plage de dates.', 'error');
         return;
     }
     // Vérification que date_debut ≤ date_fin
     if (new Date(date_debut) > new Date(date_fin)) {
-        showAlert('Erreur','La date de début ne peut pas être après la date de fin.','error');
+        showAlert('Erreur', 'La date de début ne peut pas être après la date de fin.', 'error');
         return;
     }
 
@@ -411,13 +423,13 @@ async function enregistrements_dossiers_journaliers() {
             headers: { 'Content-Type': 'application/json' }
         });
         if (!response.ok) {
-            showAlert('Erreur','Impossible de récupérer les clients.','error');
+            showAlert('Erreur', 'Impossible de récupérer les clients.', 'error');
             return;
         }
 
         const clients = await response.json();
         if (clients.length === 0) {
-            showAlert('Information',`Aucun dossier enregistré entre le ${date_debut} et le ${date_fin}.`,'info');
+            showAlert('Information', `Aucun dossier enregistré entre le ${date_debut} et le ${date_fin}.`, 'info');
             return;
         }
         ttable.innerHTML = `
@@ -475,7 +487,7 @@ async function enregistrements_dossiers_journaliers() {
         ttable.appendChild(tbody);
         Swal.close();
     } catch (error) {
-        showAlert('Erreur',`Une erreur s'est produite : ${error.message}`,'error');
+        showAlert('Erreur', `Une erreur s'est produite : ${error.message}`, 'error');
     }
 }
 
