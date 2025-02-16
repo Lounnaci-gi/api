@@ -1,3 +1,5 @@
+var element = document.querySelector('.table-container');
+
 // 👉 Afficher le formulaire lors du clic sur "Ajouter un client"
 document.getElementById('AjouterClient').addEventListener('click', async () => {
     document.querySelector('.client-section').style.display = 'flex';
@@ -5,9 +7,8 @@ document.getElementById('AjouterClient').addEventListener('click', async () => {
     document.querySelector('.footer').style.marginTop = 'auto';
     ttable.innerHTML = '';
     // Cacher le tableau
-    var element = document.getElementsByClassName('table-container')[0];
-    if (getComputedStyle(element).style.display === "block") {
-        element.style.display = "none";
+    if (element) {
+        element.classList.toggle("hidden");
     }
     // Afficher le loader avec SweetAlert2
     Swal.fire({
@@ -154,7 +155,6 @@ function debounce(func, delay) {
 
 // Fonction de recherche
 async function searchRaisonSociale() {
-    var element = document.getElementsByClassName('table-container')[0];
     const inputValue = document.getElementById('raisonSociale').value.trim();
     const ttable = document.getElementsByClassName("liste-clients")[0];
     // Si l'utilisateur a tapé moins de 2 caractères, on ne fait pas de requête
@@ -188,10 +188,8 @@ async function searchRaisonSociale() {
         const tbody = document.createElement('tbody');
 
         if (data.length > 0) {
-
-            if (getComputedStyle(element).display === "none") {
-                element.style.display = "block";
-
+            if (element) {
+                element.classList.toggle("hidden");
             }
             let i = 1;
             // Ajouter les résultats à la liste
@@ -224,7 +222,7 @@ async function searchRaisonSociale() {
             ttable.appendChild(tbody);
             setTimeout(() => {
                 ttable.innerHTML = ``;
-                document.getElementsByClassName('table-container')[0].style.display = "none";
+                element.classList.toggle("hidden");
             }, 1000);
 
         }
@@ -283,7 +281,6 @@ document.getElementById('liste-clients').addEventListener('click', async () => {
         </thead>`;
 
         const tbody = document.createElement('tbody');
-        var element = document.getElementsByClassName('table-container')[0];
 
         if (clients.length > 0) {
             if (getComputedStyle(element).display === "none") {

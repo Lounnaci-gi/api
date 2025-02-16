@@ -1074,3 +1074,7 @@ footer {
     cursor: pointer;
     width: 14%;
 }
+
+.hidden {
+    display: none !important;
+}
