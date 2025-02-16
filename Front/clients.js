@@ -1,4 +1,4 @@
-export function showAlert(title, text, icon) {
+function showAlert(title, text, icon) {
     return Swal.fire({
         title,
         text,
