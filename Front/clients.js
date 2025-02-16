@@ -1,3 +1,12 @@
+function showAlert(title, text, icon = "info") {
+    return Swal.fire({
+        title,
+        text,
+        icon,
+        confirmButtonText: 'OK'
+    });
+}
+
 // 👉 Afficher le formulaire lors du clic sur "Ajouter un client"
 document.getElementById('AjouterClient').addEventListener('click', async () => {
     document.querySelector('.client-section').style.display = 'flex';
@@ -25,12 +34,7 @@ document.getElementById('AjouterClient').addEventListener('click', async () => {
             Swal.close();
         }
     } catch (error) {
-        Swal.fire({
-            title: 'Erreur',
-            text: `Une erreur s'est produite lors de la récupération de l'ID Dossier : ${error.message}`,
-            icon: 'error',
-            confirmButtonText: 'OK'
-        });
+        showAlert('Erreur', `Une erreur s'est produite lors de la récupération de l'ID Dossier : ${error.message}`,'error');
     }
 });
 
@@ -54,12 +58,8 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
     const telephone = getValue('telephone');
 
     if (!id_dossier || !raisonSociale || !typeClient || !adresseBranchement || !adresseCorrespondante) {
-        return Swal.fire({
-            title: 'Erreur',
-            text: 'Veuillez remplir tous les champs obligatoires.',
-            icon: 'warning',
-            confirmButtonText: 'OK'
-        });
+        return showAlert('Erreur', 'Veuillez remplir tous les champs obligatoires.', 'warning');
+
     }
 
     const phoneRegex = /^\d+$/;
