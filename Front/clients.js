@@ -408,18 +408,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
 document.addEventListener('click', async (event) => {
     if (event.target.classList.contains('bxs-message-square-edit')) {
-        // Récupérer l'ID du client
-        const idClient = event.target.closest('tr').children[1].textContent.trim();
+        // Récupérer l'ID du dossier
+        const idDossier = event.target.closest('tr')?.children[1]?.textContent.trim();
+
+        if (!idDossier) {
+            showAlert('Erreur', 'ID du dossier invalide.', 'error');
+            return;
+        }
+
         try {
-            const client = await fetch(`http://localhost:3000/users/:id/${encodeURIComponent(idClient)}`, { method: 'GET' });
-            if (!client.ok) {
-                showAlert('Erreur', 'Impossible de récupérer les clients.', 'error');
-                return;
+            const response = await fetch(`http://localhost:3000/users/${encodeURIComponent(idDossier)}`, { method: 'GET' });
+
+            if (!response.ok) {
+                throw new Error(`Erreur HTTP ${response.status} : ${response.statusText}`);
             }
 
-        } catch {
-            console.log("ID du clienttttttt :", idClient);
+            const client = await response.json();
+            console.log(client);
+
+        } catch (err) {
+            console.error("Erreur lors de la récupération du dossier :", err);
+            showAlert('Erreur', err.message || 'Impossible de récupérer le dossier.', 'error');
         }
     }
 });
+
 

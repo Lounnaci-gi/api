@@ -76,11 +76,9 @@ module.exports.getposts = async (req, res) => {
 
 module.exports.get_with_Id_dossier = async (req, res) => {
     try {
-        // Vérification si l'ID est fourni
         if (req.params.id === "") {
             return res.status(400).send('Veuillez Fournir un Id_dossier');
         }
-        console.log(req.params.id); 
         // Recherche du client dans la base de données
         const client = await Client.findOne({ Id_Dossier: req.params.id });
 
