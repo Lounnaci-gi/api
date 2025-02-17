@@ -1027,21 +1027,18 @@ footer {
     cursor: pointer;
 }
 
-
-
 .liste-clients td {
     border: 1px solid #00abf0;
     padding: 8px;
     text-align: center;
     white-space: nowrap;
     min-width: max-content;
-    transition: transform 0.3s ease-in-out;
+    transition: color 0.5s ease-in-out;
 }
 
 .liste-clients td:hover {
-    text-shadow: var(--text-color) 0 0 10px;
+    color: #00abf0;
     cursor: pointer;
-    transform: scale(1.07);
 }
 
 .liste-clients th {

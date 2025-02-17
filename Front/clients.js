@@ -37,13 +37,14 @@ function validatePostalCode(code) {
 
 //-------------------
 function renderClientsTable(data) {
-    var element = document.querySelector('.table-container');
+    const element = document.querySelector('.table-container');
     const ttable = document.querySelector(".liste-clients");
+
+    // Réinitialiser le tableau
     ttable.innerHTML = dessiner_tableau();
     const tbody = document.createElement('tbody');
-    element.style.display = data.length > 0 ? "block" : "none";
+
     if (data.length > 0) {
-        // element.style.display = "block";
         let i = 1;
         data.forEach(client => {
             const row = document.createElement("tr");
@@ -67,8 +68,12 @@ function renderClientsTable(data) {
             tbody.appendChild(row);
         });
         ttable.appendChild(tbody);
+
+        // ✅ Afficher le tableau uniquement après remplissage
+        element.style.display = "block";
     } else {
         ttable.innerHTML += `<tr><td colspan="11" style="text-align:center;">Aucun client trouvé</td></tr>`;
+        element.style.display = "none";
     }
 }
 
@@ -206,8 +211,8 @@ function debounce(func, delay) {
 // Fonction de recherche
 async function searchRaisonSociale() {
     const inputValue = document.getElementById('raisonSociale').value.trim();
-     const ttable = document.getElementsByClassName("liste-clients")[0];
-     var element = document.querySelector('.table-container');
+    const ttable = document.getElementsByClassName("liste-clients")[0];
+    var element = document.querySelector('.table-container');
     // Si l'utilisateur a tapé moins de 2 caractères, on ne fait pas de requête
     if (inputValue.length < 2) {
         element.style.display = 'none';
@@ -248,20 +253,17 @@ document.getElementById('liste-clients').addEventListener('click', async () => {
             Swal.showLoading();
         }
     });
-    
+
     document.querySelector('.client-section').style.display = 'none';
-    
+
     try {
         const response = await fetch("http://localhost:3000/users", { method: 'GET' });
         if (!response.ok) {
             throw new Error(`Erreur HTTP : ${response.status}`);
         }
-       
         const clients = await response.json();
-         renderClientsTable(clients);
-
-           Swal.close();
-
+        renderClientsTable(clients);
+        Swal.close();
     } catch (error) {
         showAlert('Erreur', 'Impossible de récupérer les clients.', 'error');
     }
@@ -380,43 +382,7 @@ async function enregistrements_dossiers_journaliers() {
             showAlert('Information', `Aucun dossier enregistré entre le ${date_debut} et le ${date_fin}.`, 'info');
             return;
         }
-        ttable.innerHTML = dessiner_tableau();
-
-        const tbody = document.createElement('tbody');
-        var element = document.querySelector('.table-container');
-
-        if (clients.length > 0) {
-            element.style.display = "block";
-            let i = 1;
-            clients.forEach(client => {
-                const row = document.createElement("tr");
-                row.innerHTML = `                       
-                    <td>${String(i++).padStart(3, "0")}</td>
-                    <td>${client.Id_Dossier}</td>
-                    <td>${client.type_client}</td>
-                    <td>${client.raison_sociale}</td>
-                    <td>${client.Adresse_correspondante}</td>
-                    <td>${client.commune_correspondante}</td>
-                    <td>${client.Num_pic_identite?.numero || ""}</td>
-                    <td>${client.Num_pic_identite?.delivre_par || ""}</td>
-                    <td>${client.telephone}</td>
-                    <td>${client.email}</td>
-                    <td>${new Date(client.createdAt).toLocaleDateString('fr-FR')}</td>
-                    <td>
-                        <i class='bx bxs-message-square-edit'></i>
-                        <i class='bx bxs-message-square-x'></i>
-                        <i class='bx bxs-printer' >
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        } else {
-
-            const row = document.createElement("tr");
-            row.innerHTML = `<td colspan="11" style="text-align:center;">Aucun client trouvé</td>`;
-            tbody.appendChild(row);
-        }
-        ttable.appendChild(tbody);
+        renderClientsTable(clients);
         Swal.close();
     } catch (error) {
         showAlert('Erreur', `Une erreur s'est produite : ${error.message}`, 'error');
