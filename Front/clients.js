@@ -424,7 +424,7 @@ document.addEventListener('click', async (event) => {
             }
 
             const client = await response.json();
-            console.log(client);
+            showAlert('success','Dossier trouver avec success','success');
 
         } catch (err) {
             console.error("Erreur lors de la récupération du dossier :", err);
@@ -434,3 +434,58 @@ document.addEventListener('click', async (event) => {
 });
 
 
+//----------------
+document.addEventListener('click', async (event) => {
+    if (event.target.classList.contains('bxs-message-square-edit')) {
+        // Récupérer l'ID du dossier
+        const idDossier = event.target.closest('tr')?.children[1]?.textContent.trim();
+
+        if (!idDossier) {
+            showAlert('Erreur', 'ID du dossier invalide.', 'error');
+            return;
+        }
+
+        try {
+            const response = await fetch(`http://localhost:3000/users/${encodeURIComponent(idDossier)}`, { method: 'GET' });
+
+            if (!response.ok) {
+                throw new Error(`Erreur HTTP ${response.status} : ${response.statusText}`);
+            }
+
+            const client = await response.json();
+            console.log(client);
+
+            // **Préremplir le formulaire avec les données récupérées**
+            fillClientForm(client);
+
+        } catch (err) {
+            console.error("Erreur lors de la récupération du dossier :", err);
+            showAlert('Erreur', err.message || 'Impossible de récupérer le dossier.', 'error');
+        }
+    }
+});
+
+/**
+ * 📌 Fonction pour préremplir le formulaire avec les données du client
+ */
+function fillClientForm(client) {
+    document.getElementById('idDossier').value = client.Id_Dossier || '';
+    document.getElementById('civilite').value = client.Civilite || '';
+    document.getElementById('raisonSociale').value = client.raison_sociale || '';
+    document.getElementById('typeClient').value = client.type_client || '';
+    document.getElementById('adresseCorrespondante').value = client.Adresse_correspondante || '';
+    document.getElementById('communeCorrespondante').value = client.commune_correspondante || '';
+    document.getElementById('codePostal').value = client.Code_postale || '';
+    document.getElementById('numPicIdentite').value = client.Num_pic_identite?.numero || '';
+    document.getElementById('delivrePar').value = client.Num_pic_identite?.delivre_par || '';
+    document.getElementById('dateDelivrance').value = client.Num_pic_identite?.date_delivrance || '';
+    document.getElementById('adresseBranchement').value = client.Adresse_branchement || '';
+    document.getElementById('CommuneBranchement').value = client.commune_branchement || '';
+    document.getElementById('email').value = client.email || '';
+    document.getElementById('telephone').value = client.telephone || '';
+
+    // **Afficher le formulaire si besoin**
+    document.querySelector('.client-section').style.display = 'block';
+    document.querySelector('.footer').style.marginTop = '0';
+    document.querySelector('.table-container').style.display = 'none';
+}
