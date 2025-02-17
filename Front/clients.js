@@ -1,3 +1,23 @@
+function dessiner_tableau() {
+    return `
+    <thead>  
+        <tr>
+            <th>N°</th>
+            <th>N° Dossier</th>
+            <th>Statut</th>
+            <th>Raison Sociale</th>
+            <th>Adresse</th>
+            <th>Commune</th>
+            <th>N° Pièce d'identité</th>
+            <th>N° Délivrer par</th>
+            <th>Telephone</th>
+            <th>Email</th>
+            <th>Date Dépot</th>
+            <th>Actions</th>
+        </tr>
+    </thead>`
+}
+
 function showAlert(title, text, icon) {
     return Swal.fire({
         title,
@@ -14,6 +34,44 @@ function validatePhoneNumber(phone) {
 function validatePostalCode(code) {
     return /^\d{5}$/.test(code);
 }
+
+//-------------------
+function renderClientsTable(data) {
+    var element = document.querySelector('.table-container');
+    const ttable = document.querySelector(".liste-clients");
+    ttable.innerHTML = dessiner_tableau();
+    const tbody = document.createElement('tbody');
+    element.style.display = data.length > 0 ? "block" : "none";
+    if (data.length > 0) {
+        // element.style.display = "block";
+        let i = 1;
+        data.forEach(client => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${String(i++).padStart(3, "0")}</td>
+                <td>${client.Id_Dossier}</td>
+                <td>${client.type_client}</td>
+                <td>${client.raison_sociale}</td>
+                <td>${client.Adresse_correspondante}</td>
+                <td>${client.commune_correspondante}</td>
+                <td>${client.Num_pic_identite?.numero || ""}</td>
+                <td>${client.Num_pic_identite?.delivre_par || ""}</td>
+                <td>${client.telephone}</td>
+                <td>${client.email}</td>
+                <td>${new Date(client.createdAt).toLocaleDateString('fr-FR')}</td>
+                <td>
+                    <i class='bx bxs-message-square-edit'></i>
+                    <i class='bx bxs-message-square-x'></i>
+                    <i class='bx bxs-printer'></i>
+                </td>`;
+            tbody.appendChild(row);
+        });
+        ttable.appendChild(tbody);
+    } else {
+        ttable.innerHTML += `<tr><td colspan="11" style="text-align:center;">Aucun client trouvé</td></tr>`;
+    }
+}
+
 
 // 👉 Afficher le formulaire lors du clic sur "Ajouter un client"
 document.getElementById('AjouterClient').addEventListener('click', async () => {
@@ -148,8 +206,8 @@ function debounce(func, delay) {
 // Fonction de recherche
 async function searchRaisonSociale() {
     const inputValue = document.getElementById('raisonSociale').value.trim();
-    const ttable = document.getElementsByClassName("liste-clients")[0];
-    var element = document.querySelector('.table-container');
+     const ttable = document.getElementsByClassName("liste-clients")[0];
+     var element = document.querySelector('.table-container');
     // Si l'utilisateur a tapé moins de 2 caractères, on ne fait pas de requête
     if (inputValue.length < 2) {
         element.style.display = 'none';
@@ -164,65 +222,7 @@ async function searchRaisonSociale() {
         }
 
         const data = await response.json();
-        // Réinitialisation du tableau
-        ttable.innerHTML = `
-        <thead>  
-            <tr>
-                <th>N°</th>
-                <th>N° Dossier</th>
-                <th>Statut</th>
-                <th>Raison Sociale</th>
-                <th>Adresse</th>
-                <th>Commune</th>
-                <th>N° Pièce d'identité</th>
-                <th>N° Délivrer par</th>
-                <th>Telephone</th>
-                <th>Email</th>
-                <th>Date Dépot</th>
-                <th>Actions</th>
-            </tr>
-        </thead>`;
-
-        const tbody = document.createElement('tbody');
-        if (data.length > 0) {
-            document.getElementById('nbr_dossier').textContent = `${String(data.length).padStart(2, '0')} Clients potentiellement correspondants trouvés.`;
-            element.style.display = "block";
-            // element.classList.remove("hidden"); // Afficher
-            let i = 1;
-            // Ajouter les résultats à la liste
-            data.forEach(client => {
-                const row = document.createElement("tr");
-                row.innerHTML = `                       
-                        <td>${String(i++).padStart(3, "0")}</td>
-                    <td>${client.Id_Dossier}</td>
-                    <td>${client.type_client}</td>
-                    <td>${client.raison_sociale}</td>
-                    <td>${client.Adresse_correspondante}</td>
-                    <td>${client.commune_correspondante}</td>
-                    <td>${client.Num_pic_identite?.numero || ""}</td>
-                    <td>${client.Num_pic_identite?.delivre_par || ""}</td>
-                    <td>${client.telephone}</td>
-                    <td>${client.email}</td>
-                    <td>${new Date(client.createdAt).toLocaleDateString('fr-FR')}</td>
-                    <td>
-                        <i class='bx bxs-message-square-edit'></i>
-                        <i class='bx bxs-message-square-x'></i>
-                        <i class='bx bxs-printer' >
-                    </td>`;
-                tbody.appendChild(row);
-            });
-            ttable.appendChild(tbody);
-            const tfoot = document.createElement('tfoot');
-            const tr = document.createElement('tr');
-            tr.innerHTML = `<td colspan="2"><strong>Nombre d'occurences correspondantes</strong></td>
-                <td><strong>${i - 1}</strong></td>`;
-            tfoot.appendChild(tr);
-            ttable.appendChild(tfoot);
-
-        } else {
-            element.style.display = "none";
-            document.getElementById('nbr_dossier').textContent = '';
-        }
+        renderClientsTable(data);
     } catch (error) {
         console.error("Erreur lors de la récupération des raisons sociales :", error);
         // Afficher un message d'erreur à l'utilisateur
@@ -239,7 +239,6 @@ document.getElementById('raisonSociale').addEventListener('input', debouncedSear
 
 // liste des clients 
 document.getElementById('liste-clients').addEventListener('click', async () => {
-    const ttable = document.querySelector(".liste-clients");
     // Afficher le loader avec SweetAlert2
     Swal.fire({
         title: 'Chargement...',
@@ -249,70 +248,19 @@ document.getElementById('liste-clients').addEventListener('click', async () => {
             Swal.showLoading();
         }
     });
-
+    
     document.querySelector('.client-section').style.display = 'none';
-
+    
     try {
         const response = await fetch("http://localhost:3000/users", { method: 'GET' });
         if (!response.ok) {
             throw new Error(`Erreur HTTP : ${response.status}`);
         }
-
+       
         const clients = await response.json();
-        ttable.innerHTML = `
-        <thead>  
-            <tr>
-                <th>N°</th>
-                <th>N° Dossier</th>
-                <th>Statut</th>
-                <th>Raison Sociale</th>
-                <th>Adresse</th>
-                <th>Commune</th>
-                <th>N° Pièce d'identité</th>
-                <th>N° Délivrer par</th>
-                <th>Telephone</th>
-                <th>Email</th>
-                <th>Date Dépot</th>
-                <th>Actions</th>
-            </tr>
-        </thead>`;
+         renderClientsTable(clients);
 
-        const tbody = document.createElement('tbody');
-        var element = document.querySelector('.table-container');
-
-        if (clients.length > 0) {
-            element.style.display = "block";
-            let i = 1;
-            clients.forEach(client => {
-                const row = document.createElement("tr");
-                row.innerHTML = `                       
-                    <td>${String(i++).padStart(3, "0")}</td>
-                    <td>${client.Id_Dossier}</td>
-                    <td>${client.type_client}</td>
-                    <td>${client.raison_sociale}</td>
-                    <td>${client.Adresse_correspondante}</td>
-                    <td>${client.commune_correspondante}</td>
-                    <td>${client.Num_pic_identite?.numero || ""}</td>
-                    <td>${client.Num_pic_identite?.delivre_par || ""}</td>
-                    <td>${client.telephone}</td>
-                    <td>${client.email}</td>
-                    <td>${new Date(client.createdAt).toLocaleDateString('fr-FR')}</td>
-                    <td>
-                        <i class='bx bxs-message-square-edit'></i>
-                        <i class='bx bxs-message-square-x'></i>
-                        <i class='bx bxs-printer' >
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        } else {
-            const row = document.createElement("tr");
-            row.innerHTML = `<td colspan="11" style="text-align:center;">Aucun client trouvé</td>`;
-            tbody.appendChild(row);
-        }
-        ttable.appendChild(tbody);
-
-        Swal.close();
+           Swal.close();
 
     } catch (error) {
         showAlert('Erreur', 'Impossible de récupérer les clients.', 'error');
@@ -432,23 +380,7 @@ async function enregistrements_dossiers_journaliers() {
             showAlert('Information', `Aucun dossier enregistré entre le ${date_debut} et le ${date_fin}.`, 'info');
             return;
         }
-        ttable.innerHTML = `
-        <thead>  
-            <tr>
-                <th>N°</th>
-                <th>N° Dossier</th>
-                <th>Statut</th>
-                <th>Raison Sociale</th>
-                <th>Adresse</th>
-                <th>Commune</th>
-                <th>N° Pièce d'identité</th>
-                <th>N° Délivrer par</th>
-                <th>Telephone</th>
-                <th>Email</th>
-                <th>Date Dépot</th>
-                <th>Actions</th>
-            </tr>
-        </thead>`;
+        ttable.innerHTML = dessiner_tableau();
 
         const tbody = document.createElement('tbody');
         var element = document.querySelector('.table-container');
