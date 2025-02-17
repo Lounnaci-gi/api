@@ -404,3 +404,22 @@ document.addEventListener("DOMContentLoaded", () => {
         showAlert("Connexion rétablie", "Vous êtes de nouveau en ligne.", "success");
     });
 });
+
+
+document.addEventListener('click', async (event) => {
+    if (event.target.classList.contains('bxs-message-square-edit')) {
+        // Récupérer l'ID du client
+        const idClient = event.target.closest('tr').children[1].textContent.trim();
+        try {
+            const client = await fetch(`http://localhost:3000/users/:id/${encodeURIComponent(idClient)}`, { method: 'GET' });
+            if (!client.ok) {
+                showAlert('Erreur', 'Impossible de récupérer les clients.', 'error');
+                return;
+            }
+
+        } catch {
+            console.log("ID du clienttttttt :", idClient);
+        }
+    }
+});
+
