@@ -73,7 +73,6 @@ module.exports.editpost = async (req, res) => {
             return res.status(500).send("❌ Échec de la mise à jour.");
         }
 
-        console.log("✅ Mise à jour réussie :", updatepost);
         res.status(200).send("✅ Mise à jour effectuée avec succès.");
     } catch (err) {
         console.error("❌ Erreur lors de la mise à jour :", err);
@@ -114,6 +113,29 @@ module.exports.get_with_Id_dossier = async (req, res) => {
     }
 };
 
+module.exports.recherche_multiple = async (req, res) => {
+    try {
+        const query = req.query.q;
+        if (!query) {
+            return res.status(400).json({ error: 'Aucun critère de recherche fourni.' });
+        }
+        // Création du filtre de recherche
+        const searchRegex = new RegExp(query, 'i'); // 'i' = insensible à la casse
+        const clients = await Client.find({
+            $or: [
+                { Id_Dossier: searchRegex },
+                { raison_sociale: searchRegex },
+                { telephone: searchRegex }
+            ]
+        });
+
+        res.json(clients);
+
+
+    } catch {
+        res.status(500).json({ error: 'Erreur serveur' });
+    }
+};
 
 module.exports.deletepost = async (req, res) => {
     try {
@@ -312,11 +334,11 @@ module.exports.records_de_jours = async (req, res) => {
         }
 
         // 🟢 Conversion au bon format : YYYY-MM-DD
-         // Convertir le format "DD/MM/YYYY" en "YYYY-MM-DD"
-         const [jourD, moisD, anneeD] = date_debut.split('/');
-         const [jourF, moisF, anneeF] = date_fin.split('/');
-         const startDate = new Date(`${anneeD}-${moisD}-${jourD}T00:00:00.000Z`);
-         const endDate = new Date(`${anneeF}-${moisF}-${jourF}T23:59:59.999Z`);
+        // Convertir le format "DD/MM/YYYY" en "YYYY-MM-DD"
+        const [jourD, moisD, anneeD] = date_debut.split('/');
+        const [jourF, moisF, anneeF] = date_fin.split('/');
+        const startDate = new Date(`${anneeD}-${moisD}-${jourD}T00:00:00.000Z`);
+        const endDate = new Date(`${anneeF}-${moisF}-${jourF}T23:59:59.999Z`);
 
 
         // Vérification si les dates sont valides

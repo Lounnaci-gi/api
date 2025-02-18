@@ -120,7 +120,7 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
     const adresseCorrespondante = getValue('adresseCorrespondante');
     const communeCorrespondante = getValue('communeCorrespondante');
     const code_postale = getValue('codePostal');
-    const numPicIdentite = getValue('numPicIdentite'); 
+    const numPicIdentite = getValue('numPicIdentite');
     const delivrePar = getValue('delivrePar');
     const dateDelivrance = getValue('dateDelivrance');
     const adresseBranchement = getValue('adresseBranchement');
@@ -132,12 +132,13 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
         return showAlert('Attention', 'Veuillez remplir tous les champs obligatoires.', 'warning');
     }
 
-    if (!validatePhoneNumber(telephone)) {
+    // Vérifier uniquement si le champ est rempli
+    if (telephone && !validatePhoneNumber(telephone)) {
         showAlert("Erreur", "Le numéro de téléphone doit contenir exactement 10 chiffres.", "error");
         return;
     }
 
-    if (!validatePostalCode(code_postale)) {
+    if (code_postale && !validatePostalCode(code_postale)) {
         showAlert("Erreur", "Le code postal doit contenir exactement 5 chiffres.", "error");
         return;
     }
@@ -167,7 +168,7 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
         Num_pic_identite: {
             numero: numPicIdentite,
             delivre_par: delivrePar,
-            date_delivrance: dateDelivrance || null 
+            date_delivrance: dateDelivrance || null
         },
         Adresse_branchement: adresseBranchement,
         commune_branchement: communeBranchement,

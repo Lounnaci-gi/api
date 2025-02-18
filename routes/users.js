@@ -2,7 +2,7 @@ const express = require("express");
 const routes = express.Router();
 const { body, validationResult } = require("express-validator");
 const { setPosts, editpost, getposts, get_with_Id_dossier, deletepost, newuser, getuser, recupass, last_id_dossier, search_rs,
-    records_de_jours } = require("../controller/datacontroller");
+    records_de_jours, recherche_multiple } = require("../controller/datacontroller");
 
 
 // Définir les routes spécifiques AVANT les routes dynamiques
@@ -31,5 +31,6 @@ routes.get("/", getposts);
 routes.get("/:id", get_with_Id_dossier); // Route dynamique pour récupérer un client par ID
 routes.delete("/:id", deletepost);
 routes.put("/:p", editpost);
+routes.get("/", recherche_multiple);
 
 module.exports = routes;
