@@ -512,3 +512,28 @@ function fillClientForm(client) {
     document.querySelector('.footer').style.marginTop = '0';
     document.querySelector('.table-container').style.display = 'none';
 }
+
+async function searchClient() {
+    const search = document.getElementById('searchClient').value;
+    const ttable = document.querySelector(".liste-clients");
+    var element = document.querySelector('.table-container');
+
+    if (search.length < 2) {
+        // element.style.display = 'none';
+        // document.getElementById('nbr_dossier').textContent = '';
+        return;
+    }
+    try {
+        const response = await fetch(`http://localhost:3000/users/recherche_multiple?q=${encodeURIComponent(search)}`, { method: 'GET' });
+        if (!response.ok) {
+            throw new Error(`Erreur HTTP: ${response.status}`);
+        }
+
+        const data = await response.json();
+        renderClientsTable(data);
+    } catch (error) {
+        console.error("Erreur lors de la récupération des raisons sociales :", error);
+        // Afficher un message d'erreur à l'utilisateur
+        ttable.innerHTML = '<tr><td colspan="6" style="text-align:center; color: red;">Erreur lors de la récupération des données</td></tr>';
+    }
+}

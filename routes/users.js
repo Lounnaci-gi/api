@@ -27,10 +27,10 @@ routes.post("/getuser", getuser); // Route spécifique pour récupérer tous les
 
 
 // Les routes dynamiques doivent venir après
+routes.get("/recherche_multiple", recherche_multiple);
 routes.get("/", getposts);
 routes.get("/:id", get_with_Id_dossier); // Route dynamique pour récupérer un client par ID
 routes.delete("/:id", deletepost);
 routes.put("/:p", editpost);
-routes.get("/", recherche_multiple);
 
 module.exports = routes;

@@ -115,25 +115,31 @@ module.exports.get_with_Id_dossier = async (req, res) => {
 
 module.exports.recherche_multiple = async (req, res) => {
     try {
-        const query = req.query.q;
+        const query = req.query.q?.trim(); // Suppression des espaces inutiles
+
         if (!query) {
             return res.status(400).json({ error: 'Aucun critère de recherche fourni.' });
         }
-        // Création du filtre de recherche
-        const searchRegex = new RegExp(query, 'i'); // 'i' = insensible à la casse
+
+        // Création du filtre de recherche insensible à la casse
+        const searchRegex = new RegExp(query, 'i');
+
         const clients = await Client.find({
             $or: [
-                { Id_Dossier: searchRegex },
-                { raison_sociale: searchRegex },
-                { telephone: searchRegex }
+                { Id_Dossier: { $regex: searchRegex } },  // Corrige pour s'assurer que c'est un regex
+                { raison_sociale: { $regex: searchRegex } },
+                { telephone: { $regex: searchRegex } }
             ]
         });
 
+        if (clients.length === 0) {
+            return res.json([]); // Renvoie un tableau vide si aucun client trouvé
+        }
+
         res.json(clients);
-
-
-    } catch {
-        res.status(500).json({ error: 'Erreur serveur' });
+    } catch (err) {
+        console.error("Erreur serveur:", err);
+        res.status(500).json({ error: 'Erreur serveur, veuillez réessayer plus tard.' });
     }
 };
 
