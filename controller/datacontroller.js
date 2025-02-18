@@ -47,7 +47,6 @@ module.exports.setPosts = async (req, res) => {
 module.exports.editpost = async (req, res) => {
     try {
         const idDossier = decodeURIComponent(req.params.p); // Décoder l'URL
-        console.log("🔎 ID Dossier reçu :", idDossier);
 
         // Vérifier si l'ID est valide
         if (!idDossier) {

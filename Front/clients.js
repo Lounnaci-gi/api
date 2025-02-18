@@ -81,7 +81,7 @@ function renderClientsTable(data) {
 // 👉 Afficher le formulaire lors du clic sur "Ajouter un client"
 document.getElementById('AjouterClient').addEventListener('click', async () => {
     document.querySelector('.client-section').style.display = 'flex';
-    const ttable = document.getElementsByClassName("liste-clients")[0];
+    const ttable = document.querySelector(".liste-clients");
     document.querySelector('.footer').style.marginTop = 'auto';
     ttable.innerHTML = '';
     // Cacher le tableau
@@ -235,7 +235,7 @@ function debounce(func, delay) {
 // Fonction de recherche
 async function searchRaisonSociale() {
     const inputValue = document.getElementById('raisonSociale').value.trim();
-    const ttable = document.getElementsByClassName("liste-clients")[0];
+    const ttable = document.querySelector(".liste-clients");
     var element = document.querySelector('.table-container');
     // Si l'utilisateur a tapé moins de 2 caractères, on ne fait pas de requête
     if (inputValue.length < 2) {
@@ -513,27 +513,43 @@ function fillClientForm(client) {
     document.querySelector('.table-container').style.display = 'none';
 }
 
+//Recherche--------------------------------------
+let searchTimeout;
+
 async function searchClient() {
-    const search = document.getElementById('searchClient').value;
-    const ttable = document.querySelector(".liste-clients");
-    var element = document.querySelector('.table-container');
+    clearTimeout(searchTimeout);
 
-    if (search.length < 2) {
-        // element.style.display = 'none';
-        // document.getElementById('nbr_dossier').textContent = '';
-        return;
-    }
-    try {
-        const response = await fetch(`http://localhost:3000/users/recherche_multiple?q=${encodeURIComponent(search)}`, { method: 'GET' });
-        if (!response.ok) {
-            throw new Error(`Erreur HTTP: ${response.status}`);
+    searchTimeout = setTimeout(async () => {
+        const search = document.getElementById('searchClient').value.trim();
+        const ttable = document.querySelector(".liste-clients");
+        const element = document.querySelector('.table-container');
+
+        try {
+            let response;
+            if (search.length > 1) {
+                response = await fetch(`http://localhost:3000/users/recherche_multiple?q=${encodeURIComponent(search)}`, { method: 'GET' });
+            } else {
+                response = await fetch("http://localhost:3000/users", { method: 'GET' });
+            }
+
+            if (!response.ok) {
+                throw new Error(`Erreur HTTP: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            if (data.length === 0) {
+                ttable.innerHTML = '<tr><td colspan="6" style="text-align:center; color: gray;">Aucun client trouvé</td></tr>';
+                element.style.display = 'block';
+                return;
+            }
+
+            renderClientsTable(data);
+            element.style.display = 'block';
+
+        } catch (err) {
+            console.error("Erreur lors de la récupération des clients :", err);
+            ttable.innerHTML = '<tr><td colspan="6" style="text-align:center; color: red;">Erreur lors de la récupération des données</td></tr>';
         }
-
-        const data = await response.json();
-        renderClientsTable(data);
-    } catch (error) {
-        console.error("Erreur lors de la récupération des raisons sociales :", error);
-        // Afficher un message d'erreur à l'utilisateur
-        ttable.innerHTML = '<tr><td colspan="6" style="text-align:center; color: red;">Erreur lors de la récupération des données</td></tr>';
-    }
+    }, 300); // Délai de 300ms pour éviter trop de requêtes
 }
