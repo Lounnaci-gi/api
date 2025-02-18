@@ -120,9 +120,9 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
     const adresseCorrespondante = getValue('adresseCorrespondante');
     const communeCorrespondante = getValue('communeCorrespondante');
     const code_postale = getValue('codePostal');
-    const numPicIdentite = getValue('numPicIdentite'); // Ancien champ pour compatibilité
-    const delivrePar = getValue('delivrePar'); // Nouveau champ
-    const dateDelivrance = getValue('dateDelivrance'); // Nouveau champ
+    const numPicIdentite = getValue('numPicIdentite'); 
+    const delivrePar = getValue('delivrePar');
+    const dateDelivrance = getValue('dateDelivrance');
     const adresseBranchement = getValue('adresseBranchement');
     const communeBranchement = getValue('CommuneBranchement');
     const email = getValue('email');
@@ -141,6 +141,7 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
         showAlert("Erreur", "Le code postal doit contenir exactement 5 chiffres.", "error");
         return;
     }
+
     // 👉 Affichage de la boîte de confirmation avant soumission
     const confirmation = await Swal.fire({
         title: 'Confirmation',
@@ -151,7 +152,6 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
         cancelButtonText: 'Annuler'
     });
 
-    // Si l'utilisateur annule, on stoppe l'envoi
     if (!confirmation.isConfirmed) {
         return;
     }
@@ -165,9 +165,9 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
         commune_correspondante: communeCorrespondante,
         Code_postale: code_postale,
         Num_pic_identite: {
-            numero: numPicIdentite, // Récupère le numéro d'identité
-            delivre_par: delivrePar, // Récupère l'autorité de délivrance
-            date_delivrance: dateDelivrance || null // Convertir la date si besoin
+            numero: numPicIdentite,
+            delivre_par: delivrePar,
+            date_delivrance: dateDelivrance || null 
         },
         Adresse_branchement: adresseBranchement,
         commune_branchement: communeBranchement,
@@ -176,23 +176,46 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
     };
 
     try {
-        const response = await fetch('http://localhost:3000/users/posts', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(datas),
-        });
+        // Vérifier si l'ID existe déjà
+        const checkResponse = await fetch(`http://localhost:3000/users/${encodeURIComponent(id_dossier)}`, { method: 'GET' });
 
-        if (!response.ok) {
-            throw new Error(`Erreur HTTP: ${response.status}`);
-        }
-        showAlert('Succès !', 'Données envoyées avec succès.', 'success')
-            .then(() => {
-                document.getElementById('addClientForm').reset(); // Réinitialisation du formulaire
-                document.querySelector('.client-section').style.display = 'none'; // Masquer le formulaire
-                document.querySelector('.footer').style.marginTop = '50%'; // Ajuster le footer
+        if (checkResponse.ok) {
+            // L'ID existe, on met à jour
+            const updateResponse = await fetch(`http://localhost:3000/users/${encodeURIComponent(id_dossier)}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(datas),
             });
 
+            if (!updateResponse.ok) {
+                throw new Error(`Échec de la mise à jour: ${updateResponse.status}`);
+            }
+
+            await showAlert('Succès !', 'Dossier mis à jour avec succès.', 'success');
+        } else if (checkResponse.status === 404) {
+            // L'ID n'existe pas, on crée un nouveau dossier
+            const createResponse = await fetch('http://localhost:3000/users/posts', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(datas),
+            });
+
+            if (!createResponse.ok) {
+                throw new Error(`Échec de la création: ${createResponse.status}`);
+            }
+
+            await showAlert('Succès !', 'Dossier créé avec succès.', 'success');
+        } else {
+            throw new Error(`Erreur inattendue: ${checkResponse.status}`);
+        }
+
+        // Réinitialiser le formulaire après succès
+        document.getElementById('addClientForm').reset();
+        document.querySelector('.client-section').style.display = 'none';
+        document.querySelector('.footer').style.marginTop = '50%';
+
     } catch (error) {
+        console.error('Erreur :', error);
         showAlert('Erreur', `Une erreur s'est produite : ${error.message}`, 'error');
     }
 });
@@ -424,7 +447,7 @@ document.addEventListener('click', async (event) => {
             }
 
             const client = await response.json();
-            showAlert('success','Dossier trouver avec success','success');
+            showAlert('success', 'Dossier trouver avec success', 'success');
 
         } catch (err) {
             console.error("Erreur lors de la récupération du dossier :", err);
@@ -453,7 +476,6 @@ document.addEventListener('click', async (event) => {
             }
 
             const client = await response.json();
-            console.log(client);
 
             // **Préremplir le formulaire avec les données récupérées**
             fillClientForm(client);

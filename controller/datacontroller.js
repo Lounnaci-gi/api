@@ -46,22 +46,41 @@ module.exports.setPosts = async (req, res) => {
 
 module.exports.editpost = async (req, res) => {
     try {
-        const id = await Client.findById(req.params.p);
-        // Vérifier si `req.params` est vide
-        if (!id) {
-            return res.status(400).send("L'Id n'existe pas.");
+        const idDossier = decodeURIComponent(req.params.p); // Décoder l'URL
+        console.log("🔎 ID Dossier reçu :", idDossier);
+
+        // Vérifier si l'ID est valide
+        if (!idDossier) {
+            return res.status(400).send("❌ L'ID est requis.");
         }
-        const updatepost = await Client.findByIdAndUpdate(
-            id,
+
+        // Vérifier si l'ID existe dans la base de données
+        const existingClient = await Client.findOne({ Id_Dossier: idDossier });
+        if (!existingClient) {
+            console.log("⚠️ Client introuvable :", idDossier);
+            return res.status(404).send("❌ L'ID spécifié n'existe pas.");
+        }
+
+        // Mettre à jour le document
+        const updatepost = await Client.findOneAndUpdate(
+            { Id_Dossier: idDossier },
             req.body,
             { new: true }
-        )
-        res.status(200).send("mise a jour effectuer success.");
-    }
-    catch (err) {
+        );
+
+        if (!updatepost) {
+            console.log("🚨 Mise à jour impossible :", idDossier);
+            return res.status(500).send("❌ Échec de la mise à jour.");
+        }
+
+        console.log("✅ Mise à jour réussie :", updatepost);
+        res.status(200).send("✅ Mise à jour effectuée avec succès.");
+    } catch (err) {
+        console.error("❌ Erreur lors de la mise à jour :", err);
         res.status(500).send("Une erreur est survenue.");
     }
-}
+};
+
 
 module.exports.getposts = async (req, res) => {
     try {
