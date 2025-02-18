@@ -11,9 +11,19 @@
     <meta name="keywords" content="gestion client, ajouter client, modifier client, liste clients">
     <!-- Dans l'en-tête de votre fichier HTML -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const token = localStorage.getItem("token");
+
+            if (!token) {
+                window.location.href = "index.html"; // 🔄 Rediriger vers la page de connexion si pas de token
+            }
+        });
+    </script>
 </head>
 
 <body>
+
     <header class="header">
         <a href="#" class="logo">Logo</a>
         <nav class="navbar">
@@ -144,7 +154,7 @@
     </footer>
 
     <!-- <script src="main.js"></script> -->
-    <script  src="clients.js" defer></script>
+    <script src="clients.js" defer></script>
 
 </body>
 

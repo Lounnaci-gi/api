@@ -48,11 +48,11 @@ document.getElementById('submit').addEventListener('click', async (event) => {
         showAlert('Erreur', 'Veuillez remplir tous les champs.', 'warning');
         return;
     }
-    
-      const datas = { nomUtilisateur: user, motDePasse: password };
+
+    const datas = { nomUtilisateur: user, motDePasse: password };
 
     try {
-        const response = await fetch('http://localhost:3000/users/getuser', {
+        const response = await fetch('http://localhost:3000/users/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(datas),
@@ -64,13 +64,22 @@ document.getElementById('submit').addEventListener('click', async (event) => {
             throw new Error(result.message || "Erreur lors de la connexion.");
         }
 
+        if (!result.token) {
+            throw new Error("Token non reçu, problème d'authentification.");
+        }
+
+        
         // Vérification si les données retournées sont valides
         if (!result.data || !result.data.nomUtilisateur) {
             throw new Error("Données utilisateur invalides.");
         }
-
+        
+        // 🔥 Stocker le token et les informations utilisateur dans `localStorage`
+        localStorage.setItem('token', result.token);
+        localStorage.setItem('user', JSON.stringify(result.data));
+        
         // Afficher le nom d'utilisateur sans guillemets
-        document.getElementsByClassName('logo')[0].innerText = result.data.nomUtilisateur;
+        document.querySelector('.logo').innerText = result.data.nomUtilisateur;
         closeLogin();
 
         // Réinitialiser les champs du formulaire

@@ -5,6 +5,7 @@ const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const dotenv = require("dotenv").config();
 const moment = require("moment");
+const jwt = require("jsonwebtoken");
 
 module.exports.setPosts = async (req, res) => {
     try {
@@ -129,7 +130,7 @@ module.exports.recherche_multiple = async (req, res) => {
                 { raison_sociale: { $regex: searchRegex } },
                 { telephone: { $regex: searchRegex } }
             ]
-        });
+        }).limit(20);// 🔥 Limiter à 20 résultats max
 
         if (clients.length === 0) {
             return res.json([]); // Renvoie un tableau vide si aucun client trouvé
@@ -202,12 +203,11 @@ module.exports.newuser = async (req, res) => {
     }
 };
 
-module.exports.getuser = async (req, res) => {
+module.exports.login = async (req, res) => {
     try {
         const { nomUtilisateur, motDePasse } = req.body;
         // Trouver l'utilisateur par nom d'utilisateur
         const user = await User.findOne({ nomUtilisateur });
-
 
         // Vérifier si l'utilisateur existe
         if (!user) {
@@ -216,19 +216,24 @@ module.exports.getuser = async (req, res) => {
 
         // Comparer le mot de passe fourni avec le mot de passe hashé
         const isPasswordValid = await bcrypt.compare(motDePasse, user.motDePasse);
-
         if (!isPasswordValid) {
             return res.status(401).json({ success: false, message: "Nom d'utilisateur ou mot de passe incorrect." });
         }
 
-        // Renvoyer les données de l'utilisateur (sans le mot de passe)
-        const userData = {
-            nomUtilisateur: user.nomUtilisateur,
-            email: user.email,
-            nomComplet: user.nomComplet,
-        };
+        // ✅ Générer un Token JWT
+        const token = jwt.sign(
+            { userId: user._id, nomUtilisateur: user.nomUtilisateur },
+            process.env.JWT_SECRET || "mon_secret",  // 🔥 Vérifie que `JWT_SECRET` est défini dans `.env`
+            { expiresIn: "1h" }  // Expiration du token en 1 heure
+        );
 
-        res.status(200).json({ success: true, data: userData });
+        // ✅ Renvoyer le token et les infos utilisateur
+        res.status(200).json({ success: true, token, data: { 
+            nomUtilisateur: user.nomUtilisateur, 
+            email: user.email, 
+            nomComplet: user.nomComplet 
+        }});
+
     } catch (err) {
         console.error("Erreur de Connexion :", err);
         res.status(500).json({ success: false, message: "Une erreur est survenue lors de la connexion." });
