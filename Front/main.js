@@ -79,8 +79,12 @@ document.getElementById('submit').addEventListener('click', async (event) => {
         localStorage.setItem('user', JSON.stringify(result.data));
         
         // Afficher le nom d'utilisateur sans guillemets
-        document.querySelector('.logo').innerText = result.data.nomUtilisateur;
-        closeLogin();
+        showAlert("Succès", "Connexion réussie !", "success").then(() => {
+            document.querySelector('.logo').innerText = result.data.nomUtilisateur;
+            updateLoginButton();  // 🔥 Mettre à jour le bouton immédiatement
+            closeLogin();  // 🔥 Fermer la boîte de connexion
+        });
+        
 
         // Réinitialiser les champs du formulaire
         document.getElementById('connexion').reset();
@@ -198,3 +202,41 @@ document.addEventListener("DOMContentLoaded", () => {
         showAlert("Connexion rétablie", "Vous êtes de nouveau en ligne.", "success");
     });
 });
+
+
+//-------------------
+function openLogin() {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+        // 🔄 Si déjà connecté, alors on déconnecte
+        handleLogout();
+    } else {
+        // 🔑 Sinon, ouvrir la boîte de connexion
+        loginModal.style.display = "block";
+        showLoginForm(); // Assurer que le formulaire de connexion est affiché
+    }
+}
+
+function handleLogout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    showAlert("Déconnexion", "Vous avez été déconnecté.", "info").then(() => {
+        updateLoginButton();
+        window.location.reload();
+    });
+}
+
+function updateLoginButton() {
+    const loginButton = document.getElementById("loginButton");
+    const token = localStorage.getItem("token");
+
+    if (token) {
+        loginButton.textContent = "Déconnexion";
+    } else {
+        loginButton.textContent = "Login";
+    }
+}
+
+// 🔄 Mettre à jour le bouton au chargement de la page
+document.addEventListener("DOMContentLoaded", updateLoginButton);
