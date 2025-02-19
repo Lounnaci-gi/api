@@ -80,7 +80,6 @@ document.getElementById('submit').addEventListener('click', async (event) => {
         
         // Afficher le nom d'utilisateur sans guillemets
         showAlert("Succès", "Connexion réussie !", "success").then(() => {
-            document.querySelector('.logo').innerText = result.data.nomUtilisateur;
             updateLoginButton();  // 🔥 Mettre à jour le bouton immédiatement
             closeLogin();  // 🔥 Fermer la boîte de connexion
         });
@@ -222,21 +221,34 @@ function handleLogout() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     showAlert("Déconnexion", "Vous avez été déconnecté.", "info").then(() => {
-        updateLoginButton();
-        window.location.reload();
+        updateLoginButton(); // 🔄 Mettre à jour immédiatement
+        window.location.reload(); // 🔄 Recharge la page pour appliquer les changements
     });
 }
 
+
 function updateLoginButton() {
     const loginButton = document.getElementById("loginButton");
+    const logo = document.querySelector(".logo"); // 🔥 Sélection du logo
     const token = localStorage.getItem("token");
+    const user = JSON.parse(localStorage.getItem("user")); // 🔥 Récupérer l'utilisateur stocké
 
-    if (token) {
+    if (!loginButton || !logo) return; // 🔥 Vérifie que les éléments existent
+
+    if (token && user) {
         loginButton.textContent = "Déconnexion";
+        loginButton.onclick = handleLogout;
+
+        // 🔥 Afficher le nom d'utilisateur dans le logo
+        logo.textContent = user.nomUtilisateur || "Utilisateur";
     } else {
         loginButton.textContent = "Login";
+        loginButton.onclick = openLogin;
+
+        // 🔄 Remettre le logo à son état initial
+        logo.textContent = "Logo";
     }
 }
 
-// 🔄 Mettre à jour le bouton au chargement de la page
+// 🔄 Mettre à jour le bouton et le logo au chargement de la page
 document.addEventListener("DOMContentLoaded", updateLoginButton);
