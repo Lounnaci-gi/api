@@ -12,20 +12,25 @@ const rateLimit = require("express-rate-limit");
 
 const loginLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 50, // Maximum 5 tentatives par IP
+    max: 5, // Maximum 5 tentatives par IP
     message: { success: false, message: "Trop de tentatives de connexion. Veuillez réessayer plus tard." },
 });
 
-app.use("/users/getuser", loginLimiter);
+app.use("/users/login", loginLimiter);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'Front')));
 app.use("/users", users);
 
-app._router.stack.forEach((r) => {
-    if (r.route && r.route.path) {
-        console.log(`Route enregistrée: ${r.route.path}`);
+console.log("🔍 Vérification de .env...");
+console.log("🔹 JWT_SECRET :", process.env.JWT_SECRET || "❌ NON DÉFINI !");
+
+
+app._router.stack.forEach((middleware) => {
+    if (middleware.route) {
+        const methods = Object.keys(middleware.route.methods).join(", ").toUpperCase();
+        console.log(`✅ Route enregistrée: [${methods}] ${middleware.route.path}`);
     }
 });
 
