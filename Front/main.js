@@ -49,6 +49,10 @@ document.getElementById('submit').addEventListener('click', async (event) => {
         return;
     }
 
+    if (!navigator.onLine) {
+     return  showAlert("Problème de connexion", "Vous êtes hors ligne.", "error");
+    }
+
     const datas = { nomUtilisateur: user, motDePasse: password };
 
     try {
