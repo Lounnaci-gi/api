@@ -157,7 +157,7 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
         return;
     }
 
-    const headers = { 
+    const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
     };
@@ -186,7 +186,7 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
 
         // 📌 Si c'est une création, on attend la sauvegarde avant de faire un GET
         if (method === 'POST') {
-            let retries = 3; 
+            let retries = 3;
             let dossierExiste = false;
             while (retries > 0) {
                 console.log(`🕵️‍♂️ Vérification ${4 - retries}/3 du dossier : ${datas.Id_Dossier}`);
@@ -518,7 +518,7 @@ document.addEventListener('click', async (event) => {
             }
             const response = await fetch(`http://localhost:3000/users/${encodeURIComponent(idDossier)}`, {
                 method: 'GET',
-                headers: {'Authorization': `Bearer ${token}`}
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (!response.ok) {
@@ -619,6 +619,7 @@ async function searchClient() {
 
 
 //Imprimer ----------------------
+
 document.addEventListener('click', async (event) => {
     if (event.target.classList.contains('bxs-printer')) {
         const idDossier = event.target.closest('tr')?.children[1]?.textContent.trim();
@@ -634,11 +635,11 @@ document.addEventListener('click', async (event) => {
                 showAlert("Erreur", "Vous devez être connecté.", "error");
                 return;
             }
-            
+
             // 📌 Récupérer les données du dossier depuis l'API
             const response = await fetch(`http://localhost:3000/users/${encodeURIComponent(idDossier)}`, {
                 method: 'GET',
-                headers: {'Authorization': `Bearer ${token}`}
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (!response.ok) {
@@ -654,7 +655,7 @@ document.addEventListener('click', async (event) => {
         }
     }
 });
-
+/*
 function printDossier(client) {
     const printWindow = window.open('', '', 'width=800,height=600');
 
@@ -674,6 +675,7 @@ function printDossier(client) {
         </head>
         <body>
             <h2>Détails du dossier</h2>
+             <img src="./img/ade.ico" alt="" style="width :50px; height:50px">
             <table>
                 <tr><th>ID Dossier</th><td>${client.Id_Dossier}</td></tr>
                 <tr><th>Raison Sociale</th><td>${client.raison_sociale}</td></tr>
@@ -692,4 +694,32 @@ function printDossier(client) {
     printWindow.document.open();
     printWindow.document.write(printContent);
     printWindow.document.close();
+}
+*/
+function printDossier(client) {
+    // Ouvrir le fichier recepisse.html dans une nouvelle fenêtre
+    fetch('recepisse.html')
+        .then(response => response.text())  // Lire le contenu du fichier HTML
+        .then(html => {
+            // Ouvrir une nouvelle fenêtre pour l'impression
+            const printWindow = window.open('', '', 'width=800,height=600');
+
+            // Remplacer les placeholders dans le HTML avec les valeurs du client
+            html = html.replace('[Insérez la date]', new Date(client.createdAt).toLocaleDateString('fr-FR'))
+                       .replace('[Insérez le nom du déposant]', client.raison_sociale)
+                       .replace('[Insérez le type de dossier]', client.type_client)
+                       .replace('[Brève description du contenu du dossier]', client.Adresse_correspondante)
+                       .replace('[Numéro ou code de référence]', client.Id_Dossier);
+
+            // Écrire le contenu dans la fenêtre et imprimer
+            printWindow.document.open();
+            printWindow.document.write(html);
+            printWindow.document.close();
+
+            // Attendre que le document soit chargé avant d'imprimer
+            printWindow.onload = function () {
+                printWindow.print();
+            };
+        })
+        .catch(error => console.error('Erreur lors du chargement de recepisse.html :', error));
 }
