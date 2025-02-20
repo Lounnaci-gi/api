@@ -68,22 +68,22 @@ document.getElementById('submit').addEventListener('click', async (event) => {
             throw new Error("Token non reçu, problème d'authentification.");
         }
 
-        
+
         // Vérification si les données retournées sont valides
         if (!result.data || !result.data.nomUtilisateur) {
             throw new Error("Données utilisateur invalides.");
         }
-        
+
         // 🔥 Stocker le token et les informations utilisateur dans `localStorage`
         localStorage.setItem('token', result.token);
         localStorage.setItem('user', JSON.stringify(result.data));
-        
+
         // Afficher le nom d'utilisateur sans guillemets
         showAlert("Succès", "Connexion réussie !", "success").then(() => {
             updateLoginButton();  // 🔥 Mettre à jour le bouton immédiatement
             closeLogin();  // 🔥 Fermer la boîte de connexion
         });
-        
+
 
         // Réinitialiser les champs du formulaire
         document.getElementById('connexion').reset();
@@ -252,3 +252,6 @@ function updateLoginButton() {
 
 // 🔄 Mettre à jour le bouton et le logo au chargement de la page
 document.addEventListener("DOMContentLoaded", updateLoginButton);
+
+
+

@@ -224,7 +224,7 @@ module.exports.login = async (req, res) => {
         const token = jwt.sign(
             { userId: user._id, nomUtilisateur: user.nomUtilisateur },
             process.env.JWT_SECRET || "aa56fedd9bec83dc879255c5454e7656e7b148ff71b3023f09790fa2e59450a8c80491b2495e596e28c760409d7497719e103efbeffeae18744d871a5f4c56f2",  // 🔥 Vérifie que `JWT_SECRET` est défini dans `.env`
-            { expiresIn: "1h" }  // Expiration du token en 1 heure
+            { expiresIn: "7d" }  // Expiration du token en 1 heure
         );
 
         // ✅ Renvoyer le token et les infos utilisateur

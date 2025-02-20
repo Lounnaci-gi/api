@@ -23,9 +23,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'Front')));
 app.use("/users", users);
 
-console.log("🔍 Vérification de .env...");
-console.log("🔹 JWT_SECRET :", process.env.JWT_SECRET || "❌ NON DÉFINI !");
-
 
 app._router.stack.forEach((middleware) => {
     if (middleware.route) {

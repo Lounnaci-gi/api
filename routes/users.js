@@ -6,22 +6,24 @@ const { setPosts, editpost, getposts, get_with_Id_dossier, deletepost, newuser, 
     records_de_jours, recherche_multiple } = require("../controller/datacontroller");
 
 //authentification -----------------------
-    const authenticate = (req, res, next) => {
-        const token = req.headers.authorization?.split(" ")[1];
-    
-        if (!token) {
-            return res.status(401).json({ message: "Accès refusé. Token manquant." });
-        }
-    
-        try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET || "mon_secret");
-            req.user = decoded;
-            next();
-        } catch (err) {
-            res.status(401).json({ message: "Token invalide." });
-        }
-    };
-    
+const authenticate = (req, res, next) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res.status(401).json({ message: "Accès refusé. Token manquant ou invalide." });
+    }
+
+    const token = authHeader.split(" ")[1]; // Récupérer uniquement le token
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = decoded;
+        next();
+    } catch (err) {
+        console.error("❌ Erreur de vérification du token :", err);
+        res.status(401).json({ message: "Token invalide." });
+    }
+};
+
 
 // Définir les routes spécifiques AVANT les routes dynamiques
 routes.post("/reset-password", recupass);

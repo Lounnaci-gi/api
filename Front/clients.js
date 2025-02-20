@@ -27,12 +27,13 @@ function showAlert(title, text, icon) {
     });
 }
 
-function validatePhoneNumber(phone) {
-    return /^\d{10}$/.test(phone);
-}
 
-function validatePostalCode(code) {
-    return /^\d{5}$/.test(code);
+function validateField(value, regex, message) {
+    if (value && !regex.test(value)) {
+        showAlert("Erreur", message, "error");
+        return false;
+    }
+    return true;
 }
 
 //-------------------
@@ -98,7 +99,18 @@ document.getElementById('AjouterClient').addEventListener('click', async () => {
         }
     });
     try {
-        const response = await fetch('http://localhost:3000/users/last_id_dossier');
+        const token = localStorage.getItem("token"); // 🔥 Récupérer le token
+        if (!token) {
+            showAlert("Erreur", "Vous devez être connecté.", "error");
+            return;
+        }
+
+        const response = await fetch('http://localhost:3000/users/last_id_dossier', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}` // ✅ Ajouter le token
+            }
+        });
         const data = await response.json();
         if (data) {
             document.getElementById('idDossier').value = data.idDossier;
@@ -111,106 +123,96 @@ document.getElementById('AjouterClient').addEventListener('click', async () => {
 
 document.getElementById('addClientForm').addEventListener('submit', async (event) => {
     event.preventDefault(); // Empêche le rechargement de la page
+
     const getValue = (id) => document.getElementById(id).value.trim();
 
-    const id_dossier = getValue('idDossier');
-    const civilite = getValue('civilite');
-    const raisonSociale = getValue('raisonSociale');
-    const typeClient = getValue('typeClient');
-    const adresseCorrespondante = getValue('adresseCorrespondante');
-    const communeCorrespondante = getValue('communeCorrespondante');
-    const code_postale = getValue('codePostal');
-    const numPicIdentite = getValue('numPicIdentite');
-    const delivrePar = getValue('delivrePar');
-    const dateDelivrance = getValue('dateDelivrance');
-    const adresseBranchement = getValue('adresseBranchement');
-    const communeBranchement = getValue('CommuneBranchement');
-    const email = getValue('email');
-    const telephone = getValue('telephone');
+    // 📌 Récupération des valeurs du formulaire
+    const datas = {
+        Id_Dossier: getValue('idDossier'),
+        Civilite: getValue('civilite'),
+        raison_sociale: getValue('raisonSociale'),
+        type_client: getValue('typeClient'),
+        Adresse_correspondante: getValue('adresseCorrespondante'),
+        commune_correspondante: getValue('communeCorrespondante'),
+        Code_postale: getValue('codePostal'),
+        Num_pic_identite: {
+            numero: getValue('numPicIdentite'),
+            delivre_par: getValue('delivrePar'),
+            date_delivrance: getValue('dateDelivrance') || null
+        },
+        Adresse_branchement: getValue('adresseBranchement'),
+        commune_branchement: getValue('CommuneBranchement'),
+        email: getValue('email'),
+        telephone: getValue('telephone')
+    };
 
-    if (!id_dossier || !raisonSociale || !typeClient || !adresseBranchement || !adresseCorrespondante) {
+    // 📌 Vérification des champs obligatoires
+    if (!datas.Id_Dossier || !datas.raison_sociale || !datas.type_client || !datas.Adresse_branchement || !datas.Adresse_correspondante) {
         return showAlert('Attention', 'Veuillez remplir tous les champs obligatoires.', 'warning');
     }
 
-    // Vérifier uniquement si le champ est rempli
-    if (telephone && !validatePhoneNumber(telephone)) {
-        showAlert("Erreur", "Le numéro de téléphone doit contenir exactement 10 chiffres.", "error");
+    const token = localStorage.getItem("token");
+    if (!token) {
+        showAlert("Erreur", "Vous devez être connecté.", "error");
         return;
     }
 
-    if (code_postale && !validatePostalCode(code_postale)) {
-        showAlert("Erreur", "Le code postal doit contenir exactement 5 chiffres.", "error");
-        return;
-    }
-
-    // 👉 Affichage de la boîte de confirmation avant soumission
-    const confirmation = await Swal.fire({
-        title: 'Confirmation',
-        text: 'Voulez-vous vraiment soumettre ces informations ?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Oui, envoyer',
-        cancelButtonText: 'Annuler'
-    });
-
-    if (!confirmation.isConfirmed) {
-        return;
-    }
-
-    const datas = {
-        Id_Dossier: id_dossier,
-        Civilite: civilite,
-        raison_sociale: raisonSociale,
-        type_client: typeClient,
-        Adresse_correspondante: adresseCorrespondante,
-        commune_correspondante: communeCorrespondante,
-        Code_postale: code_postale,
-        Num_pic_identite: {
-            numero: numPicIdentite,
-            delivre_par: delivrePar,
-            date_delivrance: dateDelivrance || null
-        },
-        Adresse_branchement: adresseBranchement,
-        commune_branchement: communeBranchement,
-        email: email,
-        telephone: telephone
+    const headers = { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
     };
 
     try {
-        // Vérifier si l'ID existe déjà
-        const checkResponse = await fetch(`http://localhost:3000/users/${encodeURIComponent(id_dossier)}`, { method: 'GET' });
+        // 📌 Vérifier si l'ID existe déjà
+        let checkResponse = await fetch(`http://localhost:3000/users/${encodeURIComponent(datas.Id_Dossier)}`, {
+            method: 'GET', headers
+        });
 
-        if (checkResponse.ok) {
-            // L'ID existe, on met à jour
-            const updateResponse = await fetch(`http://localhost:3000/users/${encodeURIComponent(id_dossier)}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(datas),
-            });
+        let method = checkResponse.ok ? 'PUT' : 'POST';
+        let url = checkResponse.ok ? `http://localhost:3000/users/${encodeURIComponent(datas.Id_Dossier)}` : 'http://localhost:3000/users/posts';
 
-            if (!updateResponse.ok) {
-                throw new Error(`Échec de la mise à jour: ${updateResponse.status}`);
-            }
+        console.log(`🔄 ${method === 'PUT' ? 'Mise à jour' : 'Création'} du dossier : ${datas.Id_Dossier}`);
 
-            await showAlert('Succès !', 'Dossier mis à jour avec succès.', 'success');
-        } else if (checkResponse.status === 404) {
-            // L'ID n'existe pas, on crée un nouveau dossier
-            const createResponse = await fetch('http://localhost:3000/users/posts', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(datas),
-            });
+        // 📌 Effectuer la requête (PUT ou POST selon l'existence du dossier)
+        const response = await fetch(url, {
+            method,
+            headers,
+            body: JSON.stringify(datas)
+        });
 
-            if (!createResponse.ok) {
-                throw new Error(`Échec de la création: ${createResponse.status}`);
-            }
-
-            await showAlert('Succès !', 'Dossier créé avec succès.', 'success');
-        } else {
-            throw new Error(`Erreur inattendue: ${checkResponse.status}`);
+        if (!response.ok) {
+            throw new Error(`Échec de l'opération: ${response.status}`);
         }
 
-        // Réinitialiser le formulaire après succès
+        // 📌 Si c'est une création, on attend la sauvegarde avant de faire un GET
+        if (method === 'POST') {
+            let retries = 3; 
+            let dossierExiste = false;
+            while (retries > 0) {
+                console.log(`🕵️‍♂️ Vérification ${4 - retries}/3 du dossier : ${datas.Id_Dossier}`);
+                await new Promise(resolve => setTimeout(resolve, 500)); // Pause de 1s
+
+                checkResponse = await fetch(`http://localhost:3000/users/${encodeURIComponent(datas.Id_Dossier)}`, {
+                    method: 'GET', headers
+                });
+
+                if (checkResponse.ok) {
+                    console.log(`✅ Dossier trouvé après tentative ${4 - retries}`);
+                    dossierExiste = true;
+                    break;
+                }
+                retries--;
+            }
+
+            if (!dossierExiste) {
+                console.error("❌ Le dossier n'a pas été trouvé après 3 tentatives !");
+                throw new Error(`Erreur après création : Impossible de vérifier l'existence du dossier.`);
+            }
+        }
+
+        await showAlert('Succès !', `Dossier ${method === 'PUT' ? 'mis à jour' : 'créé'} avec succès.`, 'success');
+
+        // 📌 Réinitialisation du formulaire après succès
         document.getElementById('addClientForm').reset();
         document.querySelector('.client-section').style.display = 'none';
         document.querySelector('.footer').style.marginTop = '50%';
@@ -220,6 +222,7 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
         showAlert('Erreur', `Une erreur s'est produite : ${error.message}`, 'error');
     }
 });
+
 
 // Fonction debounce
 function debounce(func, delay) {
@@ -245,7 +248,17 @@ async function searchRaisonSociale() {
     }
 
     try {
-        const response = await fetch(`http://localhost:3000/users/search_rs?q=${encodeURIComponent(inputValue)}`);
+        const token = localStorage.getItem("token"); // 🔥 Récupérer le token
+        if (!token) {
+            showAlert("Erreur", "Vous devez être connecté.", "error");
+            return;
+        }
+        const response = await fetch(`http://localhost:3000/users/search_rs?q=${encodeURIComponent(inputValue)}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}` // ✅ Ajouter le token
+            }
+        });
         if (!response.ok) {
             throw new Error(`Erreur HTTP: ${response.status}`);
         }
@@ -279,9 +292,19 @@ document.getElementById('liste-clients').addEventListener('click', async () => {
     });
 
     document.querySelector('.client-section').style.display = 'none';
+    const token = localStorage.getItem("token"); // 🔥 Récupérer le token
+    if (!token) {
+        showAlert("Erreur", "Vous devez être connecté.", "error");
+        return;
+    }
 
     try {
-        const response = await fetch("http://localhost:3000/users", { method: 'GET' });
+        const response = await fetch("http://localhost:3000/users", {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}` // ✅ Ajouter le token
+            }
+        });
         if (!response.ok) {
             throw new Error(`Erreur HTTP : ${response.status}`);
         }
@@ -391,10 +414,17 @@ async function enregistrements_dossiers_journaliers() {
     });
 
     try {
-
+        const token = localStorage.getItem("token"); // 🔥 Récupérer le token
+        if (!token) {
+            showAlert("Erreur", "Vous devez être connecté.", "error");
+            return;
+        }
         const response = await fetch(`http://localhost:3000/users/records_de_jours?date_debut=${date_debut}&date_fin=${date_fin}`, {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // ✅ Ajouter le token }
+            }
         });
         if (!response.ok) {
             showAlert('Erreur', 'Impossible de récupérer les clients.', 'error');
@@ -440,8 +470,19 @@ document.addEventListener('click', async (event) => {
             return;
         }
 
+        const token = localStorage.getItem("token"); // 🔥 Récupérer le token
+        if (!token) {
+            showAlert("Erreur", "Vous devez être connecté.", "error");
+            return;
+        }
+
         try {
-            const response = await fetch(`http://localhost:3000/users/${encodeURIComponent(idDossier)}`, { method: 'GET' });
+            const response = await fetch(`http://localhost:3000/users/${encodeURIComponent(idDossier)}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}` // ✅ Ajouter le token
+                }
+            });
 
             if (!response.ok) {
                 throw new Error(`Erreur HTTP ${response.status} : ${response.statusText}`);
@@ -470,7 +511,17 @@ document.addEventListener('click', async (event) => {
         }
 
         try {
-            const response = await fetch(`http://localhost:3000/users/${encodeURIComponent(idDossier)}`, { method: 'GET' });
+            const token = localStorage.getItem("token"); // 🔥 Récupérer le token
+            if (!token) {
+                showAlert("Erreur", "Vous devez être connecté.", "error");
+                return;
+            }
+            const response = await fetch(`http://localhost:3000/users/${encodeURIComponent(idDossier)}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}` // ✅ Ajouter le token
+                }
+            });
 
             if (!response.ok) {
                 throw new Error(`Erreur HTTP ${response.status} : ${response.statusText}`);
@@ -525,11 +576,25 @@ async function searchClient() {
         const element = document.querySelector('.table-container');
 
         try {
+            const token = localStorage.getItem("token"); // 🔥 Récupérer le token
+            if (!token) {
+                showAlert("Erreur", "Vous devez être connecté.", "error");
+                return;
+            }
+
             let response;
             if (search.length > 1) {
-                response = await fetch(`http://localhost:3000/users/recherche_multiple?q=${encodeURIComponent(search)}`, { method: 'GET' });
+                response = await fetch(`http://localhost:3000/users/recherche_multiple?q=${encodeURIComponent(search)}`, {
+                    method: 'GET', headers: {
+                        'Authorization': `Bearer ${token}` // ✅ Ajouter le token
+                    }
+                });
             } else {
-                response = await fetch("http://localhost:3000/users", { method: 'GET' });
+                response = await fetch("http://localhost:3000/users", {
+                    method: 'GET', headers: {
+                        'Authorization': `Bearer ${token}` // ✅ Ajouter le token
+                    }
+                });
             }
 
             if (!response.ok) {
