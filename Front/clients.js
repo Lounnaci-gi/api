@@ -683,47 +683,6 @@ document.addEventListener('click', async (event) => {
         }
     }
 });
-/*
-function printDossier(client) {
-    const printWindow = window.open('', '', 'width=800,height=600');
-
-    // 🖨️ Contenu du document d'impression
-    const printContent = `
-        <html>
-        <head>
-            <title>Impression du dossier</title>
-            <style>
-                body { font-family: Arial, sans-serif; padding: 20px; }
-                h2 { text-align: center; }
-                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-                table, th, td { border: 1px solid black; }
-                th, td { padding: 10px; text-align: left; }
-                .btn-print { display: block; text-align: center; margin-top: 20px; }
-            </style>
-        </head>
-        <body>
-            <h2>Détails du dossier</h2>
-             <img src="./img/ade.ico" alt="" style="width :50px; height:50px">
-            <table>
-                <tr><th>ID Dossier</th><td>${client.Id_Dossier}</td></tr>
-                <tr><th>Raison Sociale</th><td>${client.raison_sociale}</td></tr>
-                <tr><th>Adresse Correspondance</th><td>${client.Adresse_correspondante}</td></tr>
-                <tr><th>Téléphone</th><td>${client.telephone}</td></tr>
-                <tr><th>Nature</th><td>${client.type_client}</td></tr>
-                <tr><th>Date de Dépôt</th><td>${new Date(client.createdAt).toLocaleDateString('fr-FR')}</td></tr>
-            </table>
-            <div class="btn-print">
-                <button onclick="window.print();">Imprimer</button>
-            </div>
-        </body>
-        </html>
-    `;
-
-    printWindow.document.open();
-    printWindow.document.write(printContent);
-    printWindow.document.close();
-}
-*/
 function printDossier(client) {
     // Ouvrir le fichier recepisse.html dans une nouvelle fenêtre
     fetch('recepisse.html')
@@ -743,7 +702,8 @@ function printDossier(client) {
                    .replace('[Téléphone]', client.telephone || 'Non spécifié')
                    .replace('[Email]', client.email || 'Non spécifié')
                    .replace('[Numéro ou code de référence]', client.Id_Dossier || 'N/A')
-                   .replace('[date dépot]', new Date(client.createdAt).toLocaleDateString('fr-FR'));
+                   .replace('[date dépot]', new Date(client.createdAt).toLocaleDateString('fr-FR'))
+                   .replace('[Numéro ou code de référence]', client.Id_Dossier);
 
         printWindow.document.open();
         printWindow.document.write(html);

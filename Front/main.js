@@ -40,7 +40,6 @@ function closeLogin() {
 
 document.getElementById('submit').addEventListener('click', async (event) => {
     event.preventDefault(); // Empêche la soumission du formulaire
-
     const user = document.getElementById('user').value.trim();
     const password = document.getElementById('password').value.trim();
 
@@ -103,6 +102,7 @@ document.getElementById('submit').addEventListener('click', async (event) => {
 // Fonction inscription nouveau utilistaeur
 document.getElementById('inscrire').addEventListener('click', async function (event) {
     event.preventDefault(); // Empêcher l'envoi du formulaire par défaut
+    document.getElementById('inscrire').disabled =true;
     const nomComplet = document.querySelector("input[name='nomComplet']").value.trim();
     const nomUtilisateur = document.querySelector("input[name='nomUtilisateurs']").value.trim();
     const email = document.querySelector("input[name='email']").value.trim();
@@ -153,6 +153,7 @@ document.getElementById('inscrire').addEventListener('click', async function (ev
         showAlert("Erreur", `Une erreur s\'est produite lors de la récupération des données.`, "error");
     }
 });
+document.getElementById('inscrire').disabled =false;
 
 
 // Afficher le formulaire de récupération de mot de passe
@@ -279,3 +280,4 @@ document.onmousemove = resetTimer;
 document.onkeypress = resetTimer;
 document.onclick = resetTimer;
 document.onscroll = resetTimer;
+

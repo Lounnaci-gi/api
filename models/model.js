@@ -10,7 +10,7 @@ const postSchema = mongoose.Schema(
         },
         Civilite: {
             type: String,
-            reuired: true,
+            required: true,
         },
         raison_sociale: {
             type: String,

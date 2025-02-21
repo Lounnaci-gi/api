@@ -1,32 +1,50 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <title>Récépissé de Dépôt de Dossier</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="recipisse">
         <div class="header">
             <img src="./img/ade.ico" alt="Logo de l'entreprise">
             <div class="header-text">
                 <h1>Récépissé de Dépôt de Dossier</h1>
-                <p>Nom de l'Organisation</p>
+                <p>Algérienne des eaux</p>
                 <p>Adresse de l'Organisation</p>
                 <p>Téléphone : 0123 456 789</p>
                 <p>Email : contact@organisation.com</p>
             </div>
+            <div class="qrcode-container">
+                <div id="qrcode"></div>
+            </div>
+            
         </div>
         <div class="content">
             <p><strong>Date :</strong> [date aujourdhui]</p>
-            <p><strong>Raison Sociale :</strong> [Insérez le nom du déposant]</p>
-            <p><strong>Type de Client :</strong> [Insérez le type de dossier]</p>
-            <p><strong>Adresse :</strong> [Adresse]</p>
-            <p><strong>Commune :</strong> [Commune]</p>
-            <p><strong>Téléphone :</strong> [Téléphone]</p>
-            <p><strong>Email :</strong> [Email]</p>
-            <p><strong>Référence Dossier :</strong> [Numéro ou code de référence]</p>
-            <p><strong>Déposé le :</strong> [date dépot]</p>
+            <div class="client-info">
+                <p><strong>🏢 Raison Sociale :</strong> [Insérez le nom du déposant]</p>
+                <p><strong>👤 Type de Client :</strong> [Insérez le type de dossier]</p>
+            </div>
+
+            <div class="address-info">
+                <p><strong>📍 Adresse :</strong> [Adresse]</p>
+                <p><strong>🏙️ Commune :</strong> [Commune]</p>
+            </div>
+
+            <div class="client-contact">
+                <p><strong>📞 Téléphone :</strong> [Téléphone]</p>
+                <p><strong>📧 Email :</strong> [Email]</p>
+            </div>
+
+            <div class="dossier-info">
+                <p><strong>📂 Référence Dossier :</strong> [Numéro ou code de référence]</p>
+                <p><strong>📅 Déposé le :</strong> [date dépot]</p>
+            </div>
+
         </div>
         <div class="signature">
             <div>
@@ -37,5 +55,23 @@
             </div>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const dossierId = "[Numéro ou code de référence]"; // Assurez-vous que ce champ est bien remplacé dans `main.js`
+
+        // Supprimer les crochets [ ] avant d'injecter la donnée réelle
+        const qrValue = `http://localhost:3000/dossier/${dossierId}`;
+
+        // Générer le QR Code
+        new QRCode(document.getElementById("qrcode"), {
+            text: qrValue,
+            width: 100,
+            height: 100
+        });
+    });
+</script>
+
 </body>
+
 </html>
