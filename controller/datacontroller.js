@@ -206,39 +206,87 @@ module.exports.newuser = async (req, res) => {
 module.exports.login = async (req, res) => {
     try {
         const { nomUtilisateur, motDePasse } = req.body;
-        // Trouver l'utilisateur par nom d'utilisateur
-        const user = await User.findOne({ nomUtilisateur });
+        console.log("🔍 Tentative de connexion :", nomUtilisateur, motDePasse);
 
         // Vérifier si l'utilisateur existe
+        const user = await User.findOne({ nomUtilisateur });
         if (!user) {
-            return res.status(401).json({ success: false, message: "Nom d'utilisateur ou mot de passe incorrect." });
+            console.log("❌ Utilisateur introuvable !");
+            return res.status(401).json({ success: false, message: "Nom d'utilisateur incorrect." });
         }
 
-        // Comparer le mot de passe fourni avec le mot de passe hashé
+        // Comparer les mots de passe
         const isPasswordValid = await bcrypt.compare(motDePasse, user.motDePasse);
         if (!isPasswordValid) {
-            return res.status(401).json({ success: false, message: "Nom d'utilisateur ou mot de passe incorrect." });
+            console.log("❌ Mot de passe incorrect !");
+            return res.status(401).json({ success: false, message: "Mot de passe incorrect." });
         }
 
-        // ✅ Générer un Token JWT
-        const token = jwt.sign(
+        console.log("✅ Connexion réussie pour :", user.nomUtilisateur);
+
+        // Générer les tokens
+        const accessToken = jwt.sign(
             { userId: user._id, nomUtilisateur: user.nomUtilisateur },
-            process.env.JWT_SECRET || "aa56fedd9bec83dc879255c5454e7656e7b148ff71b3023f09790fa2e59450a8c80491b2495e596e28c760409d7497719e103efbeffeae18744d871a5f4c56f2",  // 🔥 Vérifie que `JWT_SECRET` est défini dans `.env`
-            { expiresIn: "7d" }  // Expiration du token en 1 heure
+            process.env.JWT_SECRET,
+            { expiresIn: "1h" }
         );
 
-        // ✅ Renvoyer le token et les infos utilisateur
-        res.status(200).json({ success: true, token, data: { 
-            nomUtilisateur: user.nomUtilisateur, 
-            email: user.email, 
-            nomComplet: user.nomComplet 
-        }});
+        const refreshToken = jwt.sign(
+            { userId: user._id },
+            process.env.JWT_SECRET,
+            { expiresIn: "30d" }
+        );
+
+        // Sauvegarde du refresh token
+        user.refreshToken = refreshToken;
+        await user.save();
+
+        res.status(200).json({ success: true, accessToken, refreshToken });
+        console.log("📌 Access Token généré :", accessToken);
+        console.log("📌 Refresh Token généré :", refreshToken);
+
 
     } catch (err) {
-        console.error("Erreur de Connexion :", err);
-        res.status(500).json({ success: false, message: "Une erreur est survenue lors de la connexion." });
+        console.error("❌ Erreur de Connexion :", err);
+        res.status(500).json({ success: false, message: "Erreur serveur." });
     }
 };
+
+
+module.exports.refreshtoken = async (req, res) => {
+    try {
+        const { refreshToken } = req.body;
+        if (!refreshToken) {
+            return res.status(401).json({ message: "Refresh Token requis." });
+        }
+
+        // ✅ Vérifier si le Refresh Token est valide
+        const user = await User.findOne({ refreshToken });
+        if (!user) {
+            return res.status(403).json({ message: "Refresh Token invalide." });
+        }
+
+        jwt.verify(refreshToken, process.env.JWT_SECRET, (err, decoded) => {
+            if (err) {
+                return res.status(403).json({ message: "Token expiré ou invalide." });
+            }
+
+            // ✅ Générer un nouveau Access Token
+            const newAccessToken = jwt.sign(
+                { userId: decoded.userId, nomUtilisateur: user.nomUtilisateur },
+                process.env.JWT_SECRET,
+                { expiresIn: "1h" }
+            );
+
+            res.json({ accessToken: newAccessToken });
+        });
+
+    } catch (error) {
+        console.error("Erreur Refresh Token :", error);
+        res.status(500).json({ message: "Erreur serveur." });
+    }
+};
+
 
 const transporter = nodemailer.createTransport({
     service: "gmail",

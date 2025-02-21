@@ -38,12 +38,11 @@ function closeLogin() {
 }
 
 document.getElementById('submit').addEventListener('click', async (event) => {
-    event.preventDefault(); // Empêche la soumission du formulaire
+    event.preventDefault();
 
     const user = document.getElementById('user').value.trim();
     const password = document.getElementById('password').value.trim();
 
-    // Vérification des champs vides
     if (!user || !password) {
         showAlert('Erreur', 'Veuillez remplir tous les champs.', 'warning');
         return;
@@ -59,39 +58,29 @@ document.getElementById('submit').addEventListener('click', async (event) => {
         });
 
         const result = await response.json();
+        console.log("📌 Réponse du serveur :", result); // 🔥 Ajout pour voir la réponse complète
 
         if (!response.ok) {
             throw new Error(result.message || "Erreur lors de la connexion.");
         }
 
-        if (!result.token) {
+        if (!result.accessToken) {
             throw new Error("Token non reçu, problème d'authentification.");
         }
 
+        // ✅ Stocker les tokens
+        localStorage.setItem("token", result.accessToken);
+        localStorage.setItem("refreshToken", result.refreshToken);
 
-        // Vérification si les données retournées sont valides
-        if (!result.data || !result.data.nomUtilisateur) {
-            throw new Error("Données utilisateur invalides.");
-        }
-
-        // 🔥 Stocker le token et les informations utilisateur dans `localStorage`
-        localStorage.setItem('token', result.token);
-        localStorage.setItem('user', JSON.stringify(result.data));
-
-        // Afficher le nom d'utilisateur sans guillemets
-        showAlert("Succès", "Connexion réussie !", "success").then(() => {
-            updateLoginButton();  // 🔥 Mettre à jour le bouton immédiatement
-            closeLogin();  // 🔥 Fermer la boîte de connexion
-        });
-
-
-        // Réinitialiser les champs du formulaire
+        document.getElementsByClassName('logo')[0].innerText = result.data.nomUtilisateur;
+        closeLogin();
         document.getElementById('connexion').reset();
 
     } catch (err) {
         showAlert("Erreur de connexion", err.message || 'Échec de l’authentification.', "error");
     }
 });
+
 
 
 // Fonction inscription nouveau utilistaeur
@@ -253,5 +242,33 @@ function updateLoginButton() {
 // 🔄 Mettre à jour le bouton et le logo au chargement de la page
 document.addEventListener("DOMContentLoaded", updateLoginButton);
 
+async function refreshAccessToken() {
+    const refreshToken = localStorage.getItem("refreshToken");
+    if (!refreshToken) {
+        console.log("Aucun Refresh Token trouvé.");
+        return;
+    }
+
+    try {
+        const response = await fetch("http://localhost:3000/users/refresh-token", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ refreshToken })
+        });
+
+        if (!response.ok) {
+            throw new Error("Échec du rafraîchissement du token.");
+        }
+
+        const data = await response.json();
+        localStorage.setItem("token", data.accessToken);
+        console.log("✅ Token rafraîchi avec succès !");
+    } catch (error) {
+        console.error("❌ Erreur lors du rafraîchissement du token :", error);
+    }
+}
+
+// 📌 Rafraîchir le token toutes les 55 minutes (avant expiration de 1h)
+setInterval(refreshAccessToken, 55 * 60 * 1000);
 
 

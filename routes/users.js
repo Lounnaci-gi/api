@@ -2,7 +2,7 @@ const express = require("express");
 const routes = express.Router();
 const jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
-const { setPosts, editpost, getposts, get_with_Id_dossier, deletepost, newuser, login, recupass, last_id_dossier, search_rs,
+const { setPosts, editpost, getposts, get_with_Id_dossier, deletepost, newuser, login,refreshtoken, recupass, last_id_dossier, search_rs,
     records_de_jours, recherche_multiple } = require("../controller/datacontroller");
 
 //authentification -----------------------
@@ -43,6 +43,7 @@ routes.get("/records_de_jours", records_de_jours); // Correction de la route pou
 routes.get("/last_id_dossier", last_id_dossier); // Correction de la route pour récupérer l'ID dossier
 routes.get("/search_rs", search_rs); // Route spécifique pour récupérer tous les utilisateurs
 routes.post("/login", login); // Route spécifique pour récupérer tous les utilisateurs
+routes.post("/refresh-token", refreshtoken); // Route spécifique pour rafréchir le token
 routes.get("/recherche_multiple", authenticate, recherche_multiple);
 
 
