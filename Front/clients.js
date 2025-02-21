@@ -157,7 +157,7 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
         return;
     }
 
-    const headers = { 
+    const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
     };
@@ -186,7 +186,7 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
 
         // 📌 Si c'est une création, on attend la sauvegarde avant de faire un GET
         if (method === 'POST') {
-            let retries = 3; 
+            let retries = 3;
             let dossierExiste = false;
             while (retries > 0) {
                 console.log(`🕵️‍♂️ Vérification ${4 - retries}/3 du dossier : ${datas.Id_Dossier}`);
@@ -518,9 +518,7 @@ document.addEventListener('click', async (event) => {
             }
             const response = await fetch(`http://localhost:3000/users/${encodeURIComponent(idDossier)}`, {
                 method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}` // ✅ Ajouter le token
-                }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (!response.ok) {
@@ -617,4 +615,111 @@ async function searchClient() {
             ttable.innerHTML = '<tr><td colspan="6" style="text-align:center; color: red;">Erreur lors de la récupération des données</td></tr>';
         }
     }, 300); // Délai de 300ms pour éviter trop de requêtes
+}
+
+
+//Imprimer ----------------------
+
+document.addEventListener('click', async (event) => {
+    if (event.target.classList.contains('bxs-printer')) {
+        const idDossier = event.target.closest('tr')?.children[1]?.textContent.trim();
+
+        if (!idDossier) {
+            showAlert('Erreur', 'ID du dossier invalide.', 'error');
+            return;
+        }
+
+        try {
+            const token = localStorage.getItem("token"); // 🔥 Récupérer le token
+            if (!token) {
+                showAlert("Erreur", "Vous devez être connecté.", "error");
+                return;
+            }
+
+            // 📌 Récupérer les données du dossier depuis l'API
+            const response = await fetch(`http://localhost:3000/users/${encodeURIComponent(idDossier)}`, {
+                method: 'GET',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Erreur HTTP ${response.status} : ${response.statusText}`);
+            }
+
+            const client = await response.json();
+            printDossier(client); // Appel de la fonction d'impression
+
+        } catch (err) {
+            console.error("Erreur lors de la récupération du dossier :", err);
+            showAlert('Erreur', 'Impossible de récupérer le dossier.', 'error');
+        }
+    }
+});
+/*
+function printDossier(client) {
+    const printWindow = window.open('', '', 'width=800,height=600');
+
+    // 🖨️ Contenu du document d'impression
+    const printContent = `
+        <html>
+        <head>
+            <title>Impression du dossier</title>
+            <style>
+                body { font-family: Arial, sans-serif; padding: 20px; }
+                h2 { text-align: center; }
+                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                table, th, td { border: 1px solid black; }
+                th, td { padding: 10px; text-align: left; }
+                .btn-print { display: block; text-align: center; margin-top: 20px; }
+            </style>
+        </head>
+        <body>
+            <h2>Détails du dossier</h2>
+             <img src="./img/ade.ico" alt="" style="width :50px; height:50px">
+            <table>
+                <tr><th>ID Dossier</th><td>${client.Id_Dossier}</td></tr>
+                <tr><th>Raison Sociale</th><td>${client.raison_sociale}</td></tr>
+                <tr><th>Adresse Correspondance</th><td>${client.Adresse_correspondante}</td></tr>
+                <tr><th>Téléphone</th><td>${client.telephone}</td></tr>
+                <tr><th>Nature</th><td>${client.type_client}</td></tr>
+                <tr><th>Date de Dépôt</th><td>${new Date(client.createdAt).toLocaleDateString('fr-FR')}</td></tr>
+            </table>
+            <div class="btn-print">
+                <button onclick="window.print();">Imprimer</button>
+            </div>
+        </body>
+        </html>
+    `;
+
+    printWindow.document.open();
+    printWindow.document.write(printContent);
+    printWindow.document.close();
+}
+*/
+function printDossier(client) {
+    // Ouvrir le fichier recepisse.html dans une nouvelle fenêtre
+    fetch('recepisse.html')
+        .then(response => response.text())  // Lire le contenu du fichier HTML
+        .then(html => {
+            // Ouvrir une nouvelle fenêtre pour l'impression
+            const printWindow = window.open('', '', 'width=800,height=600');
+
+            // Remplacer les placeholders dans le HTML avec les valeurs du client
+            html = html.replace('[Insérez la date]', new Date(client.createdAt).toLocaleDateString('fr-FR'))
+                       .replace('[Insérez le nom du déposant]', client.raison_sociale)
+                       .replace('[Insérez le type de dossier]', client.type_client)
+                       .replace('[Brève description du contenu du dossier]', client.Adresse_correspondante)
+                       .replace('[Numéro ou code de référence]', client.Id_Dossier);
+
+            // Écrire le contenu dans la fenêtre et imprimer
+            printWindow.document.open();
+            printWindow.document.write(html);
+            printWindow.document.close();
+
+            // Attendre que le document soit chargé avant d'imprimer
+            printWindow.onload = function () {
+                printWindow.print();
+            };
+        })
+        .catch(error => console.error('Erreur lors du chargement de recepisse.html :', error));
 }
