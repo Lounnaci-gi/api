@@ -735,11 +735,15 @@ function printDossier(client) {
     })
     .then(html => {
         const printWindow = window.open('', '', 'width=800,height=600');
-        html = html.replace('[Insérez la date]', new Date(client.createdAt).toLocaleDateString('fr-FR'))
+        html = html.replace('[date aujourdhui]', new Date().toLocaleDateString('fr-FR'))
                    .replace('[Insérez le nom du déposant]', client.raison_sociale || 'Non spécifié')
                    .replace('[Insérez le type de dossier]', client.type_client || 'Non spécifié')
-                   .replace('[Brève description du contenu du dossier]', client.Adresse_correspondante || 'Non spécifié')
-                   .replace('[Numéro ou code de référence]', client.Id_Dossier || 'N/A');
+                   .replace('[Adresse]', client.Adresse_correspondante || 'Non spécifié')
+                   .replace('[Commune]', client.commune_correspondante || 'Non spécifié')
+                   .replace('[Téléphone]', client.telephone || 'Non spécifié')
+                   .replace('[Email]', client.email || 'Non spécifié')
+                   .replace('[Numéro ou code de référence]', client.Id_Dossier || 'N/A')
+                   .replace('[date dépot]', new Date(client.createdAt).toLocaleDateString('fr-FR'));
 
         printWindow.document.open();
         printWindow.document.write(html);
