@@ -7,6 +7,7 @@ function showAlert(title, text, icon) {
     });
 }
 
+//-----------------
 const loginModal = document.querySelector("#loginModal");
 
 function toggleMenu() {
@@ -38,11 +39,12 @@ function closeLogin() {
 }
 
 document.getElementById('submit').addEventListener('click', async (event) => {
-    event.preventDefault();
+    event.preventDefault(); // Empêche la soumission du formulaire
 
     const user = document.getElementById('user').value.trim();
     const password = document.getElementById('password').value.trim();
 
+    // Vérification des champs vides
     if (!user || !password) {
         showAlert('Erreur', 'Veuillez remplir tous les champs.', 'warning');
         return;
@@ -62,29 +64,40 @@ document.getElementById('submit').addEventListener('click', async (event) => {
         });
 
         const result = await response.json();
-        console.log("📌 Réponse du serveur :", result); // 🔥 Ajout pour voir la réponse complète
 
         if (!response.ok) {
             throw new Error(result.message || "Erreur lors de la connexion.");
         }
 
-        if (!result.accessToken) {
+        if (!result.token) {
             throw new Error("Token non reçu, problème d'authentification.");
         }
 
-        // ✅ Stocker les tokens
-        localStorage.setItem("token", result.accessToken);
-        localStorage.setItem("refreshToken", result.refreshToken);
 
-        document.getElementsByClassName('logo')[0].innerText = result.data.nomUtilisateur;
-        closeLogin();
+        // Vérification si les données retournées sont valides
+        if (!result.data || !result.data.nomUtilisateur) {
+            throw new Error("Données utilisateur invalides.");
+        }
+
+        // 🔥 Stocker le token et les informations utilisateur dans `sessionStorage`
+        sessionStorage.setItem('token', result.token);
+        sessionStorage.setItem('user', JSON.stringify(result.data));
+
+
+        // Afficher le nom d'utilisateur sans guillemets
+        showAlert("Succès", "Connexion réussie !", "success").then(() => {
+            updateLoginButton();  // 🔥 Mettre à jour le bouton immédiatement
+            closeLogin();  // 🔥 Fermer la boîte de connexion
+        });
+
+
+        // Réinitialiser les champs du formulaire
         document.getElementById('connexion').reset();
 
     } catch (err) {
         showAlert("Erreur de connexion", err.message || 'Échec de l’authentification.', "error");
     }
 });
-
 
 
 // Fonction inscription nouveau utilistaeur
@@ -198,7 +211,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 //-------------------
 function openLogin() {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
 
     if (token) {
         // 🔄 Si déjà connecté, alors on déconnecte
@@ -211,8 +224,8 @@ function openLogin() {
 }
 
 function handleLogout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("user");
     showAlert("Déconnexion", "Vous avez été déconnecté.", "info").then(() => {
         updateLoginButton(); // 🔄 Mettre à jour immédiatement
         window.location.reload(); // 🔄 Recharge la page pour appliquer les changements
@@ -223,8 +236,8 @@ function handleLogout() {
 function updateLoginButton() {
     const loginButton = document.getElementById("loginButton");
     const logo = document.querySelector(".logo"); // 🔥 Sélection du logo
-    const token = localStorage.getItem("token");
-    const user = JSON.parse(localStorage.getItem("user")); // 🔥 Récupérer l'utilisateur stocké
+    const token = sessionStorage.getItem("token");
+    const user = JSON.parse(sessionStorage.getItem("user")); // 🔥 Récupérer l'utilisateur stocké
 
     if (!loginButton || !logo) return; // 🔥 Vérifie que les éléments existent
 
@@ -246,33 +259,23 @@ function updateLoginButton() {
 // 🔄 Mettre à jour le bouton et le logo au chargement de la page
 document.addEventListener("DOMContentLoaded", updateLoginButton);
 
-async function refreshAccessToken() {
-    const refreshToken = localStorage.getItem("refreshToken");
-    if (!refreshToken) {
-        console.log("Aucun Refresh Token trouvé.");
-        return;
-    }
 
-    try {
-        const response = await fetch("http://localhost:3000/users/refresh-token", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ refreshToken })
+let logoutTimer; 
+
+function resetTimer() {
+    clearTimeout(logoutTimer);
+    logoutTimer = setTimeout(() => {
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("user");
+        showAlert("Déconnexion", "Votre session a expiré pour inactivité.", "info").then(() => {
+            window.location.reload();
         });
-
-        if (!response.ok) {
-            throw new Error("Échec du rafraîchissement du token.");
-        }
-
-        const data = await response.json();
-        localStorage.setItem("token", data.accessToken);
-        console.log("✅ Token rafraîchi avec succès !");
-    } catch (error) {
-        console.error("❌ Erreur lors du rafraîchissement du token :", error);
-    }
+    }, 30 * 15 * 1000); // ⏳ Déconnecte après 15 minutes d'inactivité
 }
 
-// 📌 Rafraîchir le token toutes les 55 minutes (avant expiration de 1h)
-setInterval(refreshAccessToken, 55 * 60 * 1000);
-
-
+// 🔄 Réinitialise le timer à chaque activité de l’utilisateur
+window.onload = resetTimer;
+document.onmousemove = resetTimer;
+document.onkeypress = resetTimer;
+document.onclick = resetTimer;
+document.onscroll = resetTimer;

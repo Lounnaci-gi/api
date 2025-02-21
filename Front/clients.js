@@ -1,3 +1,31 @@
+document.addEventListener("DOMContentLoaded", () => {
+    const token = sessionStorage.getItem("token");
+    if (!token) {
+        window.location.href = "index.html"; // 🔄 Rediriger vers la page de connexion
+    }
+});
+
+// 🔄 Timer pour gérer l’inactivité
+let logoutTimer;
+
+function resetTimer() {
+    clearTimeout(logoutTimer);
+    logoutTimer = setTimeout(() => {
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("user");
+        showAlert("Déconnexion", "Votre session a expiré.", "info").then(() => {
+            window.location.reload();
+        });
+    }, 15 * 60 * 1000); // 15 minutes d’inactivité
+}
+
+window.onload = resetTimer;
+document.onmousemove = resetTimer;
+document.onkeypress = resetTimer;
+document.onclick = resetTimer;
+document.onscroll = resetTimer;
+
+
 function dessiner_tableau() {
     return `
     <thead>  
@@ -99,7 +127,7 @@ document.getElementById('AjouterClient').addEventListener('click', async () => {
         }
     });
     try {
-        const token = localStorage.getItem("token"); // 🔥 Récupérer le token
+        const token = sessionStorage.getItem("token"); // 🔥 Récupérer le token
         if (!token) {
             showAlert("Erreur", "Vous devez être connecté.", "error");
             return;
@@ -151,7 +179,7 @@ document.getElementById('addClientForm').addEventListener('submit', async (event
         return showAlert('Attention', 'Veuillez remplir tous les champs obligatoires.', 'warning');
     }
 
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (!token) {
         showAlert("Erreur", "Vous devez être connecté.", "error");
         return;
@@ -248,7 +276,7 @@ async function searchRaisonSociale() {
     }
 
     try {
-        const token = localStorage.getItem("token"); // 🔥 Récupérer le token
+        const token = sessionStorage.getItem("token"); // 🔥 Récupérer le token
         if (!token) {
             showAlert("Erreur", "Vous devez être connecté.", "error");
             return;
@@ -292,7 +320,7 @@ document.getElementById('liste-clients').addEventListener('click', async () => {
     });
 
     document.querySelector('.client-section').style.display = 'none';
-    const token = localStorage.getItem("token"); // 🔥 Récupérer le token
+    const token = sessionStorage.getItem("token"); // 🔥 Récupérer le token
     if (!token) {
         showAlert("Erreur", "Vous devez être connecté.", "error");
         return;
@@ -414,7 +442,7 @@ async function enregistrements_dossiers_journaliers() {
     });
 
     try {
-        const token = localStorage.getItem("token"); // 🔥 Récupérer le token
+        const token = sessionStorage.getItem("token"); // 🔥 Récupérer le token
         if (!token) {
             showAlert("Erreur", "Vous devez être connecté.", "error");
             return;
@@ -470,7 +498,7 @@ document.addEventListener('click', async (event) => {
             return;
         }
 
-        const token = localStorage.getItem("token"); // 🔥 Récupérer le token
+        const token = sessionStorage.getItem("token"); // 🔥 Récupérer le token
         if (!token) {
             showAlert("Erreur", "Vous devez être connecté.", "error");
             return;
@@ -511,7 +539,7 @@ document.addEventListener('click', async (event) => {
         }
 
         try {
-            const token = localStorage.getItem("token"); // 🔥 Récupérer le token
+            const token = sessionStorage.getItem("token"); // 🔥 Récupérer le token
             if (!token) {
                 showAlert("Erreur", "Vous devez être connecté.", "error");
                 return;
@@ -574,7 +602,7 @@ async function searchClient() {
         const element = document.querySelector('.table-container');
 
         try {
-            const token = localStorage.getItem("token"); // 🔥 Récupérer le token
+            const token = sessionStorage.getItem("token"); // 🔥 Récupérer le token
             if (!token) {
                 showAlert("Erreur", "Vous devez être connecté.", "error");
                 return;
@@ -630,7 +658,7 @@ document.addEventListener('click', async (event) => {
         }
 
         try {
-            const token = localStorage.getItem("token"); // 🔥 Récupérer le token
+            const token = sessionStorage.getItem("token"); // 🔥 Récupérer le token
             if (!token) {
                 showAlert("Erreur", "Vous devez être connecté.", "error");
                 return;
@@ -699,27 +727,31 @@ function printDossier(client) {
 function printDossier(client) {
     // Ouvrir le fichier recepisse.html dans une nouvelle fenêtre
     fetch('recepisse.html')
-        .then(response => response.text())  // Lire le contenu du fichier HTML
-        .then(html => {
-            // Ouvrir une nouvelle fenêtre pour l'impression
-            const printWindow = window.open('', '', 'width=800,height=600');
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Fichier de récépissé introuvable !");
+        }
+        return response.text();
+    })
+    .then(html => {
+        const printWindow = window.open('', '', 'width=800,height=600');
+        html = html.replace('[Insérez la date]', new Date(client.createdAt).toLocaleDateString('fr-FR'))
+                   .replace('[Insérez le nom du déposant]', client.raison_sociale || 'Non spécifié')
+                   .replace('[Insérez le type de dossier]', client.type_client || 'Non spécifié')
+                   .replace('[Brève description du contenu du dossier]', client.Adresse_correspondante || 'Non spécifié')
+                   .replace('[Numéro ou code de référence]', client.Id_Dossier || 'N/A');
 
-            // Remplacer les placeholders dans le HTML avec les valeurs du client
-            html = html.replace('[Insérez la date]', new Date(client.createdAt).toLocaleDateString('fr-FR'))
-                       .replace('[Insérez le nom du déposant]', client.raison_sociale)
-                       .replace('[Insérez le type de dossier]', client.type_client)
-                       .replace('[Brève description du contenu du dossier]', client.Adresse_correspondante)
-                       .replace('[Numéro ou code de référence]', client.Id_Dossier);
+        printWindow.document.open();
+        printWindow.document.write(html);
+        printWindow.document.close();
 
-            // Écrire le contenu dans la fenêtre et imprimer
-            printWindow.document.open();
-            printWindow.document.write(html);
-            printWindow.document.close();
+        printWindow.onload = function () {
+            printWindow.print();
+        };
+    })
+    .catch(error => {
+        console.error('Erreur lors du chargement de recepisse.html :', error);
+        showAlert("Erreur", "Impossible de charger le fichier d'impression.", "error");
+    });
 
-            // Attendre que le document soit chargé avant d'imprimer
-            printWindow.onload = function () {
-                printWindow.print();
-            };
-        })
-        .catch(error => console.error('Erreur lors du chargement de recepisse.html :', error));
 }

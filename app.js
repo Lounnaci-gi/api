@@ -20,7 +20,7 @@ app.use("/users/login", loginLimiter);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'Front')));
+app.use(express.static(path.resolve(__dirname, "Front")));
 app.use("/users", users);
 
 
