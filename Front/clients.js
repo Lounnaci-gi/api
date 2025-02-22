@@ -527,7 +527,7 @@ document.addEventListener('click', async (event) => {
 });
 
 
-//----------------
+//Récupérer l'id dossier pour faire des manipulation
 document.addEventListener('click', async (event) => {
     if (event.target.classList.contains('bxs-message-square-edit')) {
         // Récupérer l'ID du dossier

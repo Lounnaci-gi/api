@@ -7,7 +7,7 @@ const dotenv = require("dotenv").config();
 const moment = require("moment");
 const jwt = require("jsonwebtoken");
 
-module.exports.setPosts = async (req, res) => {
+module.exports.new_dossier = async (req, res) => {
     try {
         const data = req.body;
         // Vérifier si `req.body` est vide

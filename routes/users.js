@@ -2,7 +2,7 @@ const express = require("express");
 const routes = express.Router();
 const jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
-const { setPosts, editpost, getposts, get_with_Id_dossier, deletepost, newuser, login, recupass, last_id_dossier, search_rs,
+const { new_dossier, editpost, getposts, get_with_Id_dossier, deletepost, newuser, login, recupass, last_id_dossier, search_rs,
     records_de_jours, recherche_multiple } = require("../controller/datacontroller");
 
 //authentification -----------------------
@@ -27,7 +27,7 @@ const authenticate = (req, res, next) => {
 
 // Définir les routes spécifiques AVANT les routes dynamiques
 routes.post("/reset-password", recupass);
-routes.post("/posts", setPosts);
+routes.post("/posts", new_dossier);
 routes.post(
     "/newuser",
     [
