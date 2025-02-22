@@ -12,6 +12,15 @@
         content="Solution de gestion clientèle spécialisée dans le suivi des branchements - Création de devis, facturation et suivi technique">
     <meta name="keywords" content="gestion client, branchements, devis, facturation, suivi technique">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const token = sessionStorage.getItem("token");
+
+            if (!token) {
+                window.location.href = "index.html"; // 🔄 Rediriger vers la page de connexion si pas de token
+            }
+        });
+    </script>
 </head>
 
 <body>
@@ -62,125 +71,122 @@
             <i class='bx bx-menu'></i>
         </div>
     </header>
-    <!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enregistrement des Articles</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Lien vers ton fichier CSS -->
-</head>
-<body>
 
-    <form action="/submit-article" method="post" class="form-container" id="articleForm">
-        <fieldset class="form-section">
-            <legend class="form-title">Informations Générales</legend>
+    <body>
 
-            <label for="nom_article" class="form-label">Nom de l'article :</label>
-            <input type="text" id="nom_article" name="nom_article" class="form-input" required>
+        <form action="/submit-article" method="post" class="form-container" id="articleForm">
+            <fieldset class="form-section">
+                <legend class="form-title">Informations Générales</legend>
+    
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nom_article" class="form-label">Nom de l'article :</label>
+                        <input type="text" id="nom_article" name="nom_article" class="form-input" required>
+                    </div>
+    
+                    <div class="form-group">
+                        <label for="unite" class="form-label">Unité :</label>
+                        <select id="unite" name="unite" class="form-input" required onchange="toggleFields()">
+                            <option value="ml">Mètre linéaire (ml)</option>
+                            <option value="m2">Mètre carré (m²)</option>
+                            <option value="m3">Mètre cube (m³)</option>
+                            <option value="unite">Unité</option>
+                        </select>
+                    </div>
+    
+                    <div class="form-group" id="diametreField">
+                        <label for="diametre" class="form-label">Diamètre (mm) :</label>
+                        <input type="number" id="diametre" name="diametre" class="form-input" step="0.1">
+                    </div>
+                </div>
+    
+                <label for="materiau" class="form-label">Matériau :</label>
+                <select id="materiau" name="materiau" class="form-input" required>
+                    <option value="">Sélectionnez un matériau</option>
+                    <option value="cuivre">Cuivre</option>
+                    <option value="pvc">PVC</option>
+                    <option value="per">PER</option>
+                    <option value="pehd">PEHD</option>
+                    <option value="multicouche">Multicouche</option>
+                    <option value="galvanisé">Acier Galvanisé</option>
+                    <option value="fonte">Fonte</option>
+                    <option value="inox">Acier Inoxydable</option>
+                    <option value="laiton">Laiton</option>
+                    <option value="autre">Autre</option>
+                </select>
+    
+                <label for="rubrique" class="form-label">Rubrique :</label>
+                <select id="rubrique" name="rubrique" class="form-input" required>
+                    <option value="">Sélectionnez une rubrique</option>
+                    <option value="terrassement">Terrassement</option>
+                    <option value="canalisations">Canalisations et Tuyauterie</option>
+                    <option value="pieces_speciales">Pièces Spéciales</option>
+                    <option value="autres">Autres</option>
+                    <option value="frais_supplementaires">Frais Supplémentaires</option>
+                </select>
+            </fieldset>
+    
+            <fieldset class="form-section">
+                <legend class="form-title">Prix (DZD)</legend>
+    
+                <label for="prix_achat" class="form-label">Prix d'achat (DZD) :</label>
+                <input type="number" id="prix_achat" name="prix_achat" class="form-input" step="0.01" required>
+    
+                <label for="prix_vente" class="form-label">Prix de vente (DZD) :</label>
+                <input type="number" id="prix_vente" name="prix_vente" class="form-input" step="0.01" required>
+            </fieldset>
+    
+            <button type="submit" class="btn">Enregistrer l'article</button>
+        </form>
 
-            <label for="materiau" class="form-label">Matériau :</label>
-            <select id="materiau" name="materiau" class="form-input" required>
-                <option value="">Sélectionnez un matériau</option>
-                <option value="cuivre">Cuivre</option>
-                <option value="pvc">PVC (Polychlorure de Vinyle)</option>
-                <option value="per">PER (Polyéthylène Réticulé)</option>
-                <option value="pehd">PEHD (Polyéthylène Haute Densité)</option>
-                <option value="multicouche">Multicouche</option>
-                <option value="galvanisé">Acier Galvanisé</option>
-                <option value="fonte">Fonte</option>
-                <option value="inox">Acier Inoxydable</option>
-                <option value="laiton">Laiton</option>
-                <option value="autre">Autre</option>
-            </select>
+        <script>
+            function toggleFields() {
+                var unite = document.getElementById("unite").value;
+                var diametreField = document.getElementById("diametreField");
 
-            <label for="rubrique" class="form-label">Rubrique :</label>
-            <select id="rubrique" name="rubrique" class="form-input" required>
-                <option value="">Sélectionnez une rubrique</option>
-                <option value="terrassement">Terrassement</option>
-                <option value="canalisations">Canalisations et Tuyauterie</option>
-                <option value="pieces_speciales">Pièces Spéciales</option>
-                <option value="autres">Autres</option>
-                <option value="frais_supplementaires">Frais Supplémentaires</option>
-            </select>
-        </fieldset>
-
-        <fieldset class="form-section">
-            <legend class="form-title">Caractéristiques Techniques</legend>
-
-            <label for="unite" class="form-label">Unité :</label>
-            <select id="unite" name="unite" class="form-input" required onchange="toggleFields()">
-                <option value="ml">Mètre linéaire (ml)</option>
-                <option value="m2">Mètre carré (m²)</option>
-                <option value="m3">Mètre cube (m³)</option>
-                <option value="unite">Unité</option>
-            </select>
-
-            <div id="diametreField">
-                <label for="diametre" class="form-label">Diamètre (mm) :</label>
-                <input type="number" id="diametre" name="diametre" class="form-input" step="0.1">
-            </div>
-        </fieldset>
-
-        <fieldset class="form-section">
-            <legend class="form-title">Prix (DZD)</legend>
-
-            <label for="prix_achat" class="form-label">Prix d'achat (DZD) :</label>
-            <input type="number" id="prix_achat" name="prix_achat" class="form-input" step="0.01" required>
-
-            <label for="prix_vente" class="form-label">Prix de vente (DZD) :</label>
-            <input type="number" id="prix_vente" name="prix_vente" class="form-input" step="0.01" required>
-        </fieldset>
-
-        <button type="submit" class="btn">Enregistrer l'article</button>
-    </form>
-
-    <script>
-        function toggleFields() {
-            var unite = document.getElementById("unite").value;
-            var diametreField = document.getElementById("diametreField");
-
-            if (unite === "ml" || unite === "unite") {
-                diametreField.style.display = "block";
-                document.getElementById("diametre").disabled = false;
-            } else {
-                diametreField.style.display = "none";
-                document.getElementById("diametre").disabled = true;
-                document.getElementById("diametre").value = ""; // Réinitialiser si désactivé
+                if (unite === "ml" || unite === "unite") {
+                    diametreField.style.display = "block";
+                    document.getElementById("diametre").disabled = false;
+                } else {
+                    diametreField.style.display = "none";
+                    document.getElementById("diametre").disabled = true;
+                    document.getElementById("diametre").value = ""; // Réinitialiser si désactivé
+                }
             }
-        }
 
-        document.getElementById("articleForm").addEventListener("submit", function(event) {
-            var nomArticle = document.getElementById("nom_article").value;
-            var prixAchat = document.getElementById("prix_achat").value;
-            var prixVente = document.getElementById("prix_vente").value;
+            document.getElementById("articleForm").addEventListener("submit", function (event) {
+                var nomArticle = document.getElementById("nom_article").value;
+                var prixAchat = document.getElementById("prix_achat").value;
+                var prixVente = document.getElementById("prix_vente").value;
 
-            if (nomArticle.trim() === "" || prixAchat <= 0 || prixVente <= 0) {
-                event.preventDefault(); // Bloque l'envoi du formulaire
-                alert("Veuillez remplir tous les champs obligatoires et vérifier les prix.");
-            }
-        });
+                if (nomArticle.trim() === "" || prixAchat <= 0 || prixVente <= 0) {
+                    event.preventDefault(); // Bloque l'envoi du formulaire
+                    alert("Veuillez remplir tous les champs obligatoires et vérifier les prix.");
+                }
+            });
 
-        // Initialisation pour masquer le champ Diamètre si nécessaire au chargement
-        window.onload = toggleFields;
-    </script>
-</body>
+            // Initialisation au chargement de la page
+            window.onload = toggleFields;
+
+        </script>
+    </body>
+
 </html>
 
-      
 
-    <footer class="footer">
-        <div class="footer-content">
-            <p>&copy; 2025 Gestion Clientèle. Tous droits réservés.</p>
-            <ul class="footer-links">
-                <li><a href="#">Mentions légales</a></li>
-                <li><a href="#">Politique de confidentialité</a></li>
-                <li><a href="#">Conditions d'utilisation</a></li>
-            </ul>
-        </div>
-    </footer>
-    <!-- <script src="main.js" defer></script> -->
-    
+
+<footer class="footer">
+    <div class="footer-content">
+        <p>&copy; 2025 Gestion Clientèle. Tous droits réservés.</p>
+        <ul class="footer-links">
+            <li><a href="#">Mentions légales</a></li>
+            <li><a href="#">Politique de confidentialité</a></li>
+            <li><a href="#">Conditions d'utilisation</a></li>
+        </ul>
+    </div>
+</footer>
+<!-- <script src="main.js" defer></script> -->
+
 
 </body>
 

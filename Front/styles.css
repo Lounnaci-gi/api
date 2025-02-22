@@ -1211,13 +1211,13 @@ footer {
     }
 }
 
-
 .form-section {
     margin-bottom: 20px;
     border: 1px solid var(--primary-color);
     padding: 15px;
     border-radius: 10px;
 }
+
 .form-title {
     color: var(--primary-color);
     font-size: 18px;
@@ -1254,3 +1254,18 @@ footer {
     opacity: 0.5;
 }
 
+/* 📌 Alignement de Nom, Unité et Diamètre */
+.form-row {
+    display: flex;
+    gap: 10px;
+}
+
+.form-group {
+    flex: 1;
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+    }
+}
