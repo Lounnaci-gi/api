@@ -3,7 +3,7 @@ const routes = express.Router();
 const jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
 const { new_dossier, editpost, getposts, get_with_Id_dossier, deletepost, newuser, login, recupass, last_id_dossier, search_rs,
-    records_de_jours, recherche_multiple } = require("../controller/datacontroller");
+    records_de_jours, recherche_multiple,ajout_article } = require("../controller/datacontroller");
 
 //authentification -----------------------
 const authenticate = (req, res, next) => {
@@ -51,5 +51,7 @@ routes.get("/", authenticate, getposts);
 routes.get("/:id", authenticate, get_with_Id_dossier);
 routes.delete("/:id", authenticate, deletepost);
 routes.put("/:p", authenticate, editpost);
+routes.post("/ajout_article", authenticate, ajout_article);
+
 
 module.exports = routes;

@@ -228,11 +228,13 @@ module.exports.login = async (req, res) => {
         );
 
         // ✅ Renvoyer le token et les infos utilisateur
-        res.status(200).json({ success: true, token, data: { 
-            nomUtilisateur: user.nomUtilisateur, 
-            email: user.email, 
-            nomComplet: user.nomComplet 
-        }});
+        res.status(200).json({
+            success: true, token, data: {
+                nomUtilisateur: user.nomUtilisateur,
+                email: user.email,
+                nomComplet: user.nomComplet
+            }
+        });
 
     } catch (err) {
         console.error("Erreur de Connexion :", err);
@@ -301,7 +303,7 @@ module.exports.last_id_dossier = async (req, res) => {
             .lean();
 
         let nextNumber = 1;
-        
+
         if (lastClient && lastClient.Id_Dossier) {
             // Extraire le numéro et l'incrémenter
             const lastNumber = parseInt(lastClient.Id_Dossier.split("/")[0], 10);
@@ -374,3 +376,19 @@ module.exports.records_de_jours = async (req, res) => {
         res.status(500).json({ error: "Erreur interne du serveur" });
     }
 };
+//-Routes des Articles--------------------------------------------------------------------------------
+module.exports.ajout_article = async (req, res) => {
+    const {informations}=req.body;
+    if (!informations || Object.keys(data).length === 0) {
+        return res.status(400).send("Le corps de la requête est vide. Veuillez ajouter des données.");
+    }
+    try {
+        
+    } catch {
+
+    }
+}
+
+
+//------------------------------------
+

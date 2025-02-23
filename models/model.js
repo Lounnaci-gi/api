@@ -63,7 +63,7 @@ const postSchema = mongoose.Schema(
 );
 
 
-// Schéma pour les utilisateurs (inchangé)
+// Schéma pour les utilisateurs
 const userSchema = mongoose.Schema(
     {
         nomComplet: {
@@ -98,9 +98,60 @@ const userSchema = mongoose.Schema(
     }
 );
 
+// Schéma pour les articles
+const articleSchema = new mongoose.Schema({
+    id_article: {
+        type: String,
+        unique: true
+    },
+    designation: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    unite: {
+        type: String,
+        required: true,
+        enum: ["m²", "m3", "ml", "unite"]
+    },
+    prix_ht: {
+        type: Number,
+        required: true,
+        min: 0
+    },
+    rubrique: {
+        type: String,
+        required: true,
+        enum: ["terrassement", "canalisations", "pièces spéciales", "cautionnements", "autres"]
+    },
+    materiau: {
+        type: String,
+        required: false,
+        enum: ["cuivre", "pvc", "per", "pehd", "multicouche", "galvanisé", "fonte", "inox", "laiton", "autre"]
+    },
+    diametre: {
+        type: Number,
+        required: function () {
+            return this.unite === "ml";
+        }
+    },
+    prix: [
+        {
+            annee: { type: Number, required: true }, // Année d'application des prix
+            prix_fourniture: { type: Number, required: function () { return ["canalisations", "pièces spéciales", "compteurs"].includes(this.rubrique); }, min: 0 },
+            prix_pose: { type: Number, required: function () { return ["canalisations", "pièces spéciales", "compteurs"].includes(this.rubrique); }, min: 0 }
+        }
+    ],
+
+}, {
+    timestamps: true
+});
+
 // Création des modèles
 const Client = mongoose.model("Client", postSchema);
 const User = mongoose.model("User", userSchema);
+const Article = mongoose.model("Article", articleSchema);
+
 
 // Export des modèles
-module.exports = { Client, User };
+module.exports = { Client, User, Article };

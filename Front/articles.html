@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -100,13 +99,13 @@
                     </div>
                 </div>
     
-                <label for="materiau" class="form-label">Matériau :</label>
+                <label for="materiau" class="form-label">Type de Matériau :</label>
                 <select id="materiau" name="materiau" class="form-input" required>
                     <option value="">Sélectionnez un matériau</option>
                     <option value="cuivre">Cuivre</option>
-                    <option value="pvc">PVC</option>
-                    <option value="per">PER</option>
-                    <option value="pehd">PEHD</option>
+                    <option value="pvc">PVC [Polychlorure de vinyle]</option>
+                    <option value="per">PER [ Polyéthylène Réticulé]</option>
+                    <option value="pehd">PEHD [Polyéthylène Haute Densité]</option>
                     <option value="multicouche">Multicouche</option>
                     <option value="galvanisé">Acier Galvanisé</option>
                     <option value="fonte">Fonte</option>
@@ -121,8 +120,8 @@
                     <option value="terrassement">Terrassement</option>
                     <option value="canalisations">Canalisations et Tuyauterie</option>
                     <option value="pieces_speciales">Pièces Spéciales</option>
+                    <option value="frais_supplementaires">Frais Cautionnements</option>
                     <option value="autres">Autres</option>
-                    <option value="frais_supplementaires">Frais Supplémentaires</option>
                 </select>
             </fieldset>
     
@@ -169,6 +168,7 @@
             window.onload = toggleFields;
 
         </script>
+        <script src="articles.js"></script>
     </body>
 
 </html>

@@ -263,7 +263,7 @@ function debounce(func, delay) {
     };
 }
 
-// Fonction de recherche
+// Fonction de recherche par raison sociale
 async function searchRaisonSociale() {
     const inputValue = document.getElementById('raisonSociale').value.trim();
     const ttable = document.querySelector(".liste-clients");
@@ -410,6 +410,7 @@ document.getElementById("numPicIdentite").addEventListener('blur', () => {
 
 })
 
+//Liste des dossiers entre un interval de date
 document.getElementById('filter').addEventListener('click', () => {
     enregistrements_dossiers_journaliers();
 })
@@ -471,6 +472,7 @@ async function enregistrements_dossiers_journaliers() {
     }
 }
 
+//Vérification de la connexion
 document.addEventListener("DOMContentLoaded", () => {
     // Vérifier si l'utilisateur est déjà hors ligne au chargement
     if (!navigator.onLine) {
@@ -487,7 +489,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-
+//Récupérer l'id dossier pour l'imprimer
 document.addEventListener('click', async (event) => {
     if (event.target.classList.contains('bxs-message-square-edit')) {
         // Récupérer l'ID du dossier
@@ -527,7 +529,7 @@ document.addEventListener('click', async (event) => {
 });
 
 
-//Récupérer l'id dossier pour faire des manipulation
+//Récupérer l'id dossier pour faire des modification
 document.addEventListener('click', async (event) => {
     if (event.target.classList.contains('bxs-message-square-edit')) {
         // Récupérer l'ID du dossier

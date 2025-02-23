@@ -1245,6 +1245,7 @@ footer {
 .form-input:focus {
     border-color: var(--text-color);
     outline: none;
+    background-color: #2a2f3a;
 }
 
 .form-input:disabled {
