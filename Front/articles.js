@@ -1,15 +1,13 @@
+//Enregistre les données de l'article
 document.querySelector(".btn").addEventListener('click', async (event) => {
     event.preventDefault();  // Empêcher le rechargement de la page
-
     const datas = {
-        id_article:'',
-        nom_article: document.getElementById("nom_article").value,
+        designation: document.getElementById("nom_article").value,
         unite: document.getElementById("unite").value,
         diametre: document.getElementById("diametre").value,
-        type_materiau: document.getElementById("materiau").value,
         rubrique: document.getElementById("rubrique").value,
-        prix_achat: document.getElementById("prix_achat").value,
-        prix_vente: document.getElementById("prix_vente").value
+        materiau: document.getElementById("materiau").value,
+        prix: getPrixData() // ✅ Ajouter les prix
     };
     const token = sessionStorage.getItem("token");
     if (!token) {
@@ -32,3 +30,16 @@ document.querySelector(".btn").addEventListener('click', async (event) => {
         Swal.fire("Erreur", result.message || "Une erreur est survenue", "error");
     }
 });
+
+//Remplire les prix 
+function getPrixData() {
+    return [
+        {
+            annee: new Date().getFullYear(),  // ✅ Corrigé
+            prix_fourniture: parseFloat(document.getElementById("prix_achat").value) || null,
+            prix_pose: parseFloat(document.getElementById("prix_vente").value) || null
+        }
+    ];
+}
+
+

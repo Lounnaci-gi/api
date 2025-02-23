@@ -127,12 +127,15 @@
     
             <fieldset class="form-section">
                 <legend class="form-title">Prix (DZD)</legend>
-    
-                <label for="prix_achat" class="form-label">Prix d'achat (DZD) :</label>
+
+                <label for="prix_achat" class="form-label">Prix d'achat :</label>
                 <input type="number" id="prix_achat" name="prix_achat" class="form-input" step="0.01" required>
+                
+                <label for="prix_forniture" class="form-label">Prix de Fourniture :</label>
+                <input type="number" id="prix_forniture" name="prix_forniture" class="form-input" step="0.01" required>
     
-                <label for="prix_vente" class="form-label">Prix de vente (DZD) :</label>
-                <input type="number" id="prix_vente" name="prix_vente" class="form-input" step="0.01" required>
+                <label for="prix_pose" class="form-label">Prix de Pose :</label>
+                <input type="number" id="prix_pose" name="prix_pose" class="form-input" step="0.01" required>
             </fieldset>
     
             <button type="submit" class="btn">Enregistrer l'article</button>

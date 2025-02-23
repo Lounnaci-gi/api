@@ -116,7 +116,7 @@ const articleSchema = new mongoose.Schema({
     },
     prix_ht: {
         type: Number,
-        required: true,
+        required: false,
         min: 0
     },
     rubrique: {
@@ -126,26 +126,65 @@ const articleSchema = new mongoose.Schema({
     },
     materiau: {
         type: String,
-        required: false,
         enum: ["cuivre", "pvc", "per", "pehd", "multicouche", "galvanisé", "fonte", "inox", "laiton", "autre"]
     },
     diametre: {
         type: Number,
-        required: function () {
-            return this.unite === "ml";
+        validate: {
+            validator: function (value) {
+                return this.unite !== "ml" || (this.unite === "ml" && value != null);
+            },
+            message: "Le diamètre est requis si l'unité est en mètres linéaires (ml)."
         }
     },
     prix: [
         {
             annee: { type: Number, required: true }, // Année d'application des prix
-            prix_fourniture: { type: Number, required: function () { return ["canalisations", "pièces spéciales", "compteurs"].includes(this.rubrique); }, min: 0 },
-            prix_pose: { type: Number, required: function () { return ["canalisations", "pièces spéciales", "compteurs"].includes(this.rubrique); }, min: 0 }
+            prix_achat_ht: {
+                type: Number,
+                required: true,
+                min: 0,
+            },
+            prix_fourniture: {
+                type: Number,
+                min: 0,
+                required: function () {
+                    return ["canalisations", "pièces spéciales", "compteurs"].includes(this.rubrique);
+                }
+            },
+            prix_pose: {
+                type: Number,
+                min: 0,
+                required: function () {
+                    return ["canalisations", "pièces spéciales", "compteurs"].includes(this.rubrique);
+                }
+            }
         }
     ],
 
 }, {
     timestamps: true
 });
+
+// 🔥 Ajouter un middleware pour générer `id_article` avant l'enregistrement
+articleSchema.pre("save", async function (next) {
+    if (!this.id_article) {
+        const lastArticle = await this.constructor.findOne({ id_article: /^ART\d{7}$/ })
+            .sort({ id_article: -1 })
+            .lean();
+
+        let nextNumber = 1;
+        if (lastArticle && lastArticle.id_article) {
+            const match = lastArticle.id_article.match(/^ART(\d{7})$/);
+            if (match) {
+                nextNumber = parseInt(match[1], 10) + 1;
+            }
+        }
+        this.id_article = `ART${String(nextNumber).padStart(7, "0")}`;
+    }
+    next();
+});
+
 
 // Création des modèles
 const Client = mongoose.model("Client", postSchema);

@@ -378,52 +378,45 @@ module.exports.records_de_jours = async (req, res) => {
 };
 //-Routes des Articles--------------------------------------------------------------------------------
 module.exports.ajout_article = async (req, res) => {
-    const informations = req.body;
-    if (!informations || Object.keys(informations).length === 0) {
-        return res.status(400).json({ message: "Le corps de la requête est vide. Veuillez ajouter des données." });
-    }
-    // 🔍 Trouver le dernier article en triant par id_article de manière décroissante
-    const lastArticle = await Article.findOne({ id_article: /^ART\d{7}$/ })
-        .sort({ id_article: -1 })  // Trie décroissant pour récupérer le plus grand
-        .lean();
-        console.log(lastArticle);
-    let nextNumber = 1; // Valeur par défaut si aucun article trouvé
-
-    if (lastArticle && lastArticle.id_article) {
-        // 🎯 Utilisation du REGEX pour extraire le numéro après "ART"
-        const match = lastArticle.id_article.match(/^ART(\d{7})$/);
-        if (match) {
-            const lastNumber = parseInt(match[1], 10); // Convertir en entier
-            nextNumber = lastNumber + 1;
-        }
-    }
-
-    // 📌 Générer le nouvel ID Article formaté
-    const newIdArticle = `ART${String(nextNumber).padStart(7, "0")}`;
-
-    //-------------------------------------------------
-
-
-
     try {
-        await Article.create({
-            id_article: newIdArticle,
-            nom_article: document.getElementById("nom_article").value,
-            unite: document.getElementById("unite").value,
-            diametre: document.getElementById("diametre").value,
-            type_materiau: document.getElementById("materiau").value,
-            rubrique: document.getElementById("rubrique").value,
-            prix_achat: document.getElementById("prix_achat").value,
-            prix_vente: document.getElementById("prix_vente").value
-        });
-        res.json({ message: "Article ajouté avec succès" });
+        console.log("Données reçues :", req.body);  // 🔍 DEBUG : Vérifier ce qui est reçu
 
+        const informations = req.body;
+        if (!informations.designation || !informations.rubrique || !informations.unite) {
+            return res.status(400).json({ message: "Les champs 'designation', 'rubrique' et 'unite' sont obligatoires." });
+        }
+
+        // Générer un id_article unique
+        const lastArticle = await Article.findOne({ id_article: /^ART\d{7}$/ })
+            .sort({ id_article: -1 })
+            .lean();
+
+        let nextNumber = 1;
+        if (lastArticle && lastArticle.id_article) {
+            const match = lastArticle.id_article.match(/^ART(\d{7})$/);
+            if (match) {
+                nextNumber = parseInt(match[1], 10) + 1;
+            }
+        }
+        const newIdArticle = `ART${String(nextNumber).padStart(7, "0")}`;
+
+        // Création de l'article
+        const nouvelArticle = await Article.create({
+            id_article: newIdArticle,
+            designation: informations.designation,
+            unite: informations.unite,
+            diametre: informations.diametre || null,
+            materiau: informations.materiau,
+            rubrique: informations.rubrique,
+            prix: informations.prix  // ✅ Ajout des prix
+        });
+
+        res.status(201).json({ message: "Article ajouté avec succès", article: nouvelArticle });
     } catch (err) {
         console.error("Erreur lors de l'ajout de l'article :", err);
-        res.status(500).send("Erreur serveur.");
+        res.status(500).json({ message: "Erreur serveur." });
     }
-}
-
+};
 
 //------------------------------------
 
