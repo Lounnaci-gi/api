@@ -1,4 +1,4 @@
-const { Client, User } = require("../models/model");
+const { Client, User, Article } = require("../models/model");
 const bcrypt = require('bcryptjs');
 const { validationResult } = require("express-validator");
 const crypto = require("crypto");
@@ -378,14 +378,49 @@ module.exports.records_de_jours = async (req, res) => {
 };
 //-Routes des Articles--------------------------------------------------------------------------------
 module.exports.ajout_article = async (req, res) => {
-    const {informations}=req.body;
-    if (!informations || Object.keys(data).length === 0) {
-        return res.status(400).send("Le corps de la requête est vide. Veuillez ajouter des données.");
+    const informations = req.body;
+    if (!informations || Object.keys(informations).length === 0) {
+        return res.status(400).json({ message: "Le corps de la requête est vide. Veuillez ajouter des données." });
     }
-    try {
-        
-    } catch {
+    // 🔍 Trouver le dernier article en triant par id_article de manière décroissante
+    const lastArticle = await Article.findOne({ id_article: /^ART\d{7}$/ })
+        .sort({ id_article: -1 })  // Trie décroissant pour récupérer le plus grand
+        .lean();
+        console.log(lastArticle);
+    let nextNumber = 1; // Valeur par défaut si aucun article trouvé
 
+    if (lastArticle && lastArticle.id_article) {
+        // 🎯 Utilisation du REGEX pour extraire le numéro après "ART"
+        const match = lastArticle.id_article.match(/^ART(\d{7})$/);
+        if (match) {
+            const lastNumber = parseInt(match[1], 10); // Convertir en entier
+            nextNumber = lastNumber + 1;
+        }
+    }
+
+    // 📌 Générer le nouvel ID Article formaté
+    const newIdArticle = `ART${String(nextNumber).padStart(7, "0")}`;
+
+    //-------------------------------------------------
+
+
+
+    try {
+        await Article.create({
+            id_article: newIdArticle,
+            nom_article: document.getElementById("nom_article").value,
+            unite: document.getElementById("unite").value,
+            diametre: document.getElementById("diametre").value,
+            type_materiau: document.getElementById("materiau").value,
+            rubrique: document.getElementById("rubrique").value,
+            prix_achat: document.getElementById("prix_achat").value,
+            prix_vente: document.getElementById("prix_vente").value
+        });
+        res.json({ message: "Article ajouté avec succès" });
+
+    } catch (err) {
+        console.error("Erreur lors de l'ajout de l'article :", err);
+        res.status(500).send("Erreur serveur.");
     }
 }
 
