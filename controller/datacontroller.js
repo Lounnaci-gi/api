@@ -390,6 +390,8 @@ module.exports.ajout_article = async (req, res) => {
         const lastArticle = await Article.findOne({ id_article: /^ART\d{7}$/ })
             .sort({ id_article: -1 })
             .lean();
+        
+            console.log(lastArticle);
 
         let nextNumber = 1;
         if (lastArticle && lastArticle.id_article) {
@@ -418,5 +420,30 @@ module.exports.ajout_article = async (req, res) => {
     }
 };
 
-//------------------------------------
+//-Mise a jour des prix d'article--------
+// module.exports.update_article = async (req, res) => {
+//     try {
+//         const { id_article, prix } = req.body;
+
+//         const article = await Article.findOne({ id_article });
+//         if (!article) {
+//             return res.status(404).json({ message: "Article non trouvé" });
+//         }
+
+//         // Ajouter le nouveau prix à l'historique
+//         article.prix.push({
+//             date_application: new Date(), // ✅ Enregistrer la date d'application
+//             prix_achat_ht: prix.prix_achat_ht,
+//             prix_fourniture: prix.prix_fourniture,
+//             prix_pose: prix.prix_pose
+//         });
+
+//         await article.save();
+//         res.status(200).json({ message: "Article mis à jour avec succès", article });
+//     } catch (err) {
+//         console.error("Erreur mise à jour article :", err);
+//         res.status(500).json({ message: "Erreur serveur." });
+//     }
+// };
+
 

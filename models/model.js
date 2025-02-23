@@ -99,7 +99,7 @@ const userSchema = mongoose.Schema(
 );
 
 // Schéma pour les articles
-const articleSchema = new mongoose.Schema({
+const articleSchema = mongoose.Schema({
     id_article: {
         type: String,
         unique: true
@@ -139,26 +139,10 @@ const articleSchema = new mongoose.Schema({
     },
     prix: [
         {
-            annee: { type: Number, required: true }, // Année d'application des prix
-            prix_achat_ht: {
-                type: Number,
-                required: true,
-                min: 0,
-            },
-            prix_fourniture: {
-                type: Number,
-                min: 0,
-                required: function () {
-                    return ["canalisations", "pièces spéciales", "compteurs"].includes(this.rubrique);
-                }
-            },
-            prix_pose: {
-                type: Number,
-                min: 0,
-                required: function () {
-                    return ["canalisations", "pièces spéciales", "compteurs"].includes(this.rubrique);
-                }
-            }
+            date_application: { type: Date, default: Date.now }, // ✅ Ajout d'une date d'application
+            prix_achat_ht: { type: Number, required: true, min: 0 },
+            prix_fourniture: { type: Number, min: 0 },
+            prix_pose: { type: Number, min: 0 }
         }
     ],
 
