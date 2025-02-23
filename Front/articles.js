@@ -1,4 +1,4 @@
-//Enregistre les données de l'article
+// Enregistre les données de l'article
 const rubriqueMapping = {
     "pieces_speciales": "pièces spéciales",
     "canalisations": "canalisations",
@@ -6,27 +6,26 @@ const rubriqueMapping = {
     "cautionnements": "cautionnements",
     "autres": "autres"
 };
-document.querySelector(".btn").addEventListener('click', async (event) => {
-    event.preventDefault();  // Empêcher le rechargement de la page
 
+document.getElementById("articleForm").addEventListener('submit', async (event) => {
+    event.preventDefault();  // Empêcher le rechargement de la page
     const token = sessionStorage.getItem("token");
     if (!token) {
         showAlert("Erreur", "Vous devez être connecté.", "error");
         return;
     }
-
-    const rubriqueValue = document.getElementById("rubrique").value;
-
+    console.log(getPrixData());
     const datas = {
-        designation: document.getElementById("nom_article").value,
+        designation: document.getElementById("designation").value,
         unite: document.getElementById("unite").value,
         diametre: document.getElementById("diametre").value || null,
-        rubrique: rubriqueMapping[rubriqueValue] || rubriqueValue,  // ✅ Convertir avant envoi
+        rubrique: document.getElementById("rubrique").value,
         materiau: document.getElementById("materiau").value,
-        prix: getPrixData()
+        prix: getPrixData(),
+        caracteristiques: getCaracteristiquesData()
     };
 
-   
+    // Utiliser l'endpoint correct
     const response = await fetch('http://localhost:3000/users/ajout_article', {
         method: 'POST',
         headers: {
@@ -44,18 +43,38 @@ document.querySelector(".btn").addEventListener('click', async (event) => {
     }
 });
 
-//Remplire les prix 
 function getPrixData() {
-    return [
-        {
-            date_application: new Date().toISOString(), // ✅ Ajout de la date d'application
-            prix_achat_ht: parseFloat(document.getElementById("prix_achat").value) || null,
-            prix_fourniture: parseFloat(document.getElementById("prix_forniture").value) || null,
-            prix_pose: parseFloat(document.getElementById("prix_pose").value) || null
+    return [{
+        date_application: new Date().toISOString(),
+        prix_achat_ht: parseFloat(document.getElementById("prix_achat_ht").value) || 0,
+        prix_fourniture: parseFloat(document.getElementById("prix_fourniture").value) || 0,
+        prix_pose: parseFloat(document.getElementById("prix_pose").value) || 0
+    }];
+}
+
+function getCaracteristiquesData() {
+    const caracteristiques = {};
+    const keys = document.querySelectorAll('input[name="caracteristique_key"]');
+    const values = document.querySelectorAll('input[name="caracteristique_value"]');
+
+    keys.forEach((keyInput, index) => {
+        const key = keyInput.value.trim();
+        const value = values[index].value.trim();
+        if (key && value) {
+            caracteristiques[key] = value;
         }
-    ];
+    });
+
+    return caracteristiques;
 }
 
 
 
-
+function showAlert(title, text, icon) {
+    Swal.fire({
+        title: title,
+        text: text,
+        icon: icon,
+        confirmButtonText: 'OK'
+    });
+}

@@ -379,41 +379,32 @@ module.exports.records_de_jours = async (req, res) => {
 //-Routes des Articles--------------------------------------------------------------------------------
 module.exports.ajout_article = async (req, res) => {
     try {
-        console.log("Données reçues :", req.body);  // 🔍 DEBUG : Vérifier ce qui est reçu
+        console.log("Données reçues :", req.body);
 
         const informations = req.body;
-        if (!informations.designation || !informations.rubrique || !informations.unite) {
-            return res.status(400).json({ message: "Les champs 'designation', 'rubrique' et 'unite' sont obligatoires." });
-        }
 
-        // Générer un id_article unique
-        const lastArticle = await Article.findOne({ id_article: /^ART\d{7}$/ })
-            .sort({ id_article: -1 })
-            .lean();
-        
-            console.log(lastArticle);
+        const prix = informations.prix && informations.prix.length > 0 ? informations.prix : [];
 
-        let nextNumber = 1;
-        if (lastArticle && lastArticle.id_article) {
-            const match = lastArticle.id_article.match(/^ART(\d{7})$/);
-            if (match) {
-                nextNumber = parseInt(match[1], 10) + 1;
-            }
-        }
-        const newIdArticle = `ART${String(nextNumber).padStart(7, "0")}`;
+        const caracteristiques = informations.caracteristiques && Object.keys(informations.caracteristiques).length > 0
+            ? informations.caracteristiques
+            : {};
 
-        // Création de l'article
+        console.log("Prix après traitement :", prix);
+        console.log("Caractéristiques après traitement :", caracteristiques);
+
         const nouvelArticle = await Article.create({
-            id_article: newIdArticle,
+            id_article: `ART${String(Date.now()).slice(-7)}`,
             designation: informations.designation,
             unite: informations.unite,
             diametre: informations.diametre || null,
             materiau: informations.materiau,
             rubrique: informations.rubrique,
-            prix: informations.prix  // ✅ Ajout des prix
+            prix: prix,
+            caracteristiques: caracteristiques
         });
 
         res.status(201).json({ message: "Article ajouté avec succès", article: nouvelArticle });
+
     } catch (err) {
         console.error("Erreur lors de l'ajout de l'article :", err);
         res.status(500).json({ message: "Erreur serveur." });

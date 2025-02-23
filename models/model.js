@@ -98,7 +98,8 @@ const userSchema = mongoose.Schema(
     }
 );
 
-// Schéma pour les articles
+//Schéma pour les articles
+
 const articleSchema = mongoose.Schema({
     id_article: {
         type: String,
@@ -114,15 +115,10 @@ const articleSchema = mongoose.Schema({
         required: true,
         enum: ["m²", "m3", "ml", "unite"]
     },
-    prix_ht: {
-        type: Number,
-        required: false,
-        min: 0
-    },
     rubrique: {
         type: String,
         required: true,
-        enum: ["terrassement", "canalisations", "pièces spéciales", "cautionnements", "autres"]
+        enum: ["terrassement", "canalisations", "pieces_speciales", "cautionnements", "autres"]
     },
     materiau: {
         type: String,
@@ -139,18 +135,22 @@ const articleSchema = mongoose.Schema({
     },
     prix: [
         {
-            date_application: { type: Date, default: Date.now }, // ✅ Ajout d'une date d'application
+            date_application: { type: Date, default: Date.now },
             prix_achat_ht: { type: Number, required: true, min: 0 },
             prix_fourniture: { type: Number, min: 0 },
             prix_pose: { type: Number, min: 0 }
         }
     ],
-
+    // 🔥 Ajout des caractéristiques techniques
+    caracteristiques: {
+        type: Map, // Utilisation d'un Map pour stocker des paires clé-valeur dynamiques
+        of: String // Les valeurs peuvent être des chaînes de caractères (ou d'autres types si nécessaire)
+    }
 }, {
     timestamps: true
 });
 
-// 🔥 Ajouter un middleware pour générer `id_article` avant l'enregistrement
+// 🔥 Middleware pour générer `id_article` avant l'enregistrement
 articleSchema.pre("save", async function (next) {
     if (!this.id_article) {
         const lastArticle = await this.constructor.findOne({ id_article: /^ART\d{7}$/ })
