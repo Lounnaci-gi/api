@@ -379,27 +379,39 @@ module.exports.records_de_jours = async (req, res) => {
 //-Routes des Articles--------------------------------------------------------------------------------
 module.exports.ajout_article = async (req, res) => {
     try {
-        console.log("Données reçues :", req.body);
-
         const informations = req.body;
 
         const prix = informations.prix && informations.prix.length > 0 ? informations.prix : [];
-
         const caracteristiques = informations.caracteristiques && Object.keys(informations.caracteristiques).length > 0
             ? informations.caracteristiques
             : {};
 
-        console.log("Prix après traitement :", prix);
-        console.log("Caractéristiques après traitement :", caracteristiques);
+        // Générer un id_article unique
+        const lastArticle = await Article.findOne({ id_article: /^ART\d{7}$/ })
+            .sort({ id_article: -1 })
+            .lean();
+        
+            let nextNumber = 1;
+            if (lastArticle && lastArticle.id_article) {
+                const match = lastArticle.id_article.match(/^ART(\d{7})$/);
+                if (match) {
+                    nextNumber = parseInt(match[1], 10) + 1;
+                }
+            }
+            const newIdArticle = `ART${String(nextNumber).padStart(7, "0")}`;
 
-        const nouvelArticle = await Article.create({
-            id_article: `ART${String(Date.now()).slice(-7)}`,
+        // Créer un nouvel article sans générer l'id ici (géré par Mongoose)
+        const nouvelArticle = new Article({
+            id_article: newIdArticle,
             designation: informations.designation,
             materiau: informations.materiau,
             rubrique: informations.rubrique,
             prix: prix,
             caracteristiques: caracteristiques
         });
+
+        // Sauvegarde pour déclencher le middleware `pre("save")`
+        await nouvelArticle.save();
 
         res.status(201).json({ message: "Article ajouté avec succès", article: nouvelArticle });
 
@@ -408,6 +420,7 @@ module.exports.ajout_article = async (req, res) => {
         res.status(500).json({ message: "Erreur serveur." });
     }
 };
+
 
 //-Mise a jour des prix d'article--------
 // module.exports.update_article = async (req, res) => {

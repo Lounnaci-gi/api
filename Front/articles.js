@@ -42,7 +42,7 @@ document.getElementById("articleForm").addEventListener('submit', async (event) 
 
 function getPrixData() {
     return [{
-        date_application: new Date().getFullYear(),
+        date_application: new Date(),
         prix_unitaire_ht: parseFloat(document.getElementById("prix_unitaire_ht").value) || 0,
         prix_fourniture: parseFloat(document.getElementById("prix_fourniture").value) || 0,
         prix_pose: parseFloat(document.getElementById("prix_pose").value) || 0
