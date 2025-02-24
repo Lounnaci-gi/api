@@ -88,8 +88,8 @@ document.querySelectorAll('.btn')[0].addEventListener('click', () => {
     const options = [
         { value: "", text: "Sélectionnez une clé" },
         { value: "Unite", text: "Unité de mesure (ex: ml, m², m3)" },
-        { value: "DN", text: "DN" },
-        { value: "PN", text: "PN" },
+        { value: "DN", text: "DN [Diamètre]" },
+        { value: "PN", text: "PN [Pression nominale]" },
         { value: "Classe", text: "Classe" }
     ];
 
@@ -97,6 +97,12 @@ document.querySelectorAll('.btn')[0].addEventListener('click', () => {
         const optionElement = document.createElement("option");
         optionElement.value = option.value;
         optionElement.textContent = option.text;
+
+        // Désactiver si déjà sélectionné
+        if (isOptionSelected(option.value)) {
+            optionElement.disabled = true;
+        }
+
         selectKey.appendChild(optionElement);
     });
 
@@ -110,15 +116,39 @@ document.querySelectorAll('.btn')[0].addEventListener('click', () => {
     // Créer le bouton "Supprimer"
     const deleteButton = document.createElement("button");
     deleteButton.type = "button";
-    deleteButton.className = "btn delete-btn"; // Utiliser les classes .btn et .delete-btn
-    deleteButton.textContent = "Supprimer";
+    deleteButton.className = "btn delete-btn";
+    deleteButton.textContent = "Supp";
     deleteButton.addEventListener("click", () => {
-        container.removeChild(newEntry); // Supprimer l'entrée
+        container.removeChild(newEntry);
+        updateOptions(); // 🔄 Mettre à jour les options après suppression
     });
 
     // Ajouter les éléments au conteneur
     newEntry.appendChild(selectKey);
     newEntry.appendChild(inputValue);
     newEntry.appendChild(deleteButton);
-    container.insertBefore(newEntry, container.lastElementChild); // Ajouter avant le bouton "Ajouter"
+    container.insertBefore(newEntry, container.lastElementChild);
+
+    // Mettre à jour les options disponibles
+    selectKey.addEventListener("change", updateOptions);
 });
+
+// Fonction pour vérifier si une option est déjà sélectionnée
+function isOptionSelected(value) {
+    return Array.from(document.querySelectorAll('select[name="caracteristique_key"]'))
+        .some(select => select.value === value);
+}
+
+// Fonction pour mettre à jour les options disponibles
+function updateOptions() {
+    const selectedValues = Array.from(document.querySelectorAll('select[name="caracteristique_key"]'))
+        .map(select => select.value);
+
+    document.querySelectorAll('select[name="caracteristique_key"] option').forEach(option => {
+        if (option.value && selectedValues.includes(option.value)) {
+            option.disabled = true;
+        } else {
+            option.disabled = false;
+        }
+    });
+}

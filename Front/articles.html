@@ -131,18 +131,19 @@
             <div id="caracteristiquesContainer">
                 <div class="caracteristique-entry">
                     <select class="form-input" name="caracteristique_key">
-                        <option value="">Sélectionnez une clé</option>
-                        <option value="Unite">Unité de mesure (ex: ml, m², m3)</option>
+                        <option value="">Sélectionnez une Unité</option>
+                        <option value="Unite">Unité (ex: ml, m², m3)</option>             
                         <option value="DN">DN [Diamètre]</option>
                         <option value="PN">PN [Pression nominale]</option>
                         <option value="Classe">Classe</option>
+                        <option value="Poid">Poid</option>
                     </select>
                     <input type="text" class="form-input" name="caracteristique_value" placeholder="Valeur (ex: 20 mm)">
                 </div>
-                <button type="button" class="btn">Ajouter une caractéristique</button>
+                <button type="button" class="btn" id="btn_article_add_car">Ajouter</button>
             </div>
         </fieldset>
-        <button type="submit" class="btn">Enregistrer l'article</button>
+        <button type="submit" class="btn" id="btn_article_add">Enregistrer</button>
     </form>
 
     <script>      

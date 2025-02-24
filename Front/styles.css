@@ -1194,10 +1194,12 @@ footer {
 .hidden {
     display: none !important;
 }
+
 /* Stylisé le devis */
 .form-container {
     width: 60%;
-    margin: 100px auto 40px; /* Décalage vers le bas pour éviter la navbar */
+    margin: 100px auto 40px;
+    /* Décalage vers le bas pour éviter la navbar */
     padding: 20px;
     background-color: var(--secondary-color);
     border-radius: 10px;
@@ -1206,7 +1208,8 @@ footer {
 
 @media (max-width: 768px) {
     .form-container {
-        margin-top: 120px; /* Ajustement pour mobile */
+        margin-top: 120px;
+        /* Ajustement pour mobile */
         width: 90%;
     }
 }
@@ -1270,42 +1273,69 @@ footer {
         flex-direction: column;
     }
 }
+
 /* Style pour le conteneur des caractéristiques techniques */
 #caracteristiquesContainer {
-    display: flex; /* Aligner les éléments sur la même ligne */
-    flex-wrap: wrap; /* Permettre le retour à la ligne si nécessaire */
-    gap: 10px; /* Espacement entre les éléments */
-    margin-bottom: 10px; /* Espacement en bas */
+    display: flex;
+    /* Aligner les éléments sur la même ligne */
+    flex-wrap: wrap;
+    /* Permettre le retour à la ligne si nécessaire */
+    gap: 10px;
+    /* Espacement entre les éléments */
+    margin-bottom: 10px;
+    /* Espacement en bas */
 }
 
 /* Style pour chaque entrée de caractéristique */
 .caracteristique-entry {
-    display: flex; /* Aligner les éléments sur la même ligne */
-    gap: 10px; /* Espacement entre les éléments */
-    align-items: center; /* Centrer verticalement les éléments */
+    display: flex;
+    /* Aligner les éléments sur la même ligne */
+    gap: 10px;
+    /* Espacement entre les éléments */
+    align-items: center;
+    /* Centrer verticalement les éléments */
 }
 
 /* Style pour la liste déroulante et le champ de texte */
 .caracteristique-entry select,
 .caracteristique-entry input {
-    flex: 1; /* Les éléments prennent une largeur égale */
-    padding: 8px; /* Padding pour un meilleur rendu */
-    border: 1px solid #ccc; /* Bordure pour une meilleure visibilité */
-    border-radius: 4px; /* Coins arrondis */
+    flex: 1;
+    /* Les éléments prennent une largeur égale */
+    padding: 8px;
+    /* Padding pour un meilleur rendu */
+    border: 1px solid #ccc;
+    /* Bordure pour une meilleure visibilité */
+    border-radius: 4px;
+    /* Coins arrondis */
+}
+
+
+
+
+#btn_article_add,
+#btn_article_add_car {
+    transform: scale(0.8);
+
+
 }
 
 /* Style pour le bouton "Supprimer" */
 .delete-btn {
-    background-color: #ff4d4d; /* Couleur rouge */
-    color: white;
+    display: inline-block;
+    padding: 10px 30px;
+    background: #d9534f;
     border: none;
-    border-radius: 4px;
-    padding: 8px 12px;
+    border-radius: 40px;
+    color: #1f242d;
+    font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s;
-    font-family: 'Poppins', sans-serif; /* Utiliser la même police que les autres boutons */
+    transform: scale(0.8);
+    transition: 0.3s;
 }
 
 .delete-btn:hover {
-    background-color: #cc0000; /* Rouge plus foncé au survol */
+    background: transparent;
+    color: var(--text-color);
+    box-shadow: 0 0 10px #d9534f;
 }

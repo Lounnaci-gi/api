@@ -137,30 +137,6 @@ const articleSchema = mongoose.Schema({
     timestamps: true
 });
 
-// 🔥 Middleware pour générer `id_article` avant l'enregistrement
-articleSchema.pre("save", async function (next) {
-    if (!this.id_article) {
-        // 🔍 Trouver le dernier article inséré
-        const lastArticle = await this.constructor.findOne({ id_article: /^ART\d{7}$/ })
-            .sort({ id_article: -1 }) // Trie en ordre décroissant
-            .collation({ locale: "en", numericOrdering: true }) // ✅ Active le tri numérique
-            .lean();
-
-        let nextNumber = 1; // Commence à 1 si aucun article n'existe encore
-
-        if (lastArticle && lastArticle.id_article) {
-            const match = lastArticle.id_article.match(/^ART(\d{7})$/);
-            if (match) {
-                nextNumber = parseInt(match[1], 10) + 1; // Incrémente le dernier numéro
-            }
-        }
-
-        // 📌 Générer le nouvel ID formaté correctement
-        this.id_article = `ART${String(nextNumber).padStart(7, "0")}`;
-    }
-    next();
-});
-
 
 // Création des modèles
 const Client = mongoose.model("Client", postSchema);
