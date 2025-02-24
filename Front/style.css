@@ -31,7 +31,8 @@ body {
 }
 
 .header img {
-    max-width: 80px; /* Réduction du logo */
+    max-width: 80px;
+    /* Réduction du logo */
     height: auto;
     margin-right: 15px;
 }
@@ -43,23 +44,29 @@ body {
 
 .header-text h1 {
     margin: 0;
-    font-size: 18px; /* Réduction du titre */
+    font-size: 18px;
+    /* Réduction du titre */
     color: #333;
     font-weight: 600;
 }
 
 .header-text p {
     margin: 3px 0;
-    font-size: 12px; /* Texte plus petit */
+    font-size: 12px;
+    /* Texte plus petit */
     color: #555;
 }
 
 /* Style des blocs d’informations */
-.client-info, .address-info, .client-contact, .dossier-info {
+.client-info,
+.address-info,
+.client-contact,
+.dossier-info {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 14px; /* Réduction générale */
+    font-size: 14px;
+    /* Réduction générale */
     color: #333;
     margin-top: 10px;
     padding: 8px 12px;
@@ -69,7 +76,10 @@ body {
 }
 
 /* Ajustement du texte */
-.client-info p, .address-info p, .client-contact p, .dossier-info p {
+.client-info p,
+.address-info p,
+.client-contact p,
+.dossier-info p {
     margin: 0;
     padding: 4px 8px;
     flex: 1;
@@ -100,7 +110,8 @@ body {
     margin-top: 15px;
     padding: 10px;
     text-align: center;
-    font-size: 14px; /* Réduction */
+    font-size: 14px;
+    /* Réduction */
     color: white;
     background: #007bff;
     border: none;
@@ -113,6 +124,7 @@ body {
 .print-button:hover {
     background: #0056b3;
 }
+
 .qrcode-container {
     text-align: center;
     margin-top: 15px;
@@ -123,3 +135,4 @@ body {
     padding: 10px;
     background-color: #fff;
 }
+

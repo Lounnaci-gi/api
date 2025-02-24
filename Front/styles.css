@@ -1270,3 +1270,42 @@ footer {
         flex-direction: column;
     }
 }
+/* Style pour le conteneur des caractéristiques techniques */
+#caracteristiquesContainer {
+    display: flex; /* Aligner les éléments sur la même ligne */
+    flex-wrap: wrap; /* Permettre le retour à la ligne si nécessaire */
+    gap: 10px; /* Espacement entre les éléments */
+    margin-bottom: 10px; /* Espacement en bas */
+}
+
+/* Style pour chaque entrée de caractéristique */
+.caracteristique-entry {
+    display: flex; /* Aligner les éléments sur la même ligne */
+    gap: 10px; /* Espacement entre les éléments */
+    align-items: center; /* Centrer verticalement les éléments */
+}
+
+/* Style pour la liste déroulante et le champ de texte */
+.caracteristique-entry select,
+.caracteristique-entry input {
+    flex: 1; /* Les éléments prennent une largeur égale */
+    padding: 8px; /* Padding pour un meilleur rendu */
+    border: 1px solid #ccc; /* Bordure pour une meilleure visibilité */
+    border-radius: 4px; /* Coins arrondis */
+}
+
+/* Style pour le bouton "Supprimer" */
+.delete-btn {
+    background-color: #ff4d4d; /* Couleur rouge */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-family: 'Poppins', sans-serif; /* Utiliser la même police que les autres boutons */
+}
+
+.delete-btn:hover {
+    background-color: #cc0000; /* Rouge plus foncé au survol */
+}

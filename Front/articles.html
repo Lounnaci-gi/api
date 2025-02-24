@@ -82,7 +82,6 @@
                 <option value="canalisations">Canalisations et Tuyauterie</option>
                 <option value="pieces_speciales">Pièces Spéciales</option>
                 <option value="frais_supplementaires">Frais Cautionnements</option>
-                <option value="autres">Autres</option>
             </select>
 
             <div class="form-row">
@@ -133,17 +132,17 @@
                 <div class="caracteristique-entry">
                     <select class="form-input" name="caracteristique_key">
                         <option value="">Sélectionnez une clé</option>
-                        <option value="Unite">Unité de meusure (ex:ml,m²,m3)</option>
+                        <option value="Unite">Unité de mesure (ex: ml, m², m3)</option>
                         <option value="DN">DN [Diamètre]</option>
                         <option value="PN">PN [Pression nominale]</option>
                         <option value="Classe">Classe</option>
                     </select>
                     <input type="text" class="form-input" name="caracteristique_value" placeholder="Valeur (ex: 20 mm)">
                 </div>
+                <button type="button" class="btn">Ajouter une caractéristique</button>
             </div>
-            <button type="button" class="btn">Ajouter une caractéristique</button>
         </fieldset>
-
+        <i class='bx bxs-message-square-x'></i>
         <button type="submit" class="btn">Enregistrer l'article</button>
     </form>
 

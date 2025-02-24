@@ -14,7 +14,6 @@ document.getElementById("articleForm").addEventListener('submit', async (event) 
         showAlert("Erreur", "Vous devez être connecté.", "error");
         return;
     }
-    console.log(getPrixData());
     const datas = {
         designation: document.getElementById("designation").value,
         rubrique: document.getElementById("rubrique").value,
@@ -87,8 +86,8 @@ document.querySelectorAll('.btn')[0].addEventListener('click', () => {
 
     // Ajouter les options à la liste déroulante
     const options = [
-        { value: "", text: "Sélectionnez une clé" }, // Option par défaut
-        { value: "Unite", text: "Unité de mesure (ex: ml, m², m3)" }, // Ajouté
+        { value: "", text: "Sélectionnez une clé" },
+        { value: "Unite", text: "Unité de mesure (ex: ml, m², m3)" },
         { value: "DN", text: "DN" },
         { value: "PN", text: "PN" },
         { value: "Classe", text: "Classe" }
@@ -108,8 +107,18 @@ document.querySelectorAll('.btn')[0].addEventListener('click', () => {
     inputValue.name = "caracteristique_value";
     inputValue.placeholder = "Valeur (ex: 20 mm)";
 
+    // Créer le bouton "Supprimer"
+    const deleteButton = document.createElement("button");
+    deleteButton.type = "button";
+    deleteButton.className = "btn delete-btn"; // Utiliser les classes .btn et .delete-btn
+    deleteButton.textContent = "Supprimer";
+    deleteButton.addEventListener("click", () => {
+        container.removeChild(newEntry); // Supprimer l'entrée
+    });
+
     // Ajouter les éléments au conteneur
     newEntry.appendChild(selectKey);
     newEntry.appendChild(inputValue);
-    container.appendChild(newEntry);
+    newEntry.appendChild(deleteButton);
+    container.insertBefore(newEntry, container.lastElementChild); // Ajouter avant le bouton "Ajouter"
 });
