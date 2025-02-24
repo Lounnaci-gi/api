@@ -44,7 +44,7 @@ document.getElementById("articleForm").addEventListener('submit', async (event) 
 
 function getPrixData() {
     return [{
-        date_application: new Date().toISOString(),
+        date_application: new Date().getFullYear(),
         prix_achat_ht: parseFloat(document.getElementById("prix_achat_ht").value) || 0,
         prix_fourniture: parseFloat(document.getElementById("prix_fourniture").value) || 0,
         prix_pose: parseFloat(document.getElementById("prix_pose").value) || 0
@@ -53,20 +53,19 @@ function getPrixData() {
 
 function getCaracteristiquesData() {
     const caracteristiques = {};
-    const keys = document.querySelectorAll('input[name="caracteristique_key"]');
-    const values = document.querySelectorAll('input[name="caracteristique_value"]');
+    const keys = document.querySelectorAll('select[name="caracteristique_key"]'); // Sélectionner les <select>
+    const values = document.querySelectorAll('input[name="caracteristique_value"]'); // Sélectionner les <input>
 
-    keys.forEach((keyInput, index) => {
-        const key = keyInput.value.trim();
-        const value = values[index].value.trim();
-        if (key && value) {
+    keys.forEach((keySelect, index) => {
+        const key = keySelect.value.trim(); // Récupérer la valeur sélectionnée dans la liste déroulante
+        const value = values[index].value.trim(); // Récupérer la valeur saisie dans le champ de texte
+        if (key && value) { // Vérifier que la clé et la valeur ne sont pas vides
             caracteristiques[key] = value;
         }
     });
 
     return caracteristiques;
 }
-
 function showAlert(title, text, icon) {
     Swal.fire({
         title: title,
@@ -76,13 +75,40 @@ function showAlert(title, text, icon) {
     });
 }
 
-document.querySelectorAll('.btn')[0].addEventListener('click',()=>{
+document.querySelectorAll('.btn')[0].addEventListener('click', () => {
     const container = document.getElementById("caracteristiquesContainer");
     const newEntry = document.createElement("div");
     newEntry.className = "caracteristique-entry";
-    newEntry.innerHTML = `
-            <input type="text" class="form-input" name="caracteristique_key" placeholder="Clé (ex: DN)">
-            <input type="text" class="form-input" name="caracteristique_value" placeholder="Valeur (ex: 20 mm)">
-        `;
+
+    // Créer la liste déroulante pour la clé
+    const selectKey = document.createElement("select");
+    selectKey.className = "form-input";
+    selectKey.name = "caracteristique_key";
+
+    // Ajouter les options à la liste déroulante
+    const options = [
+        { value: "", text: "Sélectionnez une clé" }, // Option par défaut
+        { value: "DN", text: "DN" },
+        { value: "PN", text: "PN" },
+        { value: "Classe", text: "Classe" }
+    ];
+
+    options.forEach(option => {
+        const optionElement = document.createElement("option");
+        optionElement.value = option.value;
+        optionElement.textContent = option.text;
+        selectKey.appendChild(optionElement);
+    });
+
+    // Créer le champ de texte pour la valeur
+    const inputValue = document.createElement("input");
+    inputValue.type = "text";
+    inputValue.className = "form-input";
+    inputValue.name = "caracteristique_value";
+    inputValue.placeholder = "Valeur (ex: 20 mm)";
+
+    // Ajouter les éléments au conteneur
+    newEntry.appendChild(selectKey);
+    newEntry.appendChild(inputValue);
     container.appendChild(newEntry);
 });

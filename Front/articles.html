@@ -142,7 +142,12 @@
             <legend class="form-title">Caractéristiques Techniques</legend>
             <div id="caracteristiquesContainer">
                 <div class="caracteristique-entry">
-                    <input type="text" class="form-input" name="caracteristique_key" placeholder="Clé (ex: DN)">
+                    <select class="form-input" name="caracteristique_key">
+                        <option value="">Sélectionnez une clé</option>
+                        <option value="DN">DN [Diamètre]</option>
+                        <option value="PN">PN [Pression nominale]</option>
+                        <option value="Classe">Classe</option>
+                    </select>
                     <input type="text" class="form-input" name="caracteristique_value" placeholder="Valeur (ex: 20 mm)">
                 </div>
             </div>
