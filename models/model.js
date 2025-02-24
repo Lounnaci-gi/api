@@ -124,15 +124,6 @@ const articleSchema = mongoose.Schema({
         type: String,
         enum: ["cuivre", "pvc", "per", "pehd", "multicouche", "galvanisé", "fonte", "inox", "laiton", "autre"]
     },
-    diametre: {
-        type: Number,
-        validate: {
-            validator: function (value) {
-                return this.unite !== "ml" || (this.unite === "ml" && value != null);
-            },
-            message: "Le diamètre est requis si l'unité est en mètres linéaires (ml)."
-        }
-    },
     prix: [
         {
             date_application: { type: Date, default: Date.now },

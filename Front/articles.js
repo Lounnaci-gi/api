@@ -18,7 +18,6 @@ document.getElementById("articleForm").addEventListener('submit', async (event) 
     const datas = {
         designation: document.getElementById("designation").value,
         unite: document.getElementById("unite").value,
-        diametre: document.getElementById("diametre").value || null,
         rubrique: document.getElementById("rubrique").value,
         materiau: document.getElementById("materiau").value,
         prix: getPrixData(),
@@ -68,8 +67,6 @@ function getCaracteristiquesData() {
     return caracteristiques;
 }
 
-
-
 function showAlert(title, text, icon) {
     Swal.fire({
         title: title,
@@ -78,3 +75,14 @@ function showAlert(title, text, icon) {
         confirmButtonText: 'OK'
     });
 }
+
+document.querySelectorAll('.btn')[0].addEventListener('click',()=>{
+    const container = document.getElementById("caracteristiquesContainer");
+    const newEntry = document.createElement("div");
+    newEntry.className = "caracteristique-entry";
+    newEntry.innerHTML = `
+            <input type="text" class="form-input" name="caracteristique_key" placeholder="Clé (ex: DN)">
+            <input type="text" class="form-input" name="caracteristique_value" placeholder="Valeur (ex: 20 mm)">
+        `;
+    container.appendChild(newEntry);
+});

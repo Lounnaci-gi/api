@@ -396,7 +396,6 @@ module.exports.ajout_article = async (req, res) => {
             id_article: `ART${String(Date.now()).slice(-7)}`,
             designation: informations.designation,
             unite: informations.unite,
-            diametre: informations.diametre || null,
             materiau: informations.materiau,
             rubrique: informations.rubrique,
             prix: prix,

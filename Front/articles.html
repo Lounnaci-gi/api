@@ -83,18 +83,14 @@
 
                 <div class="form-group">
                     <label for="unite" class="form-label">Unité :</label>
-                    <select id="unite" name="unite" class="form-input" required onchange="toggleFields()">
+                    <select id="unite" name="unite" class="form-input" required>
                         <option value="ml">Mètre linéaire (ml)</option>
                         <option value="m2">Mètre carré (m²)</option>
                         <option value="m3">Mètre cube (m³)</option>
                         <option value="unite">Unité</option>
                     </select>
                 </div>
-
-                <div class="form-group" id="diametreField">
-                    <label for="diametre" class="form-label">Diamètre (mm) :</label>
-                    <input type="number" id="diametre" name="diametre" class="form-input" step="0.1">
-                </div>
+             
             </div>
 
             <label for="materiau" class="form-label">Type de Matériau :</label>
@@ -150,38 +146,13 @@
                     <input type="text" class="form-input" name="caracteristique_value" placeholder="Valeur (ex: 20 mm)">
                 </div>
             </div>
-            <button type="button" class="btn" onclick="addCaracteristiqueEntry()">Ajouter une caractéristique</button>
+            <button type="button" class="btn">Ajouter une caractéristique</button>
         </fieldset>
 
         <button type="submit" class="btn">Enregistrer l'article</button>
     </form>
 
-    <script>
-        function toggleFields() {
-            var unite = document.getElementById("unite").value;
-            var diametreField = document.getElementById("diametreField");
-
-            if (unite === "ml" || unite === "unite") {
-                diametreField.style.display = "block";
-                document.getElementById("diametre").disabled = false;
-            } else {
-                diametreField.style.display = "none";
-                document.getElementById("diametre").disabled = true;
-                document.getElementById("diametre").value = ""; // Réinitialiser si désactivé
-            }
-        }
-
-
-        function addCaracteristiqueEntry() {
-            const container = document.getElementById("caracteristiquesContainer");
-            const newEntry = document.createElement("div");
-            newEntry.className = "caracteristique-entry";
-            newEntry.innerHTML = `
-                    <input type="text" class="form-input" name="caracteristique_key" placeholder="Clé (ex: DN)">
-                    <input type="text" class="form-input" name="caracteristique_value" placeholder="Valeur (ex: 20 mm)">
-                `;
-            container.appendChild(newEntry);
-        }
+    <script>      
 
         document.getElementById("articleForm").addEventListener("submit", function (event) {
             const designation = document.getElementById("designation").value;
@@ -193,8 +164,6 @@
             }
         });
 
-        // Initialisation au chargement de la page
-        window.onload = toggleFields;
     </script>
     <script src="articles.js"></script>
     <footer class="footer">
