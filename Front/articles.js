@@ -14,6 +14,41 @@ document.getElementById("articleForm").addEventListener('submit', async (event) 
         showAlert("Erreur", "Vous devez être connecté.", "error");
         return;
     }
+
+    const prix_fourniture = parseFloat(document.getElementById("prix_fourniture").value);
+    const prix_pose = parseFloat(document.getElementById("prix_pose").value);
+
+    if (isNaN(prix_fourniture) || prix_fourniture <= 0) {
+        event.preventDefault(); // Bloque l'envoi du formulaire
+        document.getElementById("prix_fourniture").focus();
+        return showAlert('Attention', 'Veuillez remplire les champs manquant', 'warning');
+    }
+
+    if (isNaN(prix_pose) || prix_pose <= 0) {
+        event.preventDefault(); // Bloque l'envoi du formulaire
+        document.getElementById("prix_pose").focus();
+        return showAlert('Attention', 'Veuillez remplire les champs manquant', 'warning');
+    }
+
+    // 🔥 Demander confirmation avant d'envoyer les données
+    const confirmation = await Swal.fire({
+        title: "Confirmer l'enregistrement ?",
+        text: "Voulez-vous vraiment ajouter cet article ?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Oui, enregistrer !",
+        cancelButtonText: "Annuler",
+        customClass: {
+            confirmButton: "sci",
+            cancelButton: "sci"
+        }
+    });
+
+    if (!confirmation.isConfirmed) {
+        return; // ⛔ Ne rien faire si l'utilisateur annule
+    }
     const datas = {
         designation: document.getElementById("designation").value,
         rubrique: document.getElementById("rubrique").value,
@@ -21,7 +56,6 @@ document.getElementById("articleForm").addEventListener('submit', async (event) 
         prix: getPrixData(),
         caracteristiques: getCaracteristiquesData()
     };
-
     // Utiliser l'endpoint correct
     const response = await fetch('http://localhost:3000/users/ajout_article', {
         method: 'POST',
@@ -35,6 +69,10 @@ document.getElementById("articleForm").addEventListener('submit', async (event) 
 
     if (response.ok) {
         Swal.fire("Succès", "Article ajouté avec succès", "success");
+        document.querySelectorAll(".btn delete-btn").forEach(element => element.remove());
+        document.querySelectorAll(".caracteristique-entry").forEach(element => element.remove());
+        document.getElementById('articleForm').reset();
+
     } else {
         Swal.fire("Erreur", result.message || "Une erreur est survenue", "error");
     }
@@ -152,3 +190,4 @@ function updateOptions() {
         }
     });
 }
+

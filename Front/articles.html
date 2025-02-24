@@ -113,15 +113,13 @@
             <div id="prixContainer">
                 <div class="prix-entry">
                     <label for="prix_unitaire_ht" class="form-label">Prix Unitaire HT :</label>
-                    <input type="number" id="prix_unitaire_ht" name="prix_unitaire_ht" class="form-input" step="0.01"
-                        required>
+                    <input type="number" id="prix_unitaire_ht" name="prix_unitaire_ht" class="form-input" step="0.01">
 
                     <label for="prix_fourniture" class="form-label">Prix de fourniture :</label>
-                    <input type="number" id="prix_fourniture" name="prix_fourniture" class="form-input" step="0.01"
-                        required>
+                    <input type="number" id="prix_fourniture" name="prix_fourniture" class="form-input" step="0.01">
 
                     <label for="prix_pose" class="form-label">Prix de pose :</label>
-                    <input type="number" id="prix_pose" name="prix_pose" class="form-input" step="0.01" required>
+                    <input type="number" id="prix_pose" name="prix_pose" class="form-input" step="0.01">
                 </div>
             </div>
         </fieldset>
@@ -148,15 +146,7 @@
 
     <script>      
 
-        document.getElementById("articleForm").addEventListener("submit", function (event) {
-            const designation = document.getElementById("designation").value;
-            const prixAchat = document.getElementById("prix_unitaire_ht").value;
-
-            if (designation.trim() === "" || prixAchat <= 0) {
-                event.preventDefault(); // Bloque l'envoi du formulaire
-                alert("Veuillez remplir tous les champs obligatoires et vérifier les prix.");
-            }
-        });
+    
 
     </script>
     <script src="articles.js"></script>
