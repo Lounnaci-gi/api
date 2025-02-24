@@ -110,11 +110,6 @@ const articleSchema = mongoose.Schema({
         required: true,
         trim: true
     },
-    unite: {
-        type: String,
-        required: true,
-        enum: ["m²", "m3", "ml", "unite"]
-    },
     rubrique: {
         type: String,
         required: true,
@@ -127,7 +122,7 @@ const articleSchema = mongoose.Schema({
     prix: [
         {
             date_application: { type: Date, default: Date.now },
-            prix_achat_ht: { type: Number, required: true, min: 0 },
+            prix_unitaire_ht: { type: Number, required: true, min: 0 },
             prix_fourniture: { type: Number, min: 0 },
             prix_pose: { type: Number, min: 0 }
         }

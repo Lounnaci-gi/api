@@ -395,7 +395,6 @@ module.exports.ajout_article = async (req, res) => {
         const nouvelArticle = await Article.create({
             id_article: `ART${String(Date.now()).slice(-7)}`,
             designation: informations.designation,
-            unite: informations.unite,
             materiau: informations.materiau,
             rubrique: informations.rubrique,
             prix: prix,

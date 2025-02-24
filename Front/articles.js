@@ -17,7 +17,6 @@ document.getElementById("articleForm").addEventListener('submit', async (event) 
     console.log(getPrixData());
     const datas = {
         designation: document.getElementById("designation").value,
-        unite: document.getElementById("unite").value,
         rubrique: document.getElementById("rubrique").value,
         materiau: document.getElementById("materiau").value,
         prix: getPrixData(),
@@ -45,7 +44,7 @@ document.getElementById("articleForm").addEventListener('submit', async (event) 
 function getPrixData() {
     return [{
         date_application: new Date().getFullYear(),
-        prix_achat_ht: parseFloat(document.getElementById("prix_achat_ht").value) || 0,
+        prix_unitaire_ht: parseFloat(document.getElementById("prix_unitaire_ht").value) || 0,
         prix_fourniture: parseFloat(document.getElementById("prix_fourniture").value) || 0,
         prix_pose: parseFloat(document.getElementById("prix_pose").value) || 0
     }];
@@ -66,6 +65,7 @@ function getCaracteristiquesData() {
 
     return caracteristiques;
 }
+
 function showAlert(title, text, icon) {
     Swal.fire({
         title: title,
@@ -88,6 +88,7 @@ document.querySelectorAll('.btn')[0].addEventListener('click', () => {
     // Ajouter les options à la liste déroulante
     const options = [
         { value: "", text: "Sélectionnez une clé" }, // Option par défaut
+        { value: "Unite", text: "Unité de mesure (ex: ml, m², m3)" }, // Ajouté
         { value: "DN", text: "DN" },
         { value: "PN", text: "PN" },
         { value: "Classe", text: "Classe" }

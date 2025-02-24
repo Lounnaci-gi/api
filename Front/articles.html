@@ -75,22 +75,21 @@
         <fieldset class="form-section">
             <legend class="form-title">Informations Générales</legend>
 
+            <label for="rubrique" class="form-label">Rubrique :</label>
+            <select id="rubrique" name="rubrique" class="form-input" required>
+                <option value="">Sélectionnez une rubrique</option>
+                <option value="terrassement">Terrassement</option>
+                <option value="canalisations">Canalisations et Tuyauterie</option>
+                <option value="pieces_speciales">Pièces Spéciales</option>
+                <option value="frais_supplementaires">Frais Cautionnements</option>
+                <option value="autres">Autres</option>
+            </select>
+
             <div class="form-row">
                 <div class="form-group">
                     <label for="designation" class="form-label">Désignation :</label>
                     <input type="text" id="designation" name="designation" class="form-input" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="unite" class="form-label">Unité :</label>
-                    <select id="unite" name="unite" class="form-input" required>
-                        <option value="ml">Mètre linéaire (ml)</option>
-                        <option value="m2">Mètre carré (m²)</option>
-                        <option value="m3">Mètre cube (m³)</option>
-                        <option value="unite">Unité</option>
-                    </select>
-                </div>
-             
+                </div>             
             </div>
 
             <label for="materiau" class="form-label">Type de Matériau :</label>
@@ -107,16 +106,6 @@
                 <option value="laiton">Laiton</option>
                 <option value="autre">Autre</option>
             </select>
-
-            <label for="rubrique" class="form-label">Rubrique :</label>
-            <select id="rubrique" name="rubrique" class="form-input" required>
-                <option value="">Sélectionnez une rubrique</option>
-                <option value="terrassement">Terrassement</option>
-                <option value="canalisations">Canalisations et Tuyauterie</option>
-                <option value="pieces_speciales">Pièces Spéciales</option>
-                <option value="frais_supplementaires">Frais Cautionnements</option>
-                <option value="autres">Autres</option>
-            </select>
         </fieldset>
 
         <fieldset class="form-section">
@@ -124,8 +113,8 @@
 
             <div id="prixContainer">
                 <div class="prix-entry">
-                    <label for="prix_achat_ht" class="form-label">Prix d'achat HT :</label>
-                    <input type="number" id="prix_achat_ht" name="prix_achat_ht" class="form-input" step="0.01"
+                    <label for="prix_unitaire_ht" class="form-label">Prix Unitaire HT :</label>
+                    <input type="number" id="prix_unitaire_ht" name="prix_unitaire_ht" class="form-input" step="0.01"
                         required>
 
                     <label for="prix_fourniture" class="form-label">Prix de fourniture :</label>
@@ -144,6 +133,7 @@
                 <div class="caracteristique-entry">
                     <select class="form-input" name="caracteristique_key">
                         <option value="">Sélectionnez une clé</option>
+                        <option value="Unite">Unité de meusure (ex:ml,m²,m3)</option>
                         <option value="DN">DN [Diamètre]</option>
                         <option value="PN">PN [Pression nominale]</option>
                         <option value="Classe">Classe</option>
@@ -161,7 +151,7 @@
 
         document.getElementById("articleForm").addEventListener("submit", function (event) {
             const designation = document.getElementById("designation").value;
-            const prixAchat = document.getElementById("prix_achat_ht").value;
+            const prixAchat = document.getElementById("prix_unitaire_ht").value;
 
             if (designation.trim() === "" || prixAchat <= 0) {
                 event.preventDefault(); // Bloque l'envoi du formulaire
