@@ -39,11 +39,7 @@ document.getElementById("articleForm").addEventListener('submit', async (event) 
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
         confirmButtonText: "Oui, enregistrer !",
-        cancelButtonText: "Annuler",
-        customClass: {
-            confirmButton: "sci",
-            cancelButton: "sci"
-        }
+        cancelButtonText: "Annuler"
     });
 
     if (!confirmation.isConfirmed) {

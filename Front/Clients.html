@@ -11,15 +11,16 @@
     <meta name="keywords" content="gestion client, ajouter client, modifier client, liste clients">
     <!-- Dans l'en-tête de votre fichier HTML -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="deconnect.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const token = sessionStorage.getItem("token");
-
-            if (!token) {
-                window.location.href = "index.html"; // 🔄 Rediriger vers la page de connexion si pas de token
-            }
-        });
-    </script>
+           const token = sessionStorage.getItem("token");
+       
+           if (!token) {
+               window.location.href = "index.html"; // 🔄 Rediriger vers la page de connexion si pas de token
+           }
+       });   
+       </script>
 </head>
 
 <body>
