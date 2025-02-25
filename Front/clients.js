@@ -5,27 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// 🔄 Timer pour gérer l’inactivité
-let logoutTimer;
-
-function resetTimer() {
-    clearTimeout(logoutTimer);
-    logoutTimer = setTimeout(() => {
-        sessionStorage.removeItem("token");
-        sessionStorage.removeItem("user");
-        showAlert("Déconnexion", "Votre session a expiré.", "info").then(() => {
-            window.location.reload();
-        });
-    }, 15 * 60 * 1000); // 15 minutes d’inactivité
-}
-
-window.onload = resetTimer;
-document.onmousemove = resetTimer;
-document.onkeypress = resetTimer;
-document.onclick = resetTimer;
-document.onscroll = resetTimer;
-
-
 function dessiner_tableau() {
     return `
     <thead>  

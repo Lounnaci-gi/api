@@ -99,14 +99,14 @@ function getCaracteristiquesData() {
     return caracteristiques;
 }
 
-function showAlert(title, text, icon) {
-    Swal.fire({
-        title: title,
-        text: text,
-        icon: icon,
-        confirmButtonText: 'OK'
-    });
-}
+// function showAlert(title, text, icon) {
+//     Swal.fire({
+//         title: title,
+//         text: text,
+//         icon: icon,
+//         confirmButtonText: 'OK'
+//     });
+// }
 
 document.querySelectorAll('.btn')[0].addEventListener('click', () => {
     const container = document.getElementById("caracteristiquesContainer");
