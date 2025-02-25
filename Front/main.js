@@ -261,23 +261,4 @@ function updateLoginButton() {
 document.addEventListener("DOMContentLoaded", updateLoginButton);
 
 
-let logoutTimer; 
-
-function resetTimer() {
-    clearTimeout(logoutTimer);
-    logoutTimer = setTimeout(() => {
-        sessionStorage.removeItem("token");
-        sessionStorage.removeItem("user");
-        showAlert("Déconnexion", "Votre session a expiré pour inactivité.", "info").then(() => {
-            window.location.reload();
-        });
-    }, 30 * 15 * 1000); // ⏳ Déconnecte après 15 minutes d'inactivité
-}
-
-// 🔄 Réinitialise le timer à chaque activité de l’utilisateur
-window.onload = resetTimer;
-document.onmousemove = resetTimer;
-document.onkeypress = resetTimer;
-document.onclick = resetTimer;
-document.onscroll = resetTimer;
 

@@ -6,6 +6,9 @@ const nodemailer = require("nodemailer");
 const dotenv = require("dotenv").config();
 const moment = require("moment");
 const jwt = require("jsonwebtoken");
+const authenticate = require("../middlewares/auth");
+
+
 
 module.exports.new_dossier = async (req, res) => {
     try {
@@ -144,25 +147,27 @@ module.exports.recherche_multiple = async (req, res) => {
 };
 
 module.exports.deletepost = async (req, res) => {
-    try {
-        if (req.params.id === "") {
-            return res.status(400).send(`Ajouter l'id de Client !`);
-        } else {
+    authenticate(req, res, async () => {
+        try {
+            if (!req.params.id) {
+                return res.status(400).send("Ajoutez l'ID du client !");
+            }
+
             const post = await Client.findOne({ Id_Dossier: req.params.id });
             if (!post) {
-                return res.status(404).send(`Aucun enregistrement trouvé avec l'id : ` + req.params.id);
-            } else {
-                await post.deleteOne();
-                res.status(200).send(`Enregistrement supprimer avec succes`);
+                return res.status(404).send(`Aucun enregistrement trouvé avec l'ID : ${req.params.id}`);
             }
+
+            await post.deleteOne();
+            res.status(200).send("Enregistrement supprimé avec succès.");
+
+        } catch (err) {
+            res.status(500).send("Erreur lors de la suppression.");
         }
+    });
+};
 
-    } catch (err) {
-        res.status(500).send(`Impossible de ce connecté a l'enregistrement.`);
-    }
-}
 //-----------Ajouter des utilisateurs ---------------------------------------------------
-
 
 module.exports.newuser = async (req, res) => {
     const errors = validationResult(req);
@@ -220,12 +225,16 @@ module.exports.login = async (req, res) => {
             return res.status(401).json({ success: false, message: "Nom d'utilisateur ou mot de passe incorrect." });
         }
 
-        // ✅ Générer un Token JWT
+        if (!process.env.JWT_SECRET) {
+            throw new Error("❌ JWT_SECRET manquant ! Impossible de générer un token.");
+        }
+
         const token = jwt.sign(
             { userId: user._id, nomUtilisateur: user.nomUtilisateur },
-            process.env.JWT_SECRET || "aa56fedd9bec83dc879255c5454e7656e7b148ff71b3023f09790fa2e59450a8c80491b2495e596e28c760409d7497719e103efbeffeae18744d871a5f4c56f2",  // 🔥 Vérifie que `JWT_SECRET` est défini dans `.env`
-            { expiresIn: "7d" }  // Expiration du token en 1 heure
+            process.env.JWT_SECRET, // 🔒 Utiliser uniquement la variable d'environnement
+            { expiresIn: "1h" } // ⏳ Réduit la durée de validité à 1 heure
         );
+
 
         // ✅ Renvoyer le token et les infos utilisateur
         res.status(200).json({
@@ -254,24 +263,25 @@ const transporter = nodemailer.createTransport({
 });
 
 module.exports.recupass = async (req, res) => {
-    const { email } = req.body; // Extraction de l'e-mail de la requête
+    const { email } = req.body;
 
     try {
-        // Recherche de l'utilisateur dans la base de données
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(404).json({ message: `Utilisateur non trouvé.` }); // Si l'utilisateur n'existe pas, renvoyer une erreur 404
+            return res.status(404).json({ message: `Utilisateur non trouvé.` });
         }
-        // Génération d'un token de réinitialisation (valide 1h)
-        const resetToken = crypto.randomBytes(32).toString("hex"); // Génère un token aléatoire
-        user.resetToken = resetToken; // Associe le token à l'utilisateur
-        user.resetTokenExpire = Date.now() + 3600000; // Définit l'expiration à 1 heure
-        await user.save(); // Sauvegarde les modifications dans la base de données
-        // Création du lien de réinitialisation
+
+        // 🔒 Générer un token et stocker sa version hachée
+        const resetToken = crypto.randomBytes(32).toString("hex");
+        const hashedToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+
+        user.resetToken = hashedToken; // ✅ Stocker la version hachée du token
+        user.resetTokenExpire = Date.now() + 3600000; // Expire après 1h
+        await user.save();
+
+        // 📩 Envoyer le token brut par email (car en base, on stocke uniquement la version hachée)
         const resetLink = `http://localhost:3000/users/reset-password/${resetToken}`;
 
-        // Envoi de l'e-mail avec le lien de réinitialisation
-        console.log("Tentative d'envoi d'e-mail à :", user.email);
         await transporter.sendMail({
             from: process.env.EMAIL_USER,
             to: user.email,
@@ -279,18 +289,68 @@ module.exports.recupass = async (req, res) => {
             text: `Cliquez sur le lien suivant pour réinitialiser votre mot de passe : ${resetLink}`,
         });
 
-        // Réponse indiquant que l'e-mail a été envoyé
         res.json({
-            message: `Un e-mail de réinitialisation a été envoyé à ${user.email}.`,
-            email: user.email // Ajouter l'email pour l'afficher côté frontend
+            message: `Un e-mail de réinitialisation a été envoyé à ${user.email}.`
         });
 
-
     } catch (err) {
-        console.error("Erreur dans recupass :", err); // Affiche l'erreur complète
+        console.error("Erreur dans recupass :", err);
         res.status(500).json({ message: "Erreur serveur." });
     }
-}
+};
+//-----------Reset password------------------------------------------------------------------------
+module.exports.resetPassword = async (req, res) => {
+    const { token } = req.params; // Token envoyé dans l'URL
+    const { newPassword } = req.body; // Nouveau mot de passe soumis
+
+    try {
+        if (!newPassword || newPassword.length < 8) {
+            return res.status(400).json({ message: "Le mot de passe doit contenir au moins 8 caractères." });
+        }
+
+        // 🔍 Hacher le token reçu pour le comparer avec la version stockée
+        const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+        // 📌 Vérifier si l'utilisateur existe avec ce token et qu'il n'a pas expiré
+        const user = await User.findOne({
+            resetToken: hashedToken,
+            resetTokenExpire: { $gt: Date.now() }
+        });
+
+        if (!user) {
+            return res.status(400).json({ message: "Token invalide ou expiré." });
+        }
+
+        // 🔒 Hasher le nouveau mot de passe avant de l'enregistrer
+        const salt = await bcrypt.genSalt(10);
+        user.motDePasse = await bcrypt.hash(newPassword, salt);
+
+        // 📌 Mettre à jour les informations utilisateur avant la sauvegarde
+        user.tokenVersion = (user.tokenVersion || 0) + 1; // 🔥 Invalider les anciens JWT
+        user.resetToken = undefined; // Supprime le token de réinitialisation
+        user.resetTokenExpire = undefined;
+        await user.save(); // ✅ Un seul `save()`
+
+        // 📩 Envoyer un email de confirmation
+        await transporter.sendMail({
+            from: process.env.EMAIL_USER,
+            to: user.email,
+            subject: "Votre mot de passe a été réinitialisé",
+            text: "Bonjour,\n\nVotre mot de passe a été réinitialisé avec succès. Si vous n'êtes pas à l'origine de cette demande, veuillez contacter notre support immédiatement.\n\nCordialement,\nL'équipe de support",
+        });
+
+        // ✅ Répondre au frontend pour forcer la déconnexion
+        res.json({
+            message: "Mot de passe réinitialisé avec succès ! Vous devez vous reconnecter.",
+            forceLogout: true
+        });
+
+    } catch (err) {
+        console.error("Erreur lors de la réinitialisation du mot de passe :", err);
+        res.status(500).json({ message: "Erreur serveur." });
+    }
+};
+
 
 //-----------Récupérer le dernier id_dossier -- ---------------------------------------------------
 module.exports.last_id_dossier = async (req, res) => {
@@ -390,15 +450,15 @@ module.exports.ajout_article = async (req, res) => {
         const lastArticle = await Article.findOne({ id_article: /^ART\d{7}$/ })
             .sort({ id_article: -1 })
             .lean();
-        
-            let nextNumber = 1;
-            if (lastArticle && lastArticle.id_article) {
-                const match = lastArticle.id_article.match(/^ART(\d{7})$/);
-                if (match) {
-                    nextNumber = parseInt(match[1], 10) + 1;
-                }
+
+        let nextNumber = 1;
+        if (lastArticle && lastArticle.id_article) {
+            const match = lastArticle.id_article.match(/^ART(\d{7})$/);
+            if (match) {
+                nextNumber = parseInt(match[1], 10) + 1;
             }
-            const newIdArticle = `ART${String(nextNumber).padStart(7, "0")}`;
+        }
+        const newIdArticle = `ART${String(nextNumber).padStart(7, "0")}`;
 
         // Créer un nouvel article sans générer l'id ici (géré par Mongoose)
         const nouvelArticle = new Article({

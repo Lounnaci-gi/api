@@ -1243,6 +1243,7 @@ footer {
     border-radius: 5px;
     background-color: transparent;
     color: var(--text-color);
+    text-transform: capitalize;
 }
 
 .form-input:focus {
