@@ -30,4 +30,16 @@ const authenticate = async (req, res, next) => {
     }
 };
 
-module.exports = authenticate;
+// ✅ Middleware d'autorisation (gestion des rôles)
+const authorize = (roles = []) => {
+    return (req, res, next) => {
+        if (!roles.includes(req.user.role)) {
+            return res.status(403).json({ message: "⛔ Accès refusé. Vous n'avez pas les permissions nécessaires." });
+        }
+        next();
+    };
+};
+
+// Exporter les deux middlewares
+module.exports = { authenticate, authorize };
+

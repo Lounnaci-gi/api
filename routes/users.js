@@ -1,6 +1,6 @@
 const express = require("express");
 const routes = express.Router();
-const authenticate = require("../middlewares/auth");
+const { authenticate, authorize } = require("../middlewares/auth");
 const rateLimit = require("express-rate-limit"); // Ajout du limiteur
 
 const { body, validationResult } = require("express-validator");

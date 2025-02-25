@@ -168,19 +168,14 @@ module.exports.deletepost = async (req, res) => {
 };
 
 //-----------Ajouter des utilisateurs ---------------------------------------------------
-
 module.exports.newuser = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ success: false, errors: errors.array() });
     }
-    try {
-        const { nomComplet, nomUtilisateur, email, motDePasse } = req.body;
 
-        // Vérifier si `req.body` est vide
-        if (!req.body || Object.keys(req.body).length === 0) {
-            return res.status(400).json({ success: false, message: "Le corps de la requête est vide. Veuillez ajouter des données." });
-        }
+    try {
+        const { nomComplet, nomUtilisateur, email, motDePasse, role } = req.body;
 
         // Vérifier si l'utilisateur ou l'email existe déjà
         const existingUser = await User.findOne({ $or: [{ nomUtilisateur }, { email }] });
@@ -188,25 +183,26 @@ module.exports.newuser = async (req, res) => {
             return res.status(400).json({ success: false, message: "Le nom d'utilisateur ou l'email est déjà utilisé." });
         }
 
-        // Hasher le mot de passe avant de l'enregistrer
-        const salt = await bcrypt.genSalt(10); // Générer un salt
-        const hashedPassword = await bcrypt.hash(motDePasse, salt); // Hasher le mot de passe
+        // Hasher le mot de passe
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(motDePasse, salt);
 
-        // Créer un nouvel utilisateur
+        // Créer un nouvel utilisateur avec un rôle défini
         const newUser = await User.create({
             nomComplet,
             nomUtilisateur,
             email,
-            motDePasse: hashedPassword, // Utiliser le mot de passe hashé
+            motDePasse: hashedPassword,
+            role: role || "utilisateur" // 🔥 Par défaut, l’utilisateur a un accès limité
         });
 
-        // Renvoyer une réponse JSON
-        res.status(200).json({ success: true, message: "Enregistrement ajouté avec succès.", data: newUser });
+        res.status(200).json({ success: true, message: "Utilisateur ajouté avec succès.", data: newUser });
     } catch (err) {
-        console.error("Erreur dans newuser :", err); // Log de l'erreur pour le débogage
+        console.error("Erreur dans newuser :", err);
         res.status(500).json({ success: false, message: "Une erreur est survenue lors de la création de l'utilisateur." });
     }
 };
+
 
 module.exports.login = async (req, res) => {
     try {

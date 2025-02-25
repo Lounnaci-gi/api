@@ -66,37 +66,21 @@ const postSchema = mongoose.Schema(
 // Schéma pour les utilisateurs
 const userSchema = mongoose.Schema(
     {
-        nomComplet: {
+        nomComplet: { type: String, required: true },
+        nomUtilisateur: { type: String, required: true, unique: true },
+        email: { type: String, required: true, unique: true },
+        motDePasse: { type: String, required: true },
+        role: {
             type: String,
-            required: true,
+            enum: ["admin", "chef_centre", "chef_agence", "chef_tech_com", "juriste", "utilisateur"], // 🔥 6 rôles
+            default: "utilisateur" // L'utilisateur de base a un accès limité
         },
-        nomUtilisateur: {
-            type: String,
-            required: true,
-            unique: true, // Le nom d'utilisateur doit être unique
-        },
-        email: {
-            type: String,
-            required: true,
-            unique: true, // L'email doit être unique
-        },
-        motDePasse: {
-            type: String,
-            required: true,
-        },
-        resetToken: {
-            type: String, // Champ pour stocker le token de réinitialisation
-            default: null, // Valeur par défaut
-        },
-        resetTokenExpire: {
-            type: Date, // Champ pour stocker la date d'expiration du token
-            default: null, // Valeur par défaut
-        },
+        resetToken: { type: String, default: null },
+        resetTokenExpire: { type: Date, default: null },
     },
-    {
-        timestamps: true, // Ajoute automatiquement les champs createdAt et updatedAt
-    }
+    { timestamps: true }
 );
+
 
 //Schéma pour les articles
 
@@ -104,7 +88,7 @@ const articleSchema = mongoose.Schema({
     id_article: {
         type: String,
         unique: true,
-        
+
     },
     designation: {
         type: String,
