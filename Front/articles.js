@@ -74,7 +74,7 @@ function showAlert(title, text, icon) {
     });
 }
 
-document.querySelectorAll('.btn')[0].addEventListener('click', () => {
+document.querySelectorAll('bxs-message-square-add')[0].addEventListener('click', () => {
     const container = document.getElementById("caracteristiquesContainer");
     const newEntry = document.createElement("div");
     newEntry.className = "caracteristique-entry";

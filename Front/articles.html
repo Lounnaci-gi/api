@@ -88,7 +88,7 @@
                 <div class="form-group">
                     <label for="designation" class="form-label">Désignation :</label>
                     <input type="text" id="designation" name="designation" class="form-input" required>
-                </div>             
+                </div>
             </div>
 
             <label for="materiau" class="form-label">Type de Matériau :</label>
@@ -132,7 +132,7 @@
                 <div class="caracteristique-entry">
                     <select class="form-input" name="caracteristique_key">
                         <option value="">Sélectionnez une Unité</option>
-                        <option value="Unite">Unité (ex: ml, m², m3)</option>             
+                        <option value="Unite">Unité (ex: ml, m², m3)</option>
                         <option value="DN">DN [Diamètre]</option>
                         <option value="PN">PN [Pression nominale]</option>
                         <option value="Classe">Classe</option>
@@ -140,13 +140,19 @@
                     </select>
                     <input type="text" class="form-input" name="caracteristique_value" placeholder="Valeur (ex: 20 mm)">
                 </div>
-                <button type="button" class="btn" id="btn_article_add_car">Ajouter</button>
+                <!-- <button type="button" class="btn" id="btn_article_add_car">Ajouter</button> -->
+                <div class="btn-sci">
+                    <div class="sci">
+                        <a href=""><i class='bx bxs-message-square-add'></i></a>
+
+                    </div>
+                </div>
             </div>
         </fieldset>
         <button type="submit" class="btn" id="btn_article_add">Enregistrer</button>
     </form>
 
-    <script>      
+    <script>
 
         document.getElementById("articleForm").addEventListener("submit", function (event) {
             const designation = document.getElementById("designation").value;
