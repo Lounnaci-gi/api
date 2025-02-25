@@ -129,7 +129,23 @@
                     <input type="text" placeholder="Nom d'utilisateur" required name="nomUtilisateurs" maxlength="20">
                     <input type="email" placeholder="Adresse e-mail" required name="email" maxlength="40">
                     <input type="password" placeholder="Mot de passe" required name="motDePasse" maxlength="15">
-                    <input type="password" placeholder="Confirmer le mot de passe" required maxlength="15">
+                    <input type="password" placeholder="Confirmer le mot de passe" name="confirmMotDePasse" required
+                        maxlength="15">
+                    <div class="role">
+
+                        <label for="role">Rôle</label>
+                        <select name="role" id="role">
+                            <option value="utilisateur" selected>Utilisateur</option>
+                            <option value="admin">Admin</option>
+                            <option value="chef_centre">Chef de Centre</option>
+                            <option value="chef_agence">Chef d'Agence</option>
+                            <option value="chef_tech_com">Chef Technico-Commercial</option>
+                            <option value="juriste">Juriste</option>
+                        </select>
+                    </div>
+
+
+
                     <button type="button" class="btn" id="inscrire">S'inscrire</button>
                 </form>
                 <p>Déjà un compte ? <a href="#" onclick="showLoginForm()">Se connecter</a></p>
@@ -148,7 +164,7 @@
         </div>
     </footer>
     <script src="main.js" defer></script>
-    
+
 
 </body>
 

@@ -99,16 +99,7 @@ function getCaracteristiquesData() {
     return caracteristiques;
 }
 
-// function showAlert(title, text, icon) {
-//     Swal.fire({
-//         title: title,
-//         text: text,
-//         icon: icon,
-//         confirmButtonText: 'OK'
-//     });
-// }
-
-document.querySelectorAll('bxs-message-square-add')[0].addEventListener('click', () => {
+document.getElementById('btn_article_add_car').addEventListener('click', () => {
     const container = document.getElementById("caracteristiquesContainer");
     const newEntry = document.createElement("div");
     newEntry.className = "caracteristique-entry";

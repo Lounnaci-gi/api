@@ -101,18 +101,24 @@ document.getElementById('submit').addEventListener('click', async (event) => {
 
 // Fonction inscription nouveau utilistaeur
 document.getElementById('inscrire').addEventListener('click', async function (event) {
-    event.preventDefault(); // Empêcher l'envoi du formulaire par défaut
-    document.getElementById('inscrire').disabled =true;
+    event.preventDefault();
+    const btnInscrire = document.getElementById('inscrire');
+    btnInscrire.disabled = true; // Désactiver le bouton pour éviter le double envoi
+
     const nomComplet = document.querySelector("input[name='nomComplet']").value.trim();
-    const nomUtilisateur = document.querySelector("input[name='nomUtilisateurs']").value.trim();
+    const nomUtilisateur = document.querySelector("input[name='nomUtilisateurs']").value.trim(); // ✅ Correction ici
     const email = document.querySelector("input[name='email']").value.trim();
     const password = document.querySelector("input[name='motDePasse']").value.trim();
-    const confirmPasswordInput = document.querySelector("input[placeholder='Confirmer le mot de passe']");
+    const confirmPasswordInput = document.querySelector("input[name='confirmMotDePasse']"); // ✅ Correction ici
     const confirmPassword = confirmPasswordInput.value.trim();
+    const role = document.querySelector("select[name='role']").value; // ✅ Ajout du rôle
+    
+    // console.log('nom : '+nomComplet+' nom utilisateur : '+nomUtilisateur+' email : '+email+' password : '+password+' confirme passe : '+co);
 
     // Vérifier si tous les champs sont remplis
     if (!nomComplet || !nomUtilisateur || !email || !password || !confirmPassword) {
         showAlert("Erreur", 'Veuillez remplir tous les champs.', "error");
+        btnInscrire.disabled = false; // Réactiver le bouton en cas d'erreur
         return;
     }
 
@@ -120,16 +126,18 @@ document.getElementById('inscrire').addEventListener('click', async function (ev
     if (password !== confirmPassword) {
         showAlert("Attention", 'Les mots de passe ne correspondent pas.', "warning");
         confirmPasswordInput.value = "";
-        confirmPasswordInput.focus(); // Remettre le focus sur le champ
+        confirmPasswordInput.focus();
+        btnInscrire.disabled = false; // Réactiver le bouton
         return;
     }
 
     // Création de l'objet de données à envoyer
     const datas = {
-        nomComplet: nomComplet,
-        nomUtilisateur: nomUtilisateur,
-        email: email,
-        motDePasse: password
+        nomComplet,
+        nomUtilisateur,
+        email,
+        motDePasse: password,
+        role // ✅ Ajout du rôle
     };
 
     try {
@@ -144,16 +152,19 @@ document.getElementById('inscrire').addEventListener('click', async function (ev
         if (response.ok) {
             showAlert("Succès", 'Inscription réussie !', "success")
                 .then(() => {
-                    closeLogin(); // Fermer le formulaire si nécessaire
+                    closeLogin(); // Fermer le formulaire
                 });
         } else {
             showAlert("Erreur", result.message || `Erreur lors de l'inscription.`, "error");
+            btnInscrire.disabled = false; // ✅ Réactiver le bouton si erreur serveur
         }
     } catch (err) {
-        showAlert("Erreur", `Une erreur s\'est produite lors de la récupération des données.`, "error");
+        console.error("Erreur de requête :", err);
+        showAlert("Erreur", `Une erreur s'est produite : ${err.message}`, "error");
+        btnInscrire.disabled = false; // ✅ Réactiver le bouton en cas d'erreur réseau
     }
 });
-document.getElementById('inscrire').disabled =false;
+
 
 
 // Afficher le formulaire de récupération de mot de passe
