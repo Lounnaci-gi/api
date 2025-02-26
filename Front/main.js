@@ -1,3 +1,25 @@
+function vider_formulaire_inscreption(identifiant) {
+    // Vérifier si l'élément existe
+    const formulaire = document.getElementById(identifiant);
+    if (!formulaire) {
+        console.error("L'élément avec l'identifiant", identifiant, "n'existe pas.");
+        return;
+    }
+
+    // Vider tous les champs input
+    formulaire.querySelectorAll('input').forEach(input => {
+        input.value = ""; // Vider la valeur de l'input
+    });
+
+    // Réinitialiser le select avec l'id 'role'
+    const roleSelect = document.getElementById('role');
+    if (roleSelect) {
+        roleSelect.selectedIndex = 0; // Réinitialiser à la première option
+    } else {
+        console.error("L'élément avec l'id 'role' n'existe pas.");
+    }
+}
+
 function showAlert(title, text, icon) {
     return Swal.fire({
         title,
@@ -18,6 +40,7 @@ function toggleMenu() {
 function showRegisterForm() {
     document.getElementById("loginForm").style.display = "none";
     document.getElementById("registerForm").style.display = "block";
+    vider_formulaire_inscreption('registerForm');
 }
 
 // Fonction pour afficher le formulaire de connexion
@@ -50,7 +73,7 @@ document.getElementById('submit').addEventListener('click', async (event) => {
     }
 
     if (!navigator.onLine) {
-     return  showAlert("Problème de connexion", "Vous êtes hors ligne.", "error");
+        return showAlert("Problème de connexion", "Vous êtes hors ligne.", "error");
     }
 
     const datas = { nomUtilisateur: user, motDePasse: password };
@@ -112,8 +135,6 @@ document.getElementById('inscrire').addEventListener('click', async function (ev
     const confirmPasswordInput = document.querySelector("input[name='confirmMotDePasse']"); // ✅ Correction ici
     const confirmPassword = confirmPasswordInput.value.trim();
     const role = document.querySelector("select[name='role']").value; // ✅ Ajout du rôle
-    
-    // console.log('nom : '+nomComplet+' nom utilisateur : '+nomUtilisateur+' email : '+email+' password : '+password+' confirme passe : '+co);
 
     // Vérifier si tous les champs sont remplis
     if (!nomComplet || !nomUtilisateur || !email || !password || !confirmPassword) {
