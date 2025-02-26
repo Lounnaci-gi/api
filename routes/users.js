@@ -40,7 +40,7 @@ routes.post("/login", login);
 routes.get("/recherche_multiple", authenticate, recherche_multiple);
 
 // 🔹 Routes protégées par `authenticate`
-routes.get("/", authenticate, getposts);
+routes.get("/", authenticate,authorize(["admin"]), getposts);
 routes.get("/:id", authenticate, get_with_Id_dossier);
 routes.delete("/:id", authenticate, deletepost);
 routes.put("/:p", authenticate, editpost);
