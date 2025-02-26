@@ -176,7 +176,15 @@ document.getElementById('inscrire').addEventListener('click', async function (ev
                     closeLogin(); // Fermer le formulaire
                 });
         } else {
-            showAlert("Erreur", result.message || `Erreur lors de l'inscription.`, "error");
+            // 🔥 Afficher les erreurs de validation du backend
+            const errorMessage = result.errors
+                ? result.errors.map(err => `• ${err.msg}`).join("\n") // 🔥 Ajoute une puce `•` pour chaque erreur
+                : result.message || "Erreur lors de l'inscription.";
+
+            showAlert("Erreur", errorMessage, "error");
+
+
+            // showAlert("Erreur", result.message || `Erreur lors de l'inscription.`, "error");
             btnInscrire.disabled = false; // ✅ Réactiver le bouton si erreur serveur
         }
     } catch (err) {
