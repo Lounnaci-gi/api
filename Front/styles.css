@@ -12,8 +12,10 @@
     --primary-color: #00abf0;
     --secondary-color: #1f242d;
     --text-color: white;
+    --background-dark: #2a2f3a;
+    --border-radius: 10px;
+    --shadow: 0 0 10px #0000004d;
 }
-
 
 body {
     background-color: var(--secondary-color);
@@ -44,7 +46,7 @@ body {
 }
 
 .logo {
-    color: white;
+    color: var(--text-color);
     font-size: 25px;
     font-weight: 500;
     text-decoration: none;
@@ -69,7 +71,7 @@ a {
 /* Styles pour les liens de la barre de navigation */
 .navbar a {
     font-size: 18px;
-    color: white;
+    color: var(--text-color);
     font-weight: 400;
     padding: 10px 15px;
     position: relative;
@@ -108,7 +110,7 @@ a {
 
 .submenu a {
     padding: 12px;
-    color: white;
+    color: var(--text-color);
     font-size: 16px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 5px;
@@ -132,7 +134,7 @@ a {
     display: flex;
     align-items: center;
     padding: 60px 9%;
-    color: white;
+    color: var(--text-color);
     visibility: hidden;
     opacity: 0;
     animation: show-content 1.5s linear forwards;
@@ -266,7 +268,7 @@ a {
     padding: 20px;
 
     box-shadow: 0 0 10px #00abf0;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     width: 90%;
     max-width: 350px;
     position: relative;
@@ -310,9 +312,9 @@ a {
     padding: 10px;
     margin: 10px 0;
     border: 1px solid #00abf0;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     background-color: transparent;
-    color: white;
+    color: var(--text-color);
 }
 
 .modal-content input::placeholder {
@@ -395,9 +397,9 @@ a {
     padding: 10px;
     margin: 10px 0;
     border: 1px solid #00abf0;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     background-color: transparent;
-    color: white;
+    color: var(--text-color);
 }
 
 #forgotPasswordForm input::placeholder {
@@ -409,7 +411,7 @@ a {
     /* Masqué par défaut */
     font-size: 24px;
     cursor: pointer;
-    color: white;
+    color: var(--text-color);
 }
 
 @media (max-width: 768px) {
@@ -556,7 +558,7 @@ a {
 footer {
     background-color: #1f242d;
     /* Fond sombre cohérent avec le reste du design */
-    color: white;
+    color: var(--text-color);
     /* Texte blanc pour un bon contraste */
     padding: 20px 10%;
     /* Espacement intérieur */
@@ -622,7 +624,7 @@ footer {
 
 .client-section {
     padding: 60px 20px;
-    background-color: #2a2f3a;
+    background-color: var(--background-dark);
     box-shadow: 0 0 10px #00000033;
     /* Ombre plus visible */
     color: var(--text-color);
@@ -631,7 +633,7 @@ footer {
     width: 90%;
     margin: 20px auto;
     /* Centrage horizontal */
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     min-height: 100vh;
     /* Pleine hauteur de l'écran */
     display: block;
@@ -656,7 +658,7 @@ footer {
     border: 1px solid #00abf0;
     border-radius: 5px;
     background-color: transparent;
-    color: white;
+    color: var(--text-color);
     font-size: 1em;
     text-transform: capitalize;
     appearance: auto;
@@ -767,22 +769,22 @@ footer {
 
 /* Styles personnalisés pour SweetAlert2 */
 .swal2-popup {
-    background-color: #2a2f3a !important;
+    background-color: var(--background-dark) !important;
     /* Arrière-plan de la boîte de dialogue */
-    border-radius: 10px !important;
+    border-radius: var(--border-radius) !important;
     /* Coins arrondis */
-    border: 1px solid #00abf0 !important;
+    border: 1px solid var(--primary-color) !important;
     /* Bordure bleue */
-    box-shadow: 0 0 10px #00abf0 !important;
+    box-shadow: 0 0 10px var(--primary-color) !important;
     /* Ombre bleue */
-    color: white !important;
+    color: var(--text-color) !important;
     /* Texte blanc */
 }
 
 .swal2-title {
     font-size: 20px !important;
     /* Taille du titre */
-    color: #00abf0 !important;
+    color: var(--primary-color) !important;
     /* Couleur du titre */
     font-weight: 600 !important;
     /* Poids de la police */
@@ -791,12 +793,12 @@ footer {
 .swal2-content {
     font-size: 16px !important;
     /* Taille du texte */
-    color: white !important;
+    color: var(--text-color) !important;
     /* Couleur du texte */
 }
 
 .swal2-confirm {
-    background-color: #00abf0 !important;
+    background-color: var(--primary-color) !important;
     /* Fond du bouton */
     border: none !important;
     /* Suppression de la bordure */
@@ -817,23 +819,23 @@ footer {
 .swal2-confirm:hover {
     background-color: transparent !important;
     /* Fond transparent au survol */
-    color: #00abf0 !important;
+    color: var(--primary-color) !important;
     /* Texte bleu au survol */
-    border: 1px solid #00abf0 !important;
+    border: 1px solid var(--primary-color) !important;
     /* Bordure bleue au survol */
-    box-shadow: 0 0 10px #00abf0 !important;
+    box-shadow: 0 0 10px var(--primary-color) !important;
     /* Ombre bleue au survol */
 }
 
 .swal2-close {
-    color: #00abf0 !important;
+    color: var(--primary-color) !important;
     /* Couleur de l'icône de fermeture */
     font-size: 16px !important;
     /* Taille de l'icône */
 }
 
 .swal2-close:hover {
-    color: white !important;
+    color: var(--text-color) !important;
     /* Couleur au survol */
 }
 
@@ -886,7 +888,7 @@ footer {
 #CommuneBranchement,
 #adresseCorrespondante,
 #adresseBranchement {
-    background-color: #2a2f3a;
+    background-color: var(--background-dark);
 }
 
 
@@ -898,7 +900,7 @@ footer {
 
 .table-container {
     padding: 60px 20px;
-    background-color: #2a2f3a;
+    background-color: var(--background-dark);
     box-shadow: 0 0 10px #00000033;
     /* Ombre plus visible */
     color: var(--text-color);
@@ -907,7 +909,7 @@ footer {
     width: 90%;
     margin: 20px auto;
     /* Centrage horizontal */
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     /* min-height: 100vh; */
     height: auto;
     /* Pleine hauteur de l'écran */
@@ -958,7 +960,7 @@ footer {
 .table-wrapper::-webkit-scrollbar-thumb {
     background-color: #00abf0;
     /* Couleur du curseur */
-    border-radius: 10px;
+    border-radius: var(--border-radius);
 }
 
 .table-wrapper::-webkit-scrollbar-track {
@@ -1052,7 +1054,7 @@ footer {
 }
 
 .liste-clients th:hover {
-    background-color: #2a2f3a;
+    background-color: var(--background-dark);
     color: #00abf0;
     cursor: pointer;
 }
@@ -1122,7 +1124,7 @@ footer {
 }
 
 #typeClient {
-    background-color: #2a2f3a;
+    background-color: var(--background-dark);
     cursor: pointer;
     width: 14%;
 }
@@ -1156,7 +1158,7 @@ footer {
     border: 1px solid #00abf0;
     border-radius: 5px;
     background-color: transparent;
-    color: white;
+    color: var(--text-color);
     font-size: 0.8em;
     text-transform: capitalize;
     appearance: none;
@@ -1202,7 +1204,7 @@ footer {
     /* Décalage vers le bas pour éviter la navbar */
     padding: 20px;
     background-color: var(--secondary-color);
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     box-shadow: 0 0 10px var(--primary-color);
 }
 
@@ -1218,7 +1220,7 @@ footer {
     margin-bottom: 20px;
     border: 1px solid var(--primary-color);
     padding: 15px;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
 }
 
 .form-title {
@@ -1249,11 +1251,11 @@ footer {
 .form-input:focus {
     border-color: var(--text-color);
     outline: none;
-    background-color: #2a2f3a;
+    background-color: var(--background-dark);
 }
 
 .form-input:disabled {
-    background-color: #2a2f3a;
+    background-color: var(--background-dark);
     color: gray;
     cursor: not-allowed;
     opacity: 0.5;
@@ -1358,7 +1360,7 @@ footer {
     padding: 10px;
     margin: 10px 0;
     border: 1px solid var(--primary-color);
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     background-color: #1f242d;
     color: var(--text-color);
     font-size: 14px;

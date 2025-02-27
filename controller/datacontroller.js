@@ -176,6 +176,20 @@ module.exports.newuser = async (req, res) => {
     try {
         const { nomComplet, nomUtilisateur, email, motDePasse, role } = req.body;
 
+        const existingAdmin = await User.findOne({ role: "admin" });
+        // Vérifier si un admin existe déjà
+        if (role === "admin" && existingAdmin) {
+            return res.status(403).json({ message: "Un admin existe déjà. Impossible d'en créer un autre." });
+        }
+        // Vérifier si l'email correspond à celui défini dans .env
+        if (role === "admin" && email !== process.env.ADMIN_EMAIL) {
+            return res.status(403).json({ message: "Seul l'administrateur désigné peut créer un compte admin." });
+        }
+        // Vérifier le code secret si besoin
+        if (role === "admin" && secretCode !== process.env.ADMIN_SECRET) {
+            return res.status(403).json({ message: "Code secret incorrect. Création d'admin refusée." });
+        }
+
         // Vérifier si l'utilisateur ou l'email existe déjà
         const existingUser = await User.findOne({ $or: [{ nomUtilisateur }, { email }] });
         if (existingUser) {
