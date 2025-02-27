@@ -87,7 +87,6 @@ module.exports.editpost = async (req, res) => {
 module.exports.getposts = async (req, res) => {
     try {
         const getpost = await Client.find();
-        //res.status(200).send("Récupération effectuer success.");
         res.status(200).json(getpost);
     }
     catch (err) {

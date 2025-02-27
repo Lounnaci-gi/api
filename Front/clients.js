@@ -309,18 +309,37 @@ document.getElementById('liste-clients').addEventListener('click', async () => {
         const response = await fetch("http://localhost:3000/users", {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${token}` // ✅ Ajouter le token
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
             }
         });
+
+        // 🔥 Vérifier si la réponse est une erreur
         if (!response.ok) {
-            throw new Error(`Erreur HTTP : ${response.status}`);
+            let errorMessage = "Une erreur inconnue est survenue.";
+            try {
+                const errorData = await response.json();
+                errorMessage = errorData.message || `Erreur HTTP : ${response.status}`;
+            } catch (jsonError) {
+                errorMessage = `Erreur HTTP : ${response.status}`;
+            }
+
+            throw new Error(errorMessage);
         }
+
         const clients = await response.json();
         renderClientsTable(clients);
         Swal.close();
+
     } catch (error) {
-        showAlert('Erreur', 'Impossible de récupérer les clients.', 'error');
+        if (error.message.includes("Failed to fetch")) {
+            showAlert("Erreur", "Impossible de se connecter au serveur. Vérifiez votre connexion Internet.", "error");
+        } else {
+            showAlert("Erreur", error.message, "error");
+        }
+        console.error("Erreur :", error.message);
     }
+
 });
 //-------------------------------
 // const dateInput = document.getElementById('dateDelivrance');
@@ -667,36 +686,36 @@ document.addEventListener('click', async (event) => {
 function printDossier(client) {
     // Ouvrir le fichier recepisse.html dans une nouvelle fenêtre
     fetch('recepisse.html')
-    .then(response => {
-        if (!response.ok) {
-            throw new Error("Fichier de récépissé introuvable !");
-        }
-        return response.text();
-    })
-    .then(html => {
-        const printWindow = window.open('', '', 'width=800,height=600');
-        html = html.replace('[date aujourdhui]', new Date().toLocaleDateString('fr-FR'))
-                   .replace('[Insérez le nom du déposant]', client.raison_sociale || 'Non spécifié')
-                   .replace('[Insérez le type de dossier]', client.type_client || 'Non spécifié')
-                   .replace('[Adresse]', client.Adresse_correspondante || 'Non spécifié')
-                   .replace('[Commune]', client.commune_correspondante || 'Non spécifié')
-                   .replace('[Téléphone]', client.telephone || 'Non spécifié')
-                   .replace('[Email]', client.email || 'Non spécifié')
-                   .replace('[Numéro ou code de référence]', client.Id_Dossier || 'N/A')
-                   .replace('[date dépot]', new Date(client.createdAt).toLocaleDateString('fr-FR'))
-                   .replace('[Numéro ou code de référence]', client.Id_Dossier);
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Fichier de récépissé introuvable !");
+            }
+            return response.text();
+        })
+        .then(html => {
+            const printWindow = window.open('', '', 'width=800,height=600');
+            html = html.replace('[date aujourdhui]', new Date().toLocaleDateString('fr-FR'))
+                .replace('[Insérez le nom du déposant]', client.raison_sociale || 'Non spécifié')
+                .replace('[Insérez le type de dossier]', client.type_client || 'Non spécifié')
+                .replace('[Adresse]', client.Adresse_correspondante || 'Non spécifié')
+                .replace('[Commune]', client.commune_correspondante || 'Non spécifié')
+                .replace('[Téléphone]', client.telephone || 'Non spécifié')
+                .replace('[Email]', client.email || 'Non spécifié')
+                .replace('[Numéro ou code de référence]', client.Id_Dossier || 'N/A')
+                .replace('[date dépot]', new Date(client.createdAt).toLocaleDateString('fr-FR'))
+                .replace('[Numéro ou code de référence]', client.Id_Dossier);
 
-        printWindow.document.open();
-        printWindow.document.write(html);
-        printWindow.document.close();
+            printWindow.document.open();
+            printWindow.document.write(html);
+            printWindow.document.close();
 
-        printWindow.onload = function () {
-            printWindow.print();
-        };
-    })
-    .catch(error => {
-        console.error('Erreur lors du chargement de recepisse.html :', error);
-        showAlert("Erreur", "Impossible de charger le fichier d'impression.", "error");
-    });
+            printWindow.onload = function () {
+                printWindow.print();
+            };
+        })
+        .catch(error => {
+            console.error('Erreur lors du chargement de recepisse.html :', error);
+            showAlert("Erreur", "Impossible de charger le fichier d'impression.", "error");
+        });
 
 }
