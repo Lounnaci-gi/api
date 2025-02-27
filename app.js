@@ -5,33 +5,28 @@ const path = require("path");
 const users = require("./routes/users.js");
 const connectdb = require("./config/db.js");
 const dotenv = require("dotenv").config();
-//--Connexion a mongodb
+
+// Connexion à MongoDB
 connectdb();
 
-const rateLimit = require("express-rate-limit");
-
-const loginLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 5, // Maximum 5 tentatives par IP
-    message: { success: false, message: "Trop de tentatives de connexion. Veuillez réessayer plus tard." },
-});
-
-app.use("/users/login", loginLimiter);
-
+// Middlewares généraux
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, "Front")));
-app.use("/users", users);
 
+// Routes
+app.use("/users", users); // Montez les routes utilisateurs
 
-app._router.stack.forEach((middleware) => {
-    if (middleware.route) {
-        const methods = Object.keys(middleware.route.methods).join(", ").toUpperCase();
-        console.log(`✅ Route enregistrée: [${methods}] ${middleware.route.path}`);
-    }
+// Middleware d'erreurs global (DOIT être le dernier)
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({
+        success: false,
+        message: "Une erreur technique est survenue.",
+    });
 });
 
-
+// Démarrage du serveur
 app.listen(port, () => {
-    console.log(`le serveur est lancé sur le port: http://localhost:${port}`);
-})
+    console.log(`Le serveur est lancé sur le port: http://localhost:${port}`);
+});
