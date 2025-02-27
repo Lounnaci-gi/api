@@ -76,6 +76,15 @@ document.getElementById('submit').addEventListener('click', async (event) => {
         return showAlert("Problème de connexion", "Vous êtes hors ligne.", "error");
     }
 
+    Swal.fire({
+        title: 'Connexion en cours...',
+        html: 'Veuillez patienter...',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
     const datas = { nomUtilisateur: user, motDePasse: password };
 
     try {
@@ -105,7 +114,7 @@ document.getElementById('submit').addEventListener('click', async (event) => {
         sessionStorage.setItem('token', result.token);
         sessionStorage.setItem('user', JSON.stringify(result.data));
 
-
+        Swal.close();
         // Afficher le nom d'utilisateur sans guillemets
         showAlert("Succès", "Connexion réussie !", "success").then(() => {
             updateLoginButton();  // 🔥 Mettre à jour le bouton immédiatement
