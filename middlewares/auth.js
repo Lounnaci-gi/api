@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { User } = require("../models/model");
+const rateLimit = require("express-rate-limit"); 
 
 const authenticate = async (req, res, next) => {
     const authHeader = req.headers.authorization;
@@ -40,6 +41,17 @@ const authorize = (roles = []) => {
     };
 };
 
+// 🔥 Limiteur de requêtes pour éviter les attaques de brute-force sur la réinitialisation de mot de passe
+const resetPasswordLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 3, // 3 tentatives
+    handler: (req, res) => { // ⚠️ Utilisez "handler" pour formater la réponse
+        res.status(429).json({
+            success: false,
+            message: "Trop de tentatives. Réessayez dans 15 minutes."
+        });
+    }
+});
 // Exporter les deux middlewares
-module.exports = { authenticate, authorize };
+module.exports = { authenticate, authorize,resetPasswordLimiter };
 
