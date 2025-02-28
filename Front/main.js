@@ -135,8 +135,8 @@ document.getElementById('submit').addEventListener('click', async (event) => {
 document.getElementById('inscrire').addEventListener('click', async function (event) {
     event.preventDefault();
     const btnInscrire = document.getElementById('inscrire');
-    btnInscrire.disabled = true; // Désactiver le bouton pour éviter le double envoi
-
+    btnInscrire.disabled = true; // Désactiver le bouton pour éviter le double envoi 
+    
     const nomComplet = document.querySelector("input[name='nomComplet']").value.trim();
     const nomUtilisateur = document.querySelector("input[name='nomUtilisateurs']").value.trim(); // ✅ Correction ici
     const email = document.querySelector("input[name='email']").value.trim();
@@ -144,22 +144,32 @@ document.getElementById('inscrire').addEventListener('click', async function (ev
     const confirmPasswordInput = document.querySelector("input[name='confirmMotDePasse']"); // ✅ Correction ici
     const confirmPassword = confirmPasswordInput.value.trim();
     const role = document.querySelector("select[name='role']").value; // ✅ Ajout du rôle
+    const secretCode = document.getElementById('code_secret').value.trim();
 
     // Vérifier si tous les champs sont remplis
     if (!nomComplet || !nomUtilisateur || !email || !password || !confirmPassword) {
-        showAlert("Erreur", 'Veuillez remplir tous les champs.', "error");
         btnInscrire.disabled = false; // Réactiver le bouton en cas d'erreur
+        showAlert("Erreur", 'Veuillez remplir tous les champs.', "error");
         return;
     }
 
     // Vérifier si les mots de passe correspondent
     if (password !== confirmPassword) {
-        showAlert("Attention", 'Les mots de passe ne correspondent pas.', "warning");
-        confirmPasswordInput.value = "";
-        confirmPasswordInput.focus();
         btnInscrire.disabled = false; // Réactiver le bouton
+        showAlert("Attention", 'Les mots de passe ne correspondent pas.', "warning");
+        password.focus();
         return;
     }
+    
+    // Afficher un indicateur de chargement
+    Swal.fire({
+        title: 'Inscription en cours...',
+        html: 'Veuillez patienter...',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
 
     // Création de l'objet de données à envoyer
     const datas = {
@@ -168,8 +178,9 @@ document.getElementById('inscrire').addEventListener('click', async function (ev
         email,
         motDePasse: password,
         role, // ✅ Ajout du rôle
-        code_secret
+        secretCode
     };
+
 
     try {
         const response = await fetch('http://localhost:3000/users/newuser', {
@@ -181,10 +192,13 @@ document.getElementById('inscrire').addEventListener('click', async function (ev
         const result = await response.json();
 
         if (response.ok) {
+            Swal.close();
             showAlert("Succès", 'Inscription réussie !', "success")
                 .then(() => {
                     closeLogin(); // Fermer le formulaire
                 });
+                document.getElementById('code_secret').style.display = 'none';
+                document.getElementById('code_secret').value = "";
         } else {
             // 🔥 Afficher les erreurs de validation du backend
             const errorMessage = result.errors
@@ -192,16 +206,15 @@ document.getElementById('inscrire').addEventListener('click', async function (ev
                 : result.message || "Erreur lors de l'inscription.";
 
             showAlert("Erreur", errorMessage, "error");
-
-
             // showAlert("Erreur", result.message || `Erreur lors de l'inscription.`, "error");
             btnInscrire.disabled = false; // ✅ Réactiver le bouton si erreur serveur
         }
     } catch (err) {
         console.error("Erreur de requête :", err);
         showAlert("Erreur", `Une erreur s'est produite : ${err.message}`, "error");
-        btnInscrire.disabled = false; // ✅ Réactiver le bouton en cas d'erreur réseau
     }
+    btnInscrire.disabled = false; // ✅ Réactiver le bouton en cas d'erreur réseau
+
 });
 
 
@@ -310,15 +323,15 @@ function updateLoginButton() {
 // 🔄 Mettre à jour le bouton et le logo au chargement de la page
 document.addEventListener("DOMContentLoaded", updateLoginButton);
 
-const code_secret = document.getElementById('code_secret'); 
+
 document.getElementById('role').addEventListener('change', () => {
     if (document.getElementById('role').value === 'admin') {
-        code_secret.style.display = 'block';
-        code_secret.required = true;
+        document.getElementById('code_secret').style.display = 'block';
+        document.getElementById('code_secret').required = true;
     } else {
-        code_secret.style.display = 'none';
-        code_secret.required = false;
-        code_secret.value = "";
+        document.getElementById('code_secret').style.display = 'none';
+        document.getElementById('code_secret').required = false;
+        document.getElementById('code_secret').value = "";
     }
 })
 
