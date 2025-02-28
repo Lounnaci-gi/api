@@ -167,7 +167,8 @@ document.getElementById('inscrire').addEventListener('click', async function (ev
         nomUtilisateur,
         email,
         motDePasse: password,
-        role // ✅ Ajout du rôle
+        role, // ✅ Ajout du rôle
+        code_secret
     };
 
     try {
@@ -309,5 +310,15 @@ function updateLoginButton() {
 // 🔄 Mettre à jour le bouton et le logo au chargement de la page
 document.addEventListener("DOMContentLoaded", updateLoginButton);
 
-
+const code_secret = document.getElementById('code_secret'); 
+document.getElementById('role').addEventListener('change', () => {
+    if (document.getElementById('role').value === 'admin') {
+        code_secret.style.display = 'block';
+        code_secret.required = true;
+    } else {
+        code_secret.style.display = 'none';
+        code_secret.required = false;
+        code_secret.value = "";
+    }
+})
 

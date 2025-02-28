@@ -174,7 +174,7 @@ module.exports.newuser = async (req, res) => {
     }
 
     try {
-        const { nomComplet, nomUtilisateur, email, motDePasse, role } = req.body;
+        const { nomComplet, nomUtilisateur, email, motDePasse, role, secretCode } = req.body;
 
         const existingAdmin = await User.findOne({ role: "admin" });
         // Vérifier si un admin existe déjà
