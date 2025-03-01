@@ -256,23 +256,6 @@ async function sendPasswordReset() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    // Vérifier si l'utilisateur est déjà hors ligne au chargement
-    if (!navigator.onLine) {
-        showAlert("Problème de connexion", "Vous êtes hors ligne.", "error");
-    }
-
-    // Événements pour détecter la perte et le retour de connexion
-    window.addEventListener('offline', () => {
-        showAlert("Problème de connexion", "Vous êtes hors ligne.", "error");
-    });
-
-    window.addEventListener('online', () => {
-        showAlert("Connexion rétablie", "Vous êtes de nouveau en ligne.", "success");
-    });
-});
-
-
 //-------------------
 function openLogin() {
     const token = sessionStorage.getItem("token");

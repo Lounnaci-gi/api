@@ -27,7 +27,7 @@ const authenticate = async (req, res, next) => {
         next();
     } catch (err) {
         console.error("❌ Erreur de vérification du token :", err);
-        res.status(401).json({ message: "Token invalide." });
+        res.status(401).json({ message: "Token invalide. Vous allez être déconnecté" });
     }
 };
 
